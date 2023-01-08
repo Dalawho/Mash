@@ -1,0 +1,62 @@
+{
+    "1337" : {
+        "collection" : "0x9251dEC8DF720C2ADF3B6f46d968107cbBADf4d4" ,
+        "maxSupply" : 1000 ,
+        "minted" : 0 ,
+        "traitNames" : ["5p3c141", "0v32", "3y35", "und32", "5ku115", "84ck920und"],
+        "xSize" : 32 ,
+        "ySize" :  32
+        
+    },
+    "CryptoBabyTeddies" : {
+        "collection" : "0x3B84502dF3D36EF2E5318bcE5a988460cF349304" ,
+        "maxSupply" : 1000 ,
+        "minted" : 0 ,
+
+        "traitNames" : ["Eyes", "Head", "Snout", "Accessory", "Body Accessory", "Type", "Background"],
+        "xSize" : 39 ,
+        "ySize" :  39 
+    },
+    "pksl" : {
+        "collection" : "0x5c9Dd18B69B2778aDf344D29e910A0DcFAbfb5B3" ,
+        "maxSupply" : 1000 ,
+        "minted" : 0 ,
+        "traitNames" : ["Texture", "Face", "Head", "Background", "Luck"],
+        "xSize" : 32 ,
+        "ySize" :  32 
+    },
+    "TinyBones" : {
+        "collection" : "0x0Cc27400A9C11CF07a3b6528cB0c94b8b89Dfa3D" ,
+        "maxSupply" : 1000 ,
+        "minted" : 0 ,
+        "traitNames" : ["Eyes", "Headwear", "Accessories", "Body", "Head", "Background"], 
+        "xSize" : 24 ,
+        "ySize" :  24 
+    },
+    "TinyPussies" : {
+        "collection" : "0xc2CAd8FA3aE2c079993F827437B078B5E7ac1695" ,
+        "maxSupply" : 1000 ,
+        "minted" : 0 ,
+        "traitNames" : ["Special", "Head", "Face", "Eyes", "Feet", "Belly", "Body", "Background"],
+        "xSize" : 16 ,
+        "ySize" :  16
+    },
+    "ProofOfPepe" : {
+        "collection" : "0x2f46E37477Ca4033D74986b15F0572e9913B4858" ,
+        "maxSupply" : 1000 ,
+        "minted" : 0 ,
+        "traitNames" : ["Legendaries", "Mouth", "Eyewear", "Nose", "Headwear", "Eyes", "Clothing", "Lips", "Body", "Skill", "Background"],
+        "xSize" : 48 ,
+        "ySize" :  48
+        
+    },
+    "TonalMuse" : {
+        "collection" : "0xACC6c1e48Beca93F1343eBDc0DEc8467a0656484" ,
+        "maxSupply" : 1000 ,
+        "minted" : 0 ,
+
+        "traitNames" : ["Curated Instruments", "Accent", "Curated Frame", "Instruments", "Frame", "Canvas"],
+        "xSize" : 25 ,
+        "ySize" :  25
+    }
+}

@@ -1,0 +1,6 @@
+ds-test/=packages/contracts/lib/forge-std/lib/ds-test/src/
+forge-std/=packages/contracts/lib/forge-std/src/
+openzeppelin-upgradable/=packages/contracts/lib/openzeppelin-contracts-upgradeable/contracts/
+openzeppelin/=packages/contracts/lib/openzeppelin-contracts/contracts/
+ethier/=packages/contracts/lib/ethier/contracts/
+solmate/=packages/contracts/lib/solmate/src/
