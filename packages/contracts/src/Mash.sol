@@ -25,11 +25,12 @@ contract Mash is ERC721G, OwnableUpgradeable, DefaultOperatorFiltererUpgradeable
     error NoMoreLayersToBeMinted();
     error notTokenOwner();
     error payRightAmount();
-
+    error mintNotStarted();
 
     IRender public render;
     uint256 public MINT_PRICE;
     uint256 public constant MAX_SUPPLY = 3_000; 
+    bool public mintActive;
 
     mapping(uint256 => SSt.CollectionInfo) private collections; 
     mapping(uint256 => string[]) private layerNames; 
@@ -42,6 +43,7 @@ contract Mash is ERC721G, OwnableUpgradeable, DefaultOperatorFiltererUpgradeable
         __DefaultOperatorFilterer_init();
         MINT_PRICE = 0.005 ether;
         nextCollection = 1; 
+        mintActive = false;
     }
 
     //Add collection 
@@ -57,7 +59,11 @@ contract Mash is ERC721G, OwnableUpgradeable, DefaultOperatorFiltererUpgradeable
         return collections[_collectionNr];
     }
 
-    function changeLayer(uint256 tokenId, bytes6 layerInfo, uint256 layer, uint256 collection) public {
+    function setMintActive() external {
+        mintActive = true;
+    }
+
+    function changeLayer(uint256 tokenId, bytes6 layerInfo, uint256 layer, uint256 collection) external {
         if(msg.sender != _tokenData[tokenId].owner) revert notTokenOwner();
         //logic to get rid of the token 
         // CHECK IF it IS MORE GAS EFFICIENT TO LOAD ONCE AND WRITE EVERYTHING BACK? 
@@ -67,7 +73,8 @@ contract Mash is ERC721G, OwnableUpgradeable, DefaultOperatorFiltererUpgradeable
         emit MetadataUpdate(tokenId);
     }
 
-    function mintAndBuy(bytes6[MAX_LAYERS] calldata layerInfo) public payable {
+    function mintAndBuy(bytes6[MAX_LAYERS] calldata layerInfo) external payable {
+        if(!mintActive) revert mintNotStarted();
         if(totalSupply() + 1 > MAX_SUPPLY) revert MaxSupplyReached();
         if(msg.value < MINT_PRICE) revert payRightAmount();
 
@@ -106,11 +113,11 @@ contract Mash is ERC721G, OwnableUpgradeable, DefaultOperatorFiltererUpgradeable
         return render.tokenURI(tokenId, layerIds, _collections);
     }
 
-    function getLayerNames(uint256 collectionNr) public view returns(string[] memory) {
+    function getLayerNames(uint256 collectionNr) external view returns(string[] memory) {
         return layerNames[collectionNr];
     }
 
-    function previewTokenCollage(uint256 tokenId, uint256 layerNr, LayerStruct memory _newLayer) public view returns (string memory) { 
+    function previewTokenCollage(uint256 tokenId, uint256 layerNr, LayerStruct memory _newLayer) external view returns (string memory) { 
         LayerStruct[MAX_LAYERS] memory _tokenLayers;
         for(uint256 i; i < MAX_LAYERS; ++i) {
             _tokenLayers[i] = decodeLayer(_tokenData[tokenId].layers[i]);
@@ -119,7 +126,7 @@ contract Mash is ERC721G, OwnableUpgradeable, DefaultOperatorFiltererUpgradeable
         return render.previewCollage(_tokenLayers);
     }
 
-    function previewCollage(bytes6[MAX_LAYERS] calldata layerInfo) public view returns (string memory) { 
+    function previewCollage(bytes6[MAX_LAYERS] calldata layerInfo) external view returns (string memory) { 
         LayerStruct[MAX_LAYERS] memory _tokenLayers;
         for(uint256 i; i < MAX_LAYERS; ++i) {
             _tokenLayers[i] = decodeLayer(layerInfo[i]);
@@ -142,6 +149,10 @@ contract Mash is ERC721G, OwnableUpgradeable, DefaultOperatorFiltererUpgradeable
 
     function decodeContract(bytes6 array) public pure returns (uint8) {
         return uint8(array[0]);
+    }
+
+    function withdraw() external onlyOwner {
+        // how should a withdraw function look? 
     }
 
     // Operatorfilter overrides ///

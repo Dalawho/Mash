@@ -15,9 +15,9 @@ contract CounterTest is Test, SharedStructs {
         address collection;
         uint16 maxSupply; 
         uint16 minted; 
-         string[] traitNames;
-         uint8 xSize;
-         uint8 ySize;
+        string[] traitNames;
+        uint8 xSize;
+        uint8 ySize;
     }
 
     function setUp() public {
