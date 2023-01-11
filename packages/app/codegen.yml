@@ -1,4 +1,4 @@
-schema: https://api.thegraph.com/subgraphs/name/dalawho/collage
+schema: https://api.thegraph.com/subgraphs/name/dalawho/indelt
 documents: "src/**/*.{ts,tsx,graphql}"
 generates:
   ./codegen/subgraph.ts:

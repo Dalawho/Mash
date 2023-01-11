@@ -28,14 +28,371 @@ export type Block_Height = {
   readonly number_gte?: InputMaybe<Scalars['Int']>;
 };
 
-export type CollageToken = {
-  readonly __typename?: 'CollageToken';
+export type Contract = {
+  readonly __typename?: 'Contract';
+  readonly address: Scalars['Bytes'];
+  readonly height: Scalars['BigInt'];
+  readonly id: Scalars['ID'];
+  readonly layerNames: ReadonlyArray<Scalars['String']>;
+  readonly layers: ReadonlyArray<Layer>;
+  readonly maxSupply: Scalars['BigInt'];
+  readonly minted: Scalars['BigInt'];
+  readonly width: Scalars['BigInt'];
+};
+
+
+export type ContractLayersArgs = {
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Layer_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<Layer_Filter>;
+};
+
+export type Contract_Filter = {
+  /** Filter for the block changed event. */
+  readonly _change_block?: InputMaybe<BlockChangedFilter>;
+  readonly address?: InputMaybe<Scalars['Bytes']>;
+  readonly address_contains?: InputMaybe<Scalars['Bytes']>;
+  readonly address_in?: InputMaybe<ReadonlyArray<Scalars['Bytes']>>;
+  readonly address_not?: InputMaybe<Scalars['Bytes']>;
+  readonly address_not_contains?: InputMaybe<Scalars['Bytes']>;
+  readonly address_not_in?: InputMaybe<ReadonlyArray<Scalars['Bytes']>>;
+  readonly height?: InputMaybe<Scalars['BigInt']>;
+  readonly height_gt?: InputMaybe<Scalars['BigInt']>;
+  readonly height_gte?: InputMaybe<Scalars['BigInt']>;
+  readonly height_in?: InputMaybe<ReadonlyArray<Scalars['BigInt']>>;
+  readonly height_lt?: InputMaybe<Scalars['BigInt']>;
+  readonly height_lte?: InputMaybe<Scalars['BigInt']>;
+  readonly height_not?: InputMaybe<Scalars['BigInt']>;
+  readonly height_not_in?: InputMaybe<ReadonlyArray<Scalars['BigInt']>>;
+  readonly id?: InputMaybe<Scalars['ID']>;
+  readonly id_gt?: InputMaybe<Scalars['ID']>;
+  readonly id_gte?: InputMaybe<Scalars['ID']>;
+  readonly id_in?: InputMaybe<ReadonlyArray<Scalars['ID']>>;
+  readonly id_lt?: InputMaybe<Scalars['ID']>;
+  readonly id_lte?: InputMaybe<Scalars['ID']>;
+  readonly id_not?: InputMaybe<Scalars['ID']>;
+  readonly id_not_in?: InputMaybe<ReadonlyArray<Scalars['ID']>>;
+  readonly layerNames?: InputMaybe<ReadonlyArray<Scalars['String']>>;
+  readonly layerNames_contains?: InputMaybe<ReadonlyArray<Scalars['String']>>;
+  readonly layerNames_contains_nocase?: InputMaybe<ReadonlyArray<Scalars['String']>>;
+  readonly layerNames_not?: InputMaybe<ReadonlyArray<Scalars['String']>>;
+  readonly layerNames_not_contains?: InputMaybe<ReadonlyArray<Scalars['String']>>;
+  readonly layerNames_not_contains_nocase?: InputMaybe<ReadonlyArray<Scalars['String']>>;
+  readonly layers_?: InputMaybe<Layer_Filter>;
+  readonly maxSupply?: InputMaybe<Scalars['BigInt']>;
+  readonly maxSupply_gt?: InputMaybe<Scalars['BigInt']>;
+  readonly maxSupply_gte?: InputMaybe<Scalars['BigInt']>;
+  readonly maxSupply_in?: InputMaybe<ReadonlyArray<Scalars['BigInt']>>;
+  readonly maxSupply_lt?: InputMaybe<Scalars['BigInt']>;
+  readonly maxSupply_lte?: InputMaybe<Scalars['BigInt']>;
+  readonly maxSupply_not?: InputMaybe<Scalars['BigInt']>;
+  readonly maxSupply_not_in?: InputMaybe<ReadonlyArray<Scalars['BigInt']>>;
+  readonly minted?: InputMaybe<Scalars['BigInt']>;
+  readonly minted_gt?: InputMaybe<Scalars['BigInt']>;
+  readonly minted_gte?: InputMaybe<Scalars['BigInt']>;
+  readonly minted_in?: InputMaybe<ReadonlyArray<Scalars['BigInt']>>;
+  readonly minted_lt?: InputMaybe<Scalars['BigInt']>;
+  readonly minted_lte?: InputMaybe<Scalars['BigInt']>;
+  readonly minted_not?: InputMaybe<Scalars['BigInt']>;
+  readonly minted_not_in?: InputMaybe<ReadonlyArray<Scalars['BigInt']>>;
+  readonly width?: InputMaybe<Scalars['BigInt']>;
+  readonly width_gt?: InputMaybe<Scalars['BigInt']>;
+  readonly width_gte?: InputMaybe<Scalars['BigInt']>;
+  readonly width_in?: InputMaybe<ReadonlyArray<Scalars['BigInt']>>;
+  readonly width_lt?: InputMaybe<Scalars['BigInt']>;
+  readonly width_lte?: InputMaybe<Scalars['BigInt']>;
+  readonly width_not?: InputMaybe<Scalars['BigInt']>;
+  readonly width_not_in?: InputMaybe<ReadonlyArray<Scalars['BigInt']>>;
+};
+
+export enum Contract_OrderBy {
+  Address = 'address',
+  Height = 'height',
+  Id = 'id',
+  LayerNames = 'layerNames',
+  Layers = 'layers',
+  MaxSupply = 'maxSupply',
+  Minted = 'minted',
+  Width = 'width'
+}
+
+export type Layer = {
+  readonly __typename?: 'Layer';
+  readonly contract: Contract;
+  readonly id: Scalars['ID'];
+  readonly name: Scalars['String'];
+  readonly traits: ReadonlyArray<Trait>;
+};
+
+
+export type LayerTraitsArgs = {
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Trait_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<Trait_Filter>;
+};
+
+export type Layer_Filter = {
+  /** Filter for the block changed event. */
+  readonly _change_block?: InputMaybe<BlockChangedFilter>;
+  readonly contract?: InputMaybe<Scalars['String']>;
+  readonly contract_?: InputMaybe<Contract_Filter>;
+  readonly contract_contains?: InputMaybe<Scalars['String']>;
+  readonly contract_contains_nocase?: InputMaybe<Scalars['String']>;
+  readonly contract_ends_with?: InputMaybe<Scalars['String']>;
+  readonly contract_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  readonly contract_gt?: InputMaybe<Scalars['String']>;
+  readonly contract_gte?: InputMaybe<Scalars['String']>;
+  readonly contract_in?: InputMaybe<ReadonlyArray<Scalars['String']>>;
+  readonly contract_lt?: InputMaybe<Scalars['String']>;
+  readonly contract_lte?: InputMaybe<Scalars['String']>;
+  readonly contract_not?: InputMaybe<Scalars['String']>;
+  readonly contract_not_contains?: InputMaybe<Scalars['String']>;
+  readonly contract_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  readonly contract_not_ends_with?: InputMaybe<Scalars['String']>;
+  readonly contract_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  readonly contract_not_in?: InputMaybe<ReadonlyArray<Scalars['String']>>;
+  readonly contract_not_starts_with?: InputMaybe<Scalars['String']>;
+  readonly contract_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  readonly contract_starts_with?: InputMaybe<Scalars['String']>;
+  readonly contract_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  readonly id?: InputMaybe<Scalars['ID']>;
+  readonly id_gt?: InputMaybe<Scalars['ID']>;
+  readonly id_gte?: InputMaybe<Scalars['ID']>;
+  readonly id_in?: InputMaybe<ReadonlyArray<Scalars['ID']>>;
+  readonly id_lt?: InputMaybe<Scalars['ID']>;
+  readonly id_lte?: InputMaybe<Scalars['ID']>;
+  readonly id_not?: InputMaybe<Scalars['ID']>;
+  readonly id_not_in?: InputMaybe<ReadonlyArray<Scalars['ID']>>;
+  readonly name?: InputMaybe<Scalars['String']>;
+  readonly name_contains?: InputMaybe<Scalars['String']>;
+  readonly name_contains_nocase?: InputMaybe<Scalars['String']>;
+  readonly name_ends_with?: InputMaybe<Scalars['String']>;
+  readonly name_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  readonly name_gt?: InputMaybe<Scalars['String']>;
+  readonly name_gte?: InputMaybe<Scalars['String']>;
+  readonly name_in?: InputMaybe<ReadonlyArray<Scalars['String']>>;
+  readonly name_lt?: InputMaybe<Scalars['String']>;
+  readonly name_lte?: InputMaybe<Scalars['String']>;
+  readonly name_not?: InputMaybe<Scalars['String']>;
+  readonly name_not_contains?: InputMaybe<Scalars['String']>;
+  readonly name_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  readonly name_not_ends_with?: InputMaybe<Scalars['String']>;
+  readonly name_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  readonly name_not_in?: InputMaybe<ReadonlyArray<Scalars['String']>>;
+  readonly name_not_starts_with?: InputMaybe<Scalars['String']>;
+  readonly name_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  readonly name_starts_with?: InputMaybe<Scalars['String']>;
+  readonly name_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  readonly traits_?: InputMaybe<Trait_Filter>;
+};
+
+export enum Layer_OrderBy {
+  Contract = 'contract',
+  Id = 'id',
+  Name = 'name',
+  Traits = 'traits'
+}
+
+/** Defines the order direction, either ascending or descending */
+export enum OrderDirection {
+  Asc = 'asc',
+  Desc = 'desc'
+}
+
+export type Query = {
+  readonly __typename?: 'Query';
+  /** Access to subgraph metadata */
+  readonly _meta?: Maybe<_Meta_>;
+  readonly contract?: Maybe<Contract>;
+  readonly contracts: ReadonlyArray<Contract>;
+  readonly layer?: Maybe<Layer>;
+  readonly layers: ReadonlyArray<Layer>;
+  readonly token?: Maybe<Token>;
+  readonly tokens: ReadonlyArray<Token>;
+  readonly trait?: Maybe<Trait>;
+  readonly traits: ReadonlyArray<Trait>;
+};
+
+
+export type Query_MetaArgs = {
+  block?: InputMaybe<Block_Height>;
+};
+
+
+export type QueryContractArgs = {
+  block?: InputMaybe<Block_Height>;
+  id: Scalars['ID'];
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QueryContractsArgs = {
+  block?: InputMaybe<Block_Height>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Contract_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']>;
+  subgraphError?: _SubgraphErrorPolicy_;
+  where?: InputMaybe<Contract_Filter>;
+};
+
+
+export type QueryLayerArgs = {
+  block?: InputMaybe<Block_Height>;
+  id: Scalars['ID'];
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QueryLayersArgs = {
+  block?: InputMaybe<Block_Height>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Layer_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']>;
+  subgraphError?: _SubgraphErrorPolicy_;
+  where?: InputMaybe<Layer_Filter>;
+};
+
+
+export type QueryTokenArgs = {
+  block?: InputMaybe<Block_Height>;
+  id: Scalars['ID'];
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QueryTokensArgs = {
+  block?: InputMaybe<Block_Height>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Token_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']>;
+  subgraphError?: _SubgraphErrorPolicy_;
+  where?: InputMaybe<Token_Filter>;
+};
+
+
+export type QueryTraitArgs = {
+  block?: InputMaybe<Block_Height>;
+  id: Scalars['ID'];
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QueryTraitsArgs = {
+  block?: InputMaybe<Block_Height>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Trait_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']>;
+  subgraphError?: _SubgraphErrorPolicy_;
+  where?: InputMaybe<Trait_Filter>;
+};
+
+export type Subscription = {
+  readonly __typename?: 'Subscription';
+  /** Access to subgraph metadata */
+  readonly _meta?: Maybe<_Meta_>;
+  readonly contract?: Maybe<Contract>;
+  readonly contracts: ReadonlyArray<Contract>;
+  readonly layer?: Maybe<Layer>;
+  readonly layers: ReadonlyArray<Layer>;
+  readonly token?: Maybe<Token>;
+  readonly tokens: ReadonlyArray<Token>;
+  readonly trait?: Maybe<Trait>;
+  readonly traits: ReadonlyArray<Trait>;
+};
+
+
+export type Subscription_MetaArgs = {
+  block?: InputMaybe<Block_Height>;
+};
+
+
+export type SubscriptionContractArgs = {
+  block?: InputMaybe<Block_Height>;
+  id: Scalars['ID'];
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptionContractsArgs = {
+  block?: InputMaybe<Block_Height>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Contract_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']>;
+  subgraphError?: _SubgraphErrorPolicy_;
+  where?: InputMaybe<Contract_Filter>;
+};
+
+
+export type SubscriptionLayerArgs = {
+  block?: InputMaybe<Block_Height>;
+  id: Scalars['ID'];
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptionLayersArgs = {
+  block?: InputMaybe<Block_Height>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Layer_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']>;
+  subgraphError?: _SubgraphErrorPolicy_;
+  where?: InputMaybe<Layer_Filter>;
+};
+
+
+export type SubscriptionTokenArgs = {
+  block?: InputMaybe<Block_Height>;
+  id: Scalars['ID'];
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptionTokensArgs = {
+  block?: InputMaybe<Block_Height>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Token_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']>;
+  subgraphError?: _SubgraphErrorPolicy_;
+  where?: InputMaybe<Token_Filter>;
+};
+
+
+export type SubscriptionTraitArgs = {
+  block?: InputMaybe<Block_Height>;
+  id: Scalars['ID'];
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptionTraitsArgs = {
+  block?: InputMaybe<Block_Height>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Trait_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']>;
+  subgraphError?: _SubgraphErrorPolicy_;
+  where?: InputMaybe<Trait_Filter>;
+};
+
+export type Token = {
+  readonly __typename?: 'Token';
   readonly id: Scalars['ID'];
   readonly owner: Scalars['Bytes'];
   readonly tokenURI: Scalars['String'];
 };
 
-export type CollageToken_Filter = {
+export type Token_Filter = {
   /** Filter for the block changed event. */
   readonly _change_block?: InputMaybe<BlockChangedFilter>;
   readonly id?: InputMaybe<Scalars['ID']>;
@@ -74,156 +431,43 @@ export type CollageToken_Filter = {
   readonly tokenURI_starts_with_nocase?: InputMaybe<Scalars['String']>;
 };
 
-export enum CollageToken_OrderBy {
+export enum Token_OrderBy {
   Id = 'id',
   Owner = 'owner',
   TokenUri = 'tokenURI'
 }
 
-/** Defines the order direction, either ascending or descending */
-export enum OrderDirection {
-  Asc = 'asc',
-  Desc = 'desc'
-}
-
-export type Owner = {
-  readonly __typename?: 'Owner';
-  readonly id: Scalars['Bytes'];
-  readonly token?: Maybe<ReadonlyArray<OwnerPiece>>;
-};
-
-
-export type OwnerTokenArgs = {
-  first?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<OwnerPiece_OrderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  skip?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<OwnerPiece_Filter>;
-};
-
-export type OwnerPiece = {
-  readonly __typename?: 'OwnerPiece';
-  readonly amount: Scalars['BigInt'];
+export type Trait = {
+  readonly __typename?: 'Trait';
+  readonly data: Scalars['String'];
   readonly id: Scalars['ID'];
-  readonly owner: Owner;
-  readonly piece: Piece;
-};
-
-export type OwnerPiece_Filter = {
-  /** Filter for the block changed event. */
-  readonly _change_block?: InputMaybe<BlockChangedFilter>;
-  readonly amount?: InputMaybe<Scalars['BigInt']>;
-  readonly amount_gt?: InputMaybe<Scalars['BigInt']>;
-  readonly amount_gte?: InputMaybe<Scalars['BigInt']>;
-  readonly amount_in?: InputMaybe<ReadonlyArray<Scalars['BigInt']>>;
-  readonly amount_lt?: InputMaybe<Scalars['BigInt']>;
-  readonly amount_lte?: InputMaybe<Scalars['BigInt']>;
-  readonly amount_not?: InputMaybe<Scalars['BigInt']>;
-  readonly amount_not_in?: InputMaybe<ReadonlyArray<Scalars['BigInt']>>;
-  readonly id?: InputMaybe<Scalars['ID']>;
-  readonly id_gt?: InputMaybe<Scalars['ID']>;
-  readonly id_gte?: InputMaybe<Scalars['ID']>;
-  readonly id_in?: InputMaybe<ReadonlyArray<Scalars['ID']>>;
-  readonly id_lt?: InputMaybe<Scalars['ID']>;
-  readonly id_lte?: InputMaybe<Scalars['ID']>;
-  readonly id_not?: InputMaybe<Scalars['ID']>;
-  readonly id_not_in?: InputMaybe<ReadonlyArray<Scalars['ID']>>;
-  readonly owner?: InputMaybe<Scalars['String']>;
-  readonly owner_?: InputMaybe<Owner_Filter>;
-  readonly owner_contains?: InputMaybe<Scalars['String']>;
-  readonly owner_contains_nocase?: InputMaybe<Scalars['String']>;
-  readonly owner_ends_with?: InputMaybe<Scalars['String']>;
-  readonly owner_ends_with_nocase?: InputMaybe<Scalars['String']>;
-  readonly owner_gt?: InputMaybe<Scalars['String']>;
-  readonly owner_gte?: InputMaybe<Scalars['String']>;
-  readonly owner_in?: InputMaybe<ReadonlyArray<Scalars['String']>>;
-  readonly owner_lt?: InputMaybe<Scalars['String']>;
-  readonly owner_lte?: InputMaybe<Scalars['String']>;
-  readonly owner_not?: InputMaybe<Scalars['String']>;
-  readonly owner_not_contains?: InputMaybe<Scalars['String']>;
-  readonly owner_not_contains_nocase?: InputMaybe<Scalars['String']>;
-  readonly owner_not_ends_with?: InputMaybe<Scalars['String']>;
-  readonly owner_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
-  readonly owner_not_in?: InputMaybe<ReadonlyArray<Scalars['String']>>;
-  readonly owner_not_starts_with?: InputMaybe<Scalars['String']>;
-  readonly owner_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
-  readonly owner_starts_with?: InputMaybe<Scalars['String']>;
-  readonly owner_starts_with_nocase?: InputMaybe<Scalars['String']>;
-  readonly piece?: InputMaybe<Scalars['String']>;
-  readonly piece_?: InputMaybe<Piece_Filter>;
-  readonly piece_contains?: InputMaybe<Scalars['String']>;
-  readonly piece_contains_nocase?: InputMaybe<Scalars['String']>;
-  readonly piece_ends_with?: InputMaybe<Scalars['String']>;
-  readonly piece_ends_with_nocase?: InputMaybe<Scalars['String']>;
-  readonly piece_gt?: InputMaybe<Scalars['String']>;
-  readonly piece_gte?: InputMaybe<Scalars['String']>;
-  readonly piece_in?: InputMaybe<ReadonlyArray<Scalars['String']>>;
-  readonly piece_lt?: InputMaybe<Scalars['String']>;
-  readonly piece_lte?: InputMaybe<Scalars['String']>;
-  readonly piece_not?: InputMaybe<Scalars['String']>;
-  readonly piece_not_contains?: InputMaybe<Scalars['String']>;
-  readonly piece_not_contains_nocase?: InputMaybe<Scalars['String']>;
-  readonly piece_not_ends_with?: InputMaybe<Scalars['String']>;
-  readonly piece_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
-  readonly piece_not_in?: InputMaybe<ReadonlyArray<Scalars['String']>>;
-  readonly piece_not_starts_with?: InputMaybe<Scalars['String']>;
-  readonly piece_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
-  readonly piece_starts_with?: InputMaybe<Scalars['String']>;
-  readonly piece_starts_with_nocase?: InputMaybe<Scalars['String']>;
-};
-
-export enum OwnerPiece_OrderBy {
-  Amount = 'amount',
-  Id = 'id',
-  Owner = 'owner',
-  Piece = 'piece'
-}
-
-export type Owner_Filter = {
-  /** Filter for the block changed event. */
-  readonly _change_block?: InputMaybe<BlockChangedFilter>;
-  readonly id?: InputMaybe<Scalars['Bytes']>;
-  readonly id_contains?: InputMaybe<Scalars['Bytes']>;
-  readonly id_in?: InputMaybe<ReadonlyArray<Scalars['Bytes']>>;
-  readonly id_not?: InputMaybe<Scalars['Bytes']>;
-  readonly id_not_contains?: InputMaybe<Scalars['Bytes']>;
-  readonly id_not_in?: InputMaybe<ReadonlyArray<Scalars['Bytes']>>;
-  readonly token_?: InputMaybe<OwnerPiece_Filter>;
-};
-
-export enum Owner_OrderBy {
-  Id = 'id',
-  Token = 'token'
-}
-
-export type Piece = {
-  readonly __typename?: 'Piece';
-  readonly creator: Scalars['Bytes'];
-  readonly id: Scalars['ID'];
+  readonly layer: Layer;
   readonly name: Scalars['String'];
-  readonly price: Scalars['BigInt'];
-  readonly tokenBalances: ReadonlyArray<OwnerPiece>;
-  readonly tokenURI: Scalars['String'];
 };
 
-
-export type PieceTokenBalancesArgs = {
-  first?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<OwnerPiece_OrderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  skip?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<OwnerPiece_Filter>;
-};
-
-export type Piece_Filter = {
+export type Trait_Filter = {
   /** Filter for the block changed event. */
   readonly _change_block?: InputMaybe<BlockChangedFilter>;
-  readonly creator?: InputMaybe<Scalars['Bytes']>;
-  readonly creator_contains?: InputMaybe<Scalars['Bytes']>;
-  readonly creator_in?: InputMaybe<ReadonlyArray<Scalars['Bytes']>>;
-  readonly creator_not?: InputMaybe<Scalars['Bytes']>;
-  readonly creator_not_contains?: InputMaybe<Scalars['Bytes']>;
-  readonly creator_not_in?: InputMaybe<ReadonlyArray<Scalars['Bytes']>>;
+  readonly data?: InputMaybe<Scalars['String']>;
+  readonly data_contains?: InputMaybe<Scalars['String']>;
+  readonly data_contains_nocase?: InputMaybe<Scalars['String']>;
+  readonly data_ends_with?: InputMaybe<Scalars['String']>;
+  readonly data_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  readonly data_gt?: InputMaybe<Scalars['String']>;
+  readonly data_gte?: InputMaybe<Scalars['String']>;
+  readonly data_in?: InputMaybe<ReadonlyArray<Scalars['String']>>;
+  readonly data_lt?: InputMaybe<Scalars['String']>;
+  readonly data_lte?: InputMaybe<Scalars['String']>;
+  readonly data_not?: InputMaybe<Scalars['String']>;
+  readonly data_not_contains?: InputMaybe<Scalars['String']>;
+  readonly data_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  readonly data_not_ends_with?: InputMaybe<Scalars['String']>;
+  readonly data_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  readonly data_not_in?: InputMaybe<ReadonlyArray<Scalars['String']>>;
+  readonly data_not_starts_with?: InputMaybe<Scalars['String']>;
+  readonly data_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  readonly data_starts_with?: InputMaybe<Scalars['String']>;
+  readonly data_starts_with_nocase?: InputMaybe<Scalars['String']>;
   readonly id?: InputMaybe<Scalars['ID']>;
   readonly id_gt?: InputMaybe<Scalars['ID']>;
   readonly id_gte?: InputMaybe<Scalars['ID']>;
@@ -232,6 +476,27 @@ export type Piece_Filter = {
   readonly id_lte?: InputMaybe<Scalars['ID']>;
   readonly id_not?: InputMaybe<Scalars['ID']>;
   readonly id_not_in?: InputMaybe<ReadonlyArray<Scalars['ID']>>;
+  readonly layer?: InputMaybe<Scalars['String']>;
+  readonly layer_?: InputMaybe<Layer_Filter>;
+  readonly layer_contains?: InputMaybe<Scalars['String']>;
+  readonly layer_contains_nocase?: InputMaybe<Scalars['String']>;
+  readonly layer_ends_with?: InputMaybe<Scalars['String']>;
+  readonly layer_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  readonly layer_gt?: InputMaybe<Scalars['String']>;
+  readonly layer_gte?: InputMaybe<Scalars['String']>;
+  readonly layer_in?: InputMaybe<ReadonlyArray<Scalars['String']>>;
+  readonly layer_lt?: InputMaybe<Scalars['String']>;
+  readonly layer_lte?: InputMaybe<Scalars['String']>;
+  readonly layer_not?: InputMaybe<Scalars['String']>;
+  readonly layer_not_contains?: InputMaybe<Scalars['String']>;
+  readonly layer_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  readonly layer_not_ends_with?: InputMaybe<Scalars['String']>;
+  readonly layer_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  readonly layer_not_in?: InputMaybe<ReadonlyArray<Scalars['String']>>;
+  readonly layer_not_starts_with?: InputMaybe<Scalars['String']>;
+  readonly layer_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  readonly layer_starts_with?: InputMaybe<Scalars['String']>;
+  readonly layer_starts_with_nocase?: InputMaybe<Scalars['String']>;
   readonly name?: InputMaybe<Scalars['String']>;
   readonly name_contains?: InputMaybe<Scalars['String']>;
   readonly name_contains_nocase?: InputMaybe<Scalars['String']>;
@@ -252,227 +517,14 @@ export type Piece_Filter = {
   readonly name_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
   readonly name_starts_with?: InputMaybe<Scalars['String']>;
   readonly name_starts_with_nocase?: InputMaybe<Scalars['String']>;
-  readonly price?: InputMaybe<Scalars['BigInt']>;
-  readonly price_gt?: InputMaybe<Scalars['BigInt']>;
-  readonly price_gte?: InputMaybe<Scalars['BigInt']>;
-  readonly price_in?: InputMaybe<ReadonlyArray<Scalars['BigInt']>>;
-  readonly price_lt?: InputMaybe<Scalars['BigInt']>;
-  readonly price_lte?: InputMaybe<Scalars['BigInt']>;
-  readonly price_not?: InputMaybe<Scalars['BigInt']>;
-  readonly price_not_in?: InputMaybe<ReadonlyArray<Scalars['BigInt']>>;
-  readonly tokenBalances_?: InputMaybe<OwnerPiece_Filter>;
-  readonly tokenURI?: InputMaybe<Scalars['String']>;
-  readonly tokenURI_contains?: InputMaybe<Scalars['String']>;
-  readonly tokenURI_contains_nocase?: InputMaybe<Scalars['String']>;
-  readonly tokenURI_ends_with?: InputMaybe<Scalars['String']>;
-  readonly tokenURI_ends_with_nocase?: InputMaybe<Scalars['String']>;
-  readonly tokenURI_gt?: InputMaybe<Scalars['String']>;
-  readonly tokenURI_gte?: InputMaybe<Scalars['String']>;
-  readonly tokenURI_in?: InputMaybe<ReadonlyArray<Scalars['String']>>;
-  readonly tokenURI_lt?: InputMaybe<Scalars['String']>;
-  readonly tokenURI_lte?: InputMaybe<Scalars['String']>;
-  readonly tokenURI_not?: InputMaybe<Scalars['String']>;
-  readonly tokenURI_not_contains?: InputMaybe<Scalars['String']>;
-  readonly tokenURI_not_contains_nocase?: InputMaybe<Scalars['String']>;
-  readonly tokenURI_not_ends_with?: InputMaybe<Scalars['String']>;
-  readonly tokenURI_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
-  readonly tokenURI_not_in?: InputMaybe<ReadonlyArray<Scalars['String']>>;
-  readonly tokenURI_not_starts_with?: InputMaybe<Scalars['String']>;
-  readonly tokenURI_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
-  readonly tokenURI_starts_with?: InputMaybe<Scalars['String']>;
-  readonly tokenURI_starts_with_nocase?: InputMaybe<Scalars['String']>;
 };
 
-export enum Piece_OrderBy {
-  Creator = 'creator',
+export enum Trait_OrderBy {
+  Data = 'data',
   Id = 'id',
-  Name = 'name',
-  Price = 'price',
-  TokenBalances = 'tokenBalances',
-  TokenUri = 'tokenURI'
+  Layer = 'layer',
+  Name = 'name'
 }
-
-export type Query = {
-  readonly __typename?: 'Query';
-  /** Access to subgraph metadata */
-  readonly _meta?: Maybe<_Meta_>;
-  readonly collageToken?: Maybe<CollageToken>;
-  readonly collageTokens: ReadonlyArray<CollageToken>;
-  readonly owner?: Maybe<Owner>;
-  readonly ownerPiece?: Maybe<OwnerPiece>;
-  readonly ownerPieces: ReadonlyArray<OwnerPiece>;
-  readonly owners: ReadonlyArray<Owner>;
-  readonly piece?: Maybe<Piece>;
-  readonly pieces: ReadonlyArray<Piece>;
-};
-
-
-export type Query_MetaArgs = {
-  block?: InputMaybe<Block_Height>;
-};
-
-
-export type QueryCollageTokenArgs = {
-  block?: InputMaybe<Block_Height>;
-  id: Scalars['ID'];
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type QueryCollageTokensArgs = {
-  block?: InputMaybe<Block_Height>;
-  first?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<CollageToken_OrderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  skip?: InputMaybe<Scalars['Int']>;
-  subgraphError?: _SubgraphErrorPolicy_;
-  where?: InputMaybe<CollageToken_Filter>;
-};
-
-
-export type QueryOwnerArgs = {
-  block?: InputMaybe<Block_Height>;
-  id: Scalars['ID'];
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type QueryOwnerPieceArgs = {
-  block?: InputMaybe<Block_Height>;
-  id: Scalars['ID'];
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type QueryOwnerPiecesArgs = {
-  block?: InputMaybe<Block_Height>;
-  first?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<OwnerPiece_OrderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  skip?: InputMaybe<Scalars['Int']>;
-  subgraphError?: _SubgraphErrorPolicy_;
-  where?: InputMaybe<OwnerPiece_Filter>;
-};
-
-
-export type QueryOwnersArgs = {
-  block?: InputMaybe<Block_Height>;
-  first?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<Owner_OrderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  skip?: InputMaybe<Scalars['Int']>;
-  subgraphError?: _SubgraphErrorPolicy_;
-  where?: InputMaybe<Owner_Filter>;
-};
-
-
-export type QueryPieceArgs = {
-  block?: InputMaybe<Block_Height>;
-  id: Scalars['ID'];
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type QueryPiecesArgs = {
-  block?: InputMaybe<Block_Height>;
-  first?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<Piece_OrderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  skip?: InputMaybe<Scalars['Int']>;
-  subgraphError?: _SubgraphErrorPolicy_;
-  where?: InputMaybe<Piece_Filter>;
-};
-
-export type Subscription = {
-  readonly __typename?: 'Subscription';
-  /** Access to subgraph metadata */
-  readonly _meta?: Maybe<_Meta_>;
-  readonly collageToken?: Maybe<CollageToken>;
-  readonly collageTokens: ReadonlyArray<CollageToken>;
-  readonly owner?: Maybe<Owner>;
-  readonly ownerPiece?: Maybe<OwnerPiece>;
-  readonly ownerPieces: ReadonlyArray<OwnerPiece>;
-  readonly owners: ReadonlyArray<Owner>;
-  readonly piece?: Maybe<Piece>;
-  readonly pieces: ReadonlyArray<Piece>;
-};
-
-
-export type Subscription_MetaArgs = {
-  block?: InputMaybe<Block_Height>;
-};
-
-
-export type SubscriptionCollageTokenArgs = {
-  block?: InputMaybe<Block_Height>;
-  id: Scalars['ID'];
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionCollageTokensArgs = {
-  block?: InputMaybe<Block_Height>;
-  first?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<CollageToken_OrderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  skip?: InputMaybe<Scalars['Int']>;
-  subgraphError?: _SubgraphErrorPolicy_;
-  where?: InputMaybe<CollageToken_Filter>;
-};
-
-
-export type SubscriptionOwnerArgs = {
-  block?: InputMaybe<Block_Height>;
-  id: Scalars['ID'];
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionOwnerPieceArgs = {
-  block?: InputMaybe<Block_Height>;
-  id: Scalars['ID'];
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionOwnerPiecesArgs = {
-  block?: InputMaybe<Block_Height>;
-  first?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<OwnerPiece_OrderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  skip?: InputMaybe<Scalars['Int']>;
-  subgraphError?: _SubgraphErrorPolicy_;
-  where?: InputMaybe<OwnerPiece_Filter>;
-};
-
-
-export type SubscriptionOwnersArgs = {
-  block?: InputMaybe<Block_Height>;
-  first?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<Owner_OrderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  skip?: InputMaybe<Scalars['Int']>;
-  subgraphError?: _SubgraphErrorPolicy_;
-  where?: InputMaybe<Owner_Filter>;
-};
-
-
-export type SubscriptionPieceArgs = {
-  block?: InputMaybe<Block_Height>;
-  id: Scalars['ID'];
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionPiecesArgs = {
-  block?: InputMaybe<Block_Height>;
-  first?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<Piece_OrderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  skip?: InputMaybe<Scalars['Int']>;
-  subgraphError?: _SubgraphErrorPolicy_;
-  where?: InputMaybe<Piece_Filter>;
-};
 
 export type _Block_ = {
   readonly __typename?: '_Block_';
@@ -508,67 +560,68 @@ export enum _SubgraphErrorPolicy_ {
   Deny = 'deny'
 }
 
-export type CollageOwnersQueryVariables = Exact<{
-  owner: Scalars['Bytes'];
-}>;
+export type ContractsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type CollageOwnersQuery = { readonly __typename?: 'Query', readonly collageTokens: ReadonlyArray<{ readonly __typename?: 'CollageToken', readonly id: string, readonly tokenURI: string }> };
+export type ContractsQuery = { readonly __typename?: 'Query', readonly contracts: ReadonlyArray<{ readonly __typename?: 'Contract', readonly id: string, readonly address: any, readonly maxSupply: any, readonly minted: any, readonly layerNames: ReadonlyArray<string> }> };
 
-export type OwnedPiecesQueryVariables = Exact<{
-  owner: Scalars['Bytes'];
-}>;
+export type LayersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type OwnedPiecesQuery = { readonly __typename?: 'Query', readonly owners: ReadonlyArray<{ readonly __typename?: 'Owner', readonly id: any, readonly token?: ReadonlyArray<{ readonly __typename?: 'OwnerPiece', readonly amount: any, readonly piece: { readonly __typename?: 'Piece', readonly id: string, readonly name: string } }> | null }> };
+export type LayersQuery = { readonly __typename?: 'Query', readonly layers: ReadonlyArray<{ readonly __typename?: 'Layer', readonly id: string, readonly name: string, readonly contract: { readonly __typename?: 'Contract', readonly id: string } }> };
 
-export type PiecesQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type PiecesQuery = { readonly __typename?: 'Query', readonly pieces: ReadonlyArray<{ readonly __typename?: 'Piece', readonly id: string, readonly tokenURI: string, readonly price: any, readonly name: string }> };
+export type TraitsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export const CollageOwnersDocument = gql`
-    query CollageOwners($owner: Bytes!) {
-  collageTokens(where: {owner: $owner}, first: 100) {
+export type TraitsQuery = { readonly __typename?: 'Query', readonly traits: ReadonlyArray<{ readonly __typename?: 'Trait', readonly data: string, readonly id: string, readonly name: string, readonly layer: { readonly __typename?: 'Layer', readonly name: string, readonly contract: { readonly __typename?: 'Contract', readonly id: string } } }> };
+
+
+export const ContractsDocument = gql`
+    query Contracts {
+  contracts(first: 5) {
     id
-    tokenURI
+    address
+    maxSupply
+    minted
+    layerNames
   }
 }
     `;
 
-export function useCollageOwnersQuery(options: Omit<Urql.UseQueryArgs<CollageOwnersQueryVariables>, 'query'>) {
-  return Urql.useQuery<CollageOwnersQuery, CollageOwnersQueryVariables>({ query: CollageOwnersDocument, ...options });
+export function useContractsQuery(options?: Omit<Urql.UseQueryArgs<ContractsQueryVariables>, 'query'>) {
+  return Urql.useQuery<ContractsQuery, ContractsQueryVariables>({ query: ContractsDocument, ...options });
 };
-export const OwnedPiecesDocument = gql`
-    query OwnedPieces($owner: Bytes!) {
-  owners(where: {id: $owner}, first: 100) {
+export const LayersDocument = gql`
+    query Layers {
+  layers(first: 10) {
     id
-    token {
-      piece {
-        id
-        name
-      }
-      amount
+    name
+    contract {
+      id
     }
   }
 }
     `;
 
-export function useOwnedPiecesQuery(options: Omit<Urql.UseQueryArgs<OwnedPiecesQueryVariables>, 'query'>) {
-  return Urql.useQuery<OwnedPiecesQuery, OwnedPiecesQueryVariables>({ query: OwnedPiecesDocument, ...options });
+export function useLayersQuery(options?: Omit<Urql.UseQueryArgs<LayersQueryVariables>, 'query'>) {
+  return Urql.useQuery<LayersQuery, LayersQueryVariables>({ query: LayersDocument, ...options });
 };
-export const PiecesDocument = gql`
-    query Pieces {
-  pieces(first: 100) {
+export const TraitsDocument = gql`
+    query Traits {
+  traits(first: 100) {
+    data
     id
-    tokenURI
-    price
     name
+    layer {
+      name
+      contract {
+        id
+      }
+    }
   }
 }
     `;
 
-export function usePiecesQuery(options?: Omit<Urql.UseQueryArgs<PiecesQueryVariables>, 'query'>) {
-  return Urql.useQuery<PiecesQuery, PiecesQueryVariables>({ query: PiecesDocument, ...options });
+export function useTraitsQuery(options?: Omit<Urql.UseQueryArgs<TraitsQueryVariables>, 'query'>) {
+  return Urql.useQuery<TraitsQuery, TraitsQueryVariables>({ query: TraitsDocument, ...options });
 };
