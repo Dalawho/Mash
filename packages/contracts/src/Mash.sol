@@ -140,8 +140,8 @@ contract Mash is ERC721G, OwnableUpgradeable, DefaultOperatorFiltererUpgradeable
         uint8 traitId = uint8(array[2]);
         bool pfpRender = uint8(array[3] >> 7) == 1 ? true : false;
         uint8 scale = uint8(array[3] & 0x7f);
-        uint8 xOffset = uint8(array[4]);
-        uint8 yOffset = uint8(array[5]);
+        int8 xOffset = int8(uint8(array[4]));
+        int8 yOffset = int8(uint8(array[5]));
         console.log("scale:", scale);
         console.log("pfpRender:", pfpRender);
         return LayerStruct(contractId, layerId, traitId, pfpRender, scale, xOffset, yOffset);

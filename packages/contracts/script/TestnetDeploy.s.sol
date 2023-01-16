@@ -17,14 +17,14 @@ contract Deploy is Script, SharedStructs {
     function run() public {
         uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
         vm.startBroadcast(deployerPrivateKey);
-        // indel = new IndelibleTest(); 
+        //indel = new IndelibleTest(); 
         // mash = new Mash();
         // render = new Render(); 
         // mash.initialize();
         // render.initialize();
         // mash.setRender(address(render));
         // render.setMash(address(mash));
-        Mash(0x9d629b98137b88C42f3021924A5DF8C1Ff5A1fEA).addCollection(CollectionInfo(0x2eE60e5cFe7827aFE0549fA1cA41289f3bEaa813,1000,0,32,32), names);
+        Mash(0x92152D2A74a24CB581EB8d388e0488A87dD3585B).addCollection(CollectionInfo(0x2eE60e5cFe7827aFE0549fA1cA41289f3bEaa813,1000,0,32,32), names);
         vm.stopBroadcast();
         // render 0x20b9Ed87130a0c9772c492599dA037D44AdAA3BB
     }

@@ -17,8 +17,7 @@ interface IMash {
 }
 
 contract Render is Initializable, OwnableUpgradeable, SSt {
-    using Strings for uint256;
-    using Strings for uint8;
+    using Strings for *;
     using DynamicBuffer for bytes;
 
     uint256 public constant MAX_LAYERS = 7; 
@@ -43,6 +42,10 @@ contract Render is Initializable, OwnableUpgradeable, SSt {
 
     function getTraitData(address _collection, uint8 _layerId, uint8 _traitId) public view returns(bytes memory) {
         return bytes(IIndelible(_collection).traitData(_layerId, _traitId));
+    }
+
+    function getCollectionName(uint256 _collectionNr) public view returns(string memory out) {
+        (out,,,,,,) = IIndelible(mash.getCollection(_collectionNr).collection).contractData();
     }
 
     ////////////////////////  TokenURI and preview /////////////////////////////////
@@ -104,7 +107,7 @@ contract Render is Initializable, OwnableUpgradeable, SSt {
         CollectionInfo memory _collectionInfo = mash.getCollection(_collectionId);
         bytes memory _traitData = getTraitData(_collectionInfo.collection, _layerId, _traitId);
         IIndelible.Trait memory _traitDetails = getTraitDetails(_collectionInfo.collection, _layerId, _traitId);
-        buffer.appendSafe(bytes(string.concat('<image width="100%" height="100%" href="data:image/', _traitDetails.mimetype , ';base64,'))); //add the gif/png selector
+        buffer.appendSafe(bytes(string.concat('<image width="100%" height="100%" href="data:', _traitDetails.mimetype , ';base64,'))); //add the gif/png selector
         buffer.appendSafe(bytes(Base64.encode(_traitData)));
         buffer.appendSafe(bytes('"/>'));
         buffer.appendSafe('<style>#pixel {image-rendering: pixelated; image-rendering: -moz-crisp-edges; image-rendering: -webkit-crisp-edges; -ms-interpolation-mode: nearest-neighbor;}</style></svg>');
@@ -122,8 +125,8 @@ contract Render is Initializable, OwnableUpgradeable, SSt {
                 if(_layerInfo[i].collection == 0) continue;
                 _renderImg(_layerInfo[i], _collections[i], traitNames[i], buffer);
                 if(!_layerInfo[0].pfpRender) { 
-                    if(_collections[i].ySize*_layerInfo[i].scale+_layerInfo[i].yOffset > height) height = _collections[i].ySize*_layerInfo[i].scale+_layerInfo[i].yOffset;
-                    if(_collections[i].xSize*_layerInfo[i].scale+_layerInfo[i].xOffset > width) width = _collections[i].xSize*_layerInfo[i].scale+_layerInfo[i].xOffset;
+                    if(int256(uint256(_collections[i].ySize))*int256(uint256(_layerInfo[i].scale))+_layerInfo[i].yOffset > int256(height)) height = _collections[i].ySize*_layerInfo[i].scale+_layerInfo[i].yOffset;
+                    if(_collections[i].xSize*_layerInfo[i].scale+_layerInfo[i].xOffset > int256(width)) width = _collections[i].xSize*_layerInfo[i].scale+_layerInfo[i].xOffset;
                 }
             }
             buffer.appendSafe('<style>#pixel {image-rendering: pixelated; image-rendering: -moz-crisp-edges; image-rendering: -webkit-crisp-edges; -ms-interpolation-mode: nearest-neighbor;}</style></svg>');
@@ -134,7 +137,7 @@ contract Render is Initializable, OwnableUpgradeable, SSt {
         //currently only renders as PNG this should also include gif! 
         bytes memory _traitData = getTraitData(_currentCollection.collection, _currentLayer.layerId, _currentLayer.traitId);
         buffer.appendSafe(bytes(string.concat('<image x="', Strings.toString(_currentLayer.xOffset), '" y="', Strings.toString(_currentLayer.yOffset),'" width="', Strings.toString(_currentCollection.xSize*_currentLayer.scale), '" height="', Strings.toString(_currentCollection.ySize*_currentLayer.scale),
-         '" href="data:image/', traitNames.mimetype , ';base64,'))); //add the gif/png selector
+         '" href="data:', traitNames.mimetype , ';base64,'))); //add the gif/png selector
         buffer.appendSafe(bytes(Base64.encode(_traitData)));
         buffer.appendSafe(bytes('"/>'));
     }

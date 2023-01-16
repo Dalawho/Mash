@@ -14,8 +14,8 @@ interface SharedStructs {
         uint8 traitId;
         bool pfpRender;
         uint8 scale;
-        uint8 xOffset;
-        uint8 yOffset;
+        int8 xOffset;
+        int8 yOffset;
     }
 
     struct CollectionInfo {
