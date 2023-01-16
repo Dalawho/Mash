@@ -12,7 +12,8 @@ import {
 import { EthereumProviders } from "../EthereumProviders";
 
 export const graphClient = createGraphClient({
-  url: "https://api.thegraph.com/subgraphs/name/dalawho/indelt",  
+  //url: "https://api.thegraph.com/subgraphs/name/dalawho/indelt",  
+  url: "https://api.thegraph.com/subgraphs/name/dalawho/testmainnetindel"
 });
 
 const MyApp = ({ Component, pageProps }: AppProps) => {

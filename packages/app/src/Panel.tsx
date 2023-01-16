@@ -32,10 +32,10 @@ const Panel = ({ id, picture, description, onClick }: PanelProps) => {
   }
 
   const layerNr = Array.from({length: 7}, (_, index) => index + 1)
-
+  //{picture && parse(picture)}
   return (
     <div onClick={handleClick} className="rounded-lg border-slate-900 border-4 m-1" >
-      {picture && parse(picture)}
+      
       <p>{description}</p>
       {showOverlay && (
         <div

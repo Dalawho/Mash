@@ -1,13 +1,15 @@
 import { useContractRead } from 'wagmi';
 import contractAddresses from "./contracts.json";
-import { Render__factory } from "./types";
+import { Mash__factory, Render__factory } from "./types";
  
  
-export const getSVG = ({inBytes} : {inBytes: string[]}) => {
-  const { data, isError, isLoading } = useContractRead({
+export const GetSVG = ({inBytes} : {inBytes: string[]}) => {
+  const { data } = useContractRead({
     addressOrName: contractAddresses.mash,
-    contractInterface: Render__factory.abi,
-    functionName: 'getSVGForTrait',
+    contractInterface: Mash__factory.abi,
+    functionName: 'previewCollage',
     args: [inBytes]
   })
+
+  return data;
 }

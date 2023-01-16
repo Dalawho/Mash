@@ -9,8 +9,8 @@ gql`
     contracts(first: 5) {
       id
       address
-      maxSupply
-      minted
+      #maxSupply
+      #minted
       layerNames
     }
   }
@@ -40,7 +40,7 @@ const GetContracts = ()  => {
       }
       return("no Image found");
     }
-  const returnData = query.data?.contracts.map((item, index) => { return {value: parseInt(item.id), label: `${item.id} - ${item.maxSupply - item.minted} left`, maxSupply: parseInt(item.maxSupply), minted: parseInt(item.minted) } } ).sort( (a,b) => a.value - b.value );
+  const returnData = query.data?.contracts.map((item, index) => { return {value: parseInt(item.id), label: `${item.id} - ${"item.maxSupply - item.minted"} left`, maxSupply: 100, minted: 0 } } ).sort( (a,b) => a.value - b.value );
 
   return returnData;
 };

@@ -10,6 +10,8 @@ import {
 } from "wagmi";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
+import { jsonRpcProvider } from 'wagmi/providers/jsonRpc'
+import { localhost } from 'wagmi/chains'
 
 // Will default to goerli if nothing set in the ENV
 export const targetChainId =
@@ -30,12 +32,23 @@ const provs = process.env.NEXT_PUBLIC_ALCHEMY_API_KEY ?
   publicProvider(),
 ];
 
-export const { chains, provider, webSocketProvider } = configureChains(
-  targetChains, provs
-);
+// export const { chains, provider, webSocketProvider } = configureChains(
+//   targetChains, provs
+// );
+
+const { chains, provider } = configureChains(
+  [localhost],
+  [
+    jsonRpcProvider({
+      rpc: (chain) => ({
+        http: `http://127.0.0.1:8545`,
+      }),
+    }),
+  ],
+)
 
 const { connectors } = getDefaultWallets({
-  appName: "Collage",
+  appName: "Mash",
   chains,
 });
 
@@ -43,7 +56,7 @@ export const wagmiClient = createClient({
   autoConnect: true,
   connectors,
   provider,
-  webSocketProvider,
+  //webSocketProvider,
 });
 
 const myTheme = merge(lightTheme({}), {

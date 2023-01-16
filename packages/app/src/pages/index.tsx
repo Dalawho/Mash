@@ -1,6 +1,6 @@
 import parse from 'html-react-parser';
 import type { NextPage } from "next";
-import React, { useEffect,useState} from "react";
+import React, { useEffect,useState, useCallback} from "react";
 import Select from 'react-select';
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 
@@ -10,17 +10,24 @@ import GetTraits from "../GetTraits";
 import GetLayers from "../GetLayers";
 
 import { LocationForm, Locations } from "../Location";
-import Panel from "../Panel";
+import Panel from "../Panel2";
 import { customStyles } from "../formStyles";
+import { BoxContainer } from "../BoxContainer2";
+import { GetSVG } from "../GetSVG"
+import next from 'next';
+import { Trait } from '../sharedInterfaces';
+import TraitTable from "../TraitTable";
+import { useIsMounted } from '../useIsMounted';
 
 const HomePage:NextPage = () => {
     
-  const [locations, setLocations] = useState<Locations[]>([{ order:0, contract: 0, layerId: 0, traitId: 0, scale: 1, x: 0, y: 0}]) ;// (Array.from({length: 7}, () => ({ contract: 0, layerId: 0, traitId: 0, scale: 1, x: 0, y: 0})));
-  const [SVG, setSVG] = useState<string | null>(null);
-  const [bytes, setBytes] = useState(Array.from({length: 7}, () => ("0x000000000000")));
+  const [locations, setLocations] = useState<Locations[]>([]);//[{ id: 0, name:"", contract: 0, layerId: 0, traitId: 0, scale: 1, x: 0, y: 0}]) ;
+  //const [SVG, setSVG] = useState<string | null>(null);
+  const [bytes, setBytes] = useState(Array.from({length: 7}, () => "0x000000000000"));
+  const [pfpRender, setPfpRender] = useState(true);
   
   interface Selector{
-    collection: string,
+    collection: number,
     layer: string,
   }
 
@@ -29,102 +36,94 @@ const HomePage:NextPage = () => {
     value: number;
   }
 
-  const [selectedValue, setSelectedValue] = useState<Selector>({collection: "0", layer: "None"});
-
+  const [selectedValue, setSelectedValue] = useState<Selector>({collection: 0, layer: ""});
 
   const handleLocationChange = (coord:string,e:number, index:number) => {
-    const nextLocs = [...locations.slice(0, index), {...locations[index], [coord]: e} , ...locations.slice(index + 1)];
-    const nextBytes = [...bytes.slice(0, index), getBytes(nextLocs[index]), ...bytes.slice(index + 1)];
+    const nextLocs = locations.map(item => {
+      if (item.id === index) {
+          return {...item, [coord]: e};
+      }
+      return item;
+    });
     setLocations(nextLocs);
-    setBytes(nextBytes);
+    const nextBytes = nextLocs.map((item) => encodeLayer(item, pfpRender));
+    setBytes(nextBytes.concat(Array.from({length: 7-nextBytes.length}, () => "0x000000000000")));
   }
 
-  const handlePiecesId = (id: number, layer: number) => {
-
-    const nextLocs = [...locations.slice(0, layer-1), {...locations[layer], layerId: id}  , ...locations.slice(layer)]
+  const handleOrderChange = (nextLocs: Locations[]) => {
     setLocations(nextLocs);
+    const nextBytes = nextLocs.map((item) => encodeLayer(item, pfpRender));
+    setBytes(nextBytes.concat(Array.from({length: 7-nextBytes.length}, () => "0x000000000000")));
+  }
 
+  const handlePiecesId = (trait: Trait) => {
+    if(locations.length >= 7) return;
+    const maxId = locations.reduce((max, obj) => obj.id > max ? obj.id : max, 0);
+    const nextLocs = [...locations, {id: maxId+1, name: trait.name, contract: trait.contract, layerId: trait.layerNr, traitId: trait.traitNr, scale: 1, x: 0, y: 0}]
+    setLocations(nextLocs);
+    const nextBytes = nextLocs.map((item) => encodeLayer(item, pfpRender));
+    setBytes(nextBytes.concat(Array.from({length: 7-nextBytes.length}, () => "0x000000000000")));
   }
 
   const handleFilter = (filter: string , e?: SelectTrait | unknown | null) => {
     if(e)  {
       const i: SelectTrait = e as SelectTrait;
       if(filter === "layer") {
-        setSelectedValue({...selectedValue, [filter]: i.label.toString()}) }
+        setSelectedValue({...selectedValue, [filter]: i.label.toString() === "None" ? "" : i.label.toString()}) }
 
       if(filter === "collection") {
-        setSelectedValue({...selectedValue, [filter]: i.value.toString()}) }
+        setSelectedValue({...selectedValue, [filter]: i.value}) }
       }
   }
 
-  const handleLayerFilter = (layerNr: number) => {
-    setSelectedValue({...selectedValue, collection: layerNr.toString()})
-  }
+  const isMounted = useIsMounted();
 
-  const getBytes = (loc: Locations) => {
+  const encodeLayer = (layer: Locations, pfpRender: Boolean) => {
+    let pfpRenderByte = ((pfpRender ? 1 : 0) << 7) | layer.scale;
+    let array = new Uint8Array([layer.contract, layer.layerId, layer.traitId, pfpRenderByte, layer.x, layer.y]);
+    return "0x" + array.reduce((output, elem) => output + elem.toString(16).padStart(2, '0'), '');
+}
 
-    return "0x000000000000";
-  }
-
-  // useEffect( () => {
-  //     const callData = async () => {
-  //       //previewCollage(uint256 tokenId, uint8 layerNr, uint8 pieceId, uint8 xOffset, uint8 yOffset)
-  //       if(pieceIds.some(element => element !== 0)) {
-  //       const data = await collageContract.previewCollage( pieceIds, locations.map(object => object.scale), locations.map(object => object.x), locations.map(object => object.y) );
-  //       setAnimalSVG(data);
-  //       } else {
-  //           setAnimalSVG(null);
-  //       }
-  //       }
-  //       callData();
-  //       if(pieces) {
-  //           let tempPrice = 0;
-  //           for(let i = 0; i < 4; i++) {
-  //               //doublecheck this
-  //               if(pieceIds[i] == 0) continue 
-  //               console.log(pieceIds[i]-1);
-  //               tempPrice += pieces[pieceIds[i]-1].price;
-  //           }
-  //           setPrice(tempPrice);
-  //       }
-  //   }, [pieceIds, locations]);
-
+    const SVG = GetSVG({ inBytes: bytes});
     const contracts = GetContracts();
     const traits = GetTraits();
     const layers = GetLayers();
 
     const filteredTraits = traits?.filter(trait => {
-      if(selectedValue.collection === "0" && selectedValue.layer === "None") { return traits; }
-      if(selectedValue.collection === "0") { return trait.layer === selectedValue.layer; }
+      if(selectedValue.collection === 0 && selectedValue.layer === "None") { return traits; }
+      if(selectedValue.collection === 0) { return trait.layer === selectedValue.layer; }
       if(selectedValue.layer === "None") { return trait.contract == selectedValue.collection}
       return trait.contract === selectedValue.collection && trait.layer === selectedValue.layer;
     });
 
     const filteredLayers = layers?.filter(layer => {
-      if(selectedValue.collection === "0") { return layers; }
+       if(selectedValue.collection === 0) { return layers; }
       return layer.contract === selectedValue.collection;
     });
-
 
     const placeholder = [{value: 0, label: "None", maxSupply: 0, minted: 0}]
 
     return(
       <div className="bg-amber-100">
         <div className="flex flex-col bg-amber-100 text-slate-800 text-2xl font-proggy" >
-        <ConnectButton showBalance={false} accountStatus="address"/>
+          <nav className='m-4 flex flex-row justify-end'>
+          <ConnectButton showBalance={false} accountStatus="address"/>
+        </nav>
             <div className="flex flex-col gap-4 items-center p-8 mx-auto">
               <div>
-                <h1>Mint and Set</h1>
+                <h1 className='font-bold text-3xl'>
+                  What is this, a crossover episode?
+                </h1>
+                <h2>
+                
+                </h2>
               </div>
                 <div className="flex flex-row space-x-2">
-              {SVG ? parse(SVG) : "No Layers added yet."}
+                {(isMounted && SVG ? parse(SVG.toString()) : null) ?? "??"}
+                {/* {SVG ? parse(SVG.toString()) : "No Layers added yet."} */}
               <div>
-                <h1>Set location for</h1>
-              {[0,1,2,3].map( (layerNr: number) => (
-                  <div key={layerNr}>
-                  <LocationForm loc={locations[0]} layerNr={layerNr} onChange={(coord:string,e:string) => handleLocationChange(coord, Number(e), layerNr-1)} />
-                  </div>
-                ))}
+                <h1>Nr. - Name - scale - xOffset - yOffset - Remove</h1>
+                <BoxContainer boxes={locations} setBoxes={handleOrderChange} handleLocationChange={handleLocationChange} />
                 <BuyAndMintButton inBytes={bytes} />
               </div>
               </div>
@@ -137,16 +136,8 @@ const HomePage:NextPage = () => {
                 
               </div>
               <h2>Select layers</h2>
-              <div className="grid grid-cols-5">
-                {filteredTraits?.map(panel => (
-                    <Panel
-                    key={panel.label}
-                    id={panel.value}
-                    picture={panel.tokenURI}
-                    description={panel.label}
-                    onClick={handlePiecesId}
-                    />
-                ))}
+              <div>
+                <TraitTable selectedValue={selectedValue} handlePiecesId={handlePiecesId} />
               </div>
               
                 </div>
@@ -157,13 +148,3 @@ const HomePage:NextPage = () => {
 };
 
 export default HomePage;
-
-/*
-                {[0,1,2,3].map( (layerNr: number) => (
-                  <div key={layerNr}>
-                  <h1>Set {layerNr}</h1> 
-                  <Select styles={customStyles} options={pieces ? pieces : placeholder } onChange={(newValue) => handlePiecesId(layerNr, newValue)}/>
-                  <LocationForm loc={locations[layerNr]} onChange={(coord:string,e:string) => handleLocationChange(coord, Number(e), layerNr)} />
-                  </div>
-                ))}
-*/

@@ -9,6 +9,7 @@ gql`
     layers(first: 10) {
       id
       name
+      index
       contract {
         id
       }
@@ -40,7 +41,7 @@ const GetLayers = ()  => {
       }
       return("no Image found");
     }
-  const returnData = query.data?.layers.map((item, index) => { return {value: index, label: item.name, contract: item.contract.id } } ).sort( (a,b) => a.value - b.value );
+  const returnData = query.data?.layers.map((item, index) => { return {value: index, label: item.name, contract: parseInt(item.contract.id), layerNr: item.index } } ).sort( (a,b) => a.value - b.value );
 
   return returnData;
 };

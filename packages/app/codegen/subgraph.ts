@@ -31,13 +31,9 @@ export type Block_Height = {
 export type Contract = {
   readonly __typename?: 'Contract';
   readonly address: Scalars['Bytes'];
-  readonly height: Scalars['BigInt'];
   readonly id: Scalars['ID'];
   readonly layerNames: ReadonlyArray<Scalars['String']>;
   readonly layers: ReadonlyArray<Layer>;
-  readonly maxSupply: Scalars['BigInt'];
-  readonly minted: Scalars['BigInt'];
-  readonly width: Scalars['BigInt'];
 };
 
 
@@ -54,18 +50,14 @@ export type Contract_Filter = {
   readonly _change_block?: InputMaybe<BlockChangedFilter>;
   readonly address?: InputMaybe<Scalars['Bytes']>;
   readonly address_contains?: InputMaybe<Scalars['Bytes']>;
+  readonly address_gt?: InputMaybe<Scalars['Bytes']>;
+  readonly address_gte?: InputMaybe<Scalars['Bytes']>;
   readonly address_in?: InputMaybe<ReadonlyArray<Scalars['Bytes']>>;
+  readonly address_lt?: InputMaybe<Scalars['Bytes']>;
+  readonly address_lte?: InputMaybe<Scalars['Bytes']>;
   readonly address_not?: InputMaybe<Scalars['Bytes']>;
   readonly address_not_contains?: InputMaybe<Scalars['Bytes']>;
   readonly address_not_in?: InputMaybe<ReadonlyArray<Scalars['Bytes']>>;
-  readonly height?: InputMaybe<Scalars['BigInt']>;
-  readonly height_gt?: InputMaybe<Scalars['BigInt']>;
-  readonly height_gte?: InputMaybe<Scalars['BigInt']>;
-  readonly height_in?: InputMaybe<ReadonlyArray<Scalars['BigInt']>>;
-  readonly height_lt?: InputMaybe<Scalars['BigInt']>;
-  readonly height_lte?: InputMaybe<Scalars['BigInt']>;
-  readonly height_not?: InputMaybe<Scalars['BigInt']>;
-  readonly height_not_in?: InputMaybe<ReadonlyArray<Scalars['BigInt']>>;
   readonly id?: InputMaybe<Scalars['ID']>;
   readonly id_gt?: InputMaybe<Scalars['ID']>;
   readonly id_gte?: InputMaybe<Scalars['ID']>;
@@ -81,47 +73,20 @@ export type Contract_Filter = {
   readonly layerNames_not_contains?: InputMaybe<ReadonlyArray<Scalars['String']>>;
   readonly layerNames_not_contains_nocase?: InputMaybe<ReadonlyArray<Scalars['String']>>;
   readonly layers_?: InputMaybe<Layer_Filter>;
-  readonly maxSupply?: InputMaybe<Scalars['BigInt']>;
-  readonly maxSupply_gt?: InputMaybe<Scalars['BigInt']>;
-  readonly maxSupply_gte?: InputMaybe<Scalars['BigInt']>;
-  readonly maxSupply_in?: InputMaybe<ReadonlyArray<Scalars['BigInt']>>;
-  readonly maxSupply_lt?: InputMaybe<Scalars['BigInt']>;
-  readonly maxSupply_lte?: InputMaybe<Scalars['BigInt']>;
-  readonly maxSupply_not?: InputMaybe<Scalars['BigInt']>;
-  readonly maxSupply_not_in?: InputMaybe<ReadonlyArray<Scalars['BigInt']>>;
-  readonly minted?: InputMaybe<Scalars['BigInt']>;
-  readonly minted_gt?: InputMaybe<Scalars['BigInt']>;
-  readonly minted_gte?: InputMaybe<Scalars['BigInt']>;
-  readonly minted_in?: InputMaybe<ReadonlyArray<Scalars['BigInt']>>;
-  readonly minted_lt?: InputMaybe<Scalars['BigInt']>;
-  readonly minted_lte?: InputMaybe<Scalars['BigInt']>;
-  readonly minted_not?: InputMaybe<Scalars['BigInt']>;
-  readonly minted_not_in?: InputMaybe<ReadonlyArray<Scalars['BigInt']>>;
-  readonly width?: InputMaybe<Scalars['BigInt']>;
-  readonly width_gt?: InputMaybe<Scalars['BigInt']>;
-  readonly width_gte?: InputMaybe<Scalars['BigInt']>;
-  readonly width_in?: InputMaybe<ReadonlyArray<Scalars['BigInt']>>;
-  readonly width_lt?: InputMaybe<Scalars['BigInt']>;
-  readonly width_lte?: InputMaybe<Scalars['BigInt']>;
-  readonly width_not?: InputMaybe<Scalars['BigInt']>;
-  readonly width_not_in?: InputMaybe<ReadonlyArray<Scalars['BigInt']>>;
 };
 
 export enum Contract_OrderBy {
   Address = 'address',
-  Height = 'height',
   Id = 'id',
   LayerNames = 'layerNames',
-  Layers = 'layers',
-  MaxSupply = 'maxSupply',
-  Minted = 'minted',
-  Width = 'width'
+  Layers = 'layers'
 }
 
 export type Layer = {
   readonly __typename?: 'Layer';
   readonly contract: Contract;
   readonly id: Scalars['ID'];
+  readonly index: Scalars['Int'];
   readonly name: Scalars['String'];
   readonly traits: ReadonlyArray<Trait>;
 };
@@ -167,6 +132,14 @@ export type Layer_Filter = {
   readonly id_lte?: InputMaybe<Scalars['ID']>;
   readonly id_not?: InputMaybe<Scalars['ID']>;
   readonly id_not_in?: InputMaybe<ReadonlyArray<Scalars['ID']>>;
+  readonly index?: InputMaybe<Scalars['Int']>;
+  readonly index_gt?: InputMaybe<Scalars['Int']>;
+  readonly index_gte?: InputMaybe<Scalars['Int']>;
+  readonly index_in?: InputMaybe<ReadonlyArray<Scalars['Int']>>;
+  readonly index_lt?: InputMaybe<Scalars['Int']>;
+  readonly index_lte?: InputMaybe<Scalars['Int']>;
+  readonly index_not?: InputMaybe<Scalars['Int']>;
+  readonly index_not_in?: InputMaybe<ReadonlyArray<Scalars['Int']>>;
   readonly name?: InputMaybe<Scalars['String']>;
   readonly name_contains?: InputMaybe<Scalars['String']>;
   readonly name_contains_nocase?: InputMaybe<Scalars['String']>;
@@ -193,6 +166,7 @@ export type Layer_Filter = {
 export enum Layer_OrderBy {
   Contract = 'contract',
   Id = 'id',
+  Index = 'index',
   Name = 'name',
   Traits = 'traits'
 }
@@ -405,7 +379,11 @@ export type Token_Filter = {
   readonly id_not_in?: InputMaybe<ReadonlyArray<Scalars['ID']>>;
   readonly owner?: InputMaybe<Scalars['Bytes']>;
   readonly owner_contains?: InputMaybe<Scalars['Bytes']>;
+  readonly owner_gt?: InputMaybe<Scalars['Bytes']>;
+  readonly owner_gte?: InputMaybe<Scalars['Bytes']>;
   readonly owner_in?: InputMaybe<ReadonlyArray<Scalars['Bytes']>>;
+  readonly owner_lt?: InputMaybe<Scalars['Bytes']>;
+  readonly owner_lte?: InputMaybe<Scalars['Bytes']>;
   readonly owner_not?: InputMaybe<Scalars['Bytes']>;
   readonly owner_not_contains?: InputMaybe<Scalars['Bytes']>;
   readonly owner_not_in?: InputMaybe<ReadonlyArray<Scalars['Bytes']>>;
@@ -441,7 +419,9 @@ export type Trait = {
   readonly __typename?: 'Trait';
   readonly data: Scalars['String'];
   readonly id: Scalars['ID'];
+  readonly index: Scalars['Int'];
   readonly layer: Layer;
+  readonly mimeType: Scalars['String'];
   readonly name: Scalars['String'];
 };
 
@@ -476,6 +456,14 @@ export type Trait_Filter = {
   readonly id_lte?: InputMaybe<Scalars['ID']>;
   readonly id_not?: InputMaybe<Scalars['ID']>;
   readonly id_not_in?: InputMaybe<ReadonlyArray<Scalars['ID']>>;
+  readonly index?: InputMaybe<Scalars['Int']>;
+  readonly index_gt?: InputMaybe<Scalars['Int']>;
+  readonly index_gte?: InputMaybe<Scalars['Int']>;
+  readonly index_in?: InputMaybe<ReadonlyArray<Scalars['Int']>>;
+  readonly index_lt?: InputMaybe<Scalars['Int']>;
+  readonly index_lte?: InputMaybe<Scalars['Int']>;
+  readonly index_not?: InputMaybe<Scalars['Int']>;
+  readonly index_not_in?: InputMaybe<ReadonlyArray<Scalars['Int']>>;
   readonly layer?: InputMaybe<Scalars['String']>;
   readonly layer_?: InputMaybe<Layer_Filter>;
   readonly layer_contains?: InputMaybe<Scalars['String']>;
@@ -497,6 +485,26 @@ export type Trait_Filter = {
   readonly layer_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
   readonly layer_starts_with?: InputMaybe<Scalars['String']>;
   readonly layer_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  readonly mimeType?: InputMaybe<Scalars['String']>;
+  readonly mimeType_contains?: InputMaybe<Scalars['String']>;
+  readonly mimeType_contains_nocase?: InputMaybe<Scalars['String']>;
+  readonly mimeType_ends_with?: InputMaybe<Scalars['String']>;
+  readonly mimeType_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  readonly mimeType_gt?: InputMaybe<Scalars['String']>;
+  readonly mimeType_gte?: InputMaybe<Scalars['String']>;
+  readonly mimeType_in?: InputMaybe<ReadonlyArray<Scalars['String']>>;
+  readonly mimeType_lt?: InputMaybe<Scalars['String']>;
+  readonly mimeType_lte?: InputMaybe<Scalars['String']>;
+  readonly mimeType_not?: InputMaybe<Scalars['String']>;
+  readonly mimeType_not_contains?: InputMaybe<Scalars['String']>;
+  readonly mimeType_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  readonly mimeType_not_ends_with?: InputMaybe<Scalars['String']>;
+  readonly mimeType_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  readonly mimeType_not_in?: InputMaybe<ReadonlyArray<Scalars['String']>>;
+  readonly mimeType_not_starts_with?: InputMaybe<Scalars['String']>;
+  readonly mimeType_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  readonly mimeType_starts_with?: InputMaybe<Scalars['String']>;
+  readonly mimeType_starts_with_nocase?: InputMaybe<Scalars['String']>;
   readonly name?: InputMaybe<Scalars['String']>;
   readonly name_contains?: InputMaybe<Scalars['String']>;
   readonly name_contains_nocase?: InputMaybe<Scalars['String']>;
@@ -522,7 +530,9 @@ export type Trait_Filter = {
 export enum Trait_OrderBy {
   Data = 'data',
   Id = 'id',
+  Index = 'index',
   Layer = 'layer',
+  MimeType = 'mimeType',
   Name = 'name'
 }
 
@@ -563,17 +573,26 @@ export enum _SubgraphErrorPolicy_ {
 export type ContractsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type ContractsQuery = { readonly __typename?: 'Query', readonly contracts: ReadonlyArray<{ readonly __typename?: 'Contract', readonly id: string, readonly address: any, readonly maxSupply: any, readonly minted: any, readonly layerNames: ReadonlyArray<string> }> };
+export type ContractsQuery = { readonly __typename?: 'Query', readonly contracts: ReadonlyArray<{ readonly __typename?: 'Contract', readonly id: string, readonly address: any, readonly layerNames: ReadonlyArray<string> }> };
 
 export type LayersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type LayersQuery = { readonly __typename?: 'Query', readonly layers: ReadonlyArray<{ readonly __typename?: 'Layer', readonly id: string, readonly name: string, readonly contract: { readonly __typename?: 'Contract', readonly id: string } }> };
+export type LayersQuery = { readonly __typename?: 'Query', readonly layers: ReadonlyArray<{ readonly __typename?: 'Layer', readonly id: string, readonly name: string, readonly index: number, readonly contract: { readonly __typename?: 'Contract', readonly id: string } }> };
 
 export type TraitsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type TraitsQuery = { readonly __typename?: 'Query', readonly traits: ReadonlyArray<{ readonly __typename?: 'Trait', readonly data: string, readonly id: string, readonly name: string, readonly layer: { readonly __typename?: 'Layer', readonly name: string, readonly contract: { readonly __typename?: 'Contract', readonly id: string } } }> };
+export type TraitsQuery = { readonly __typename?: 'Query', readonly traits: ReadonlyArray<{ readonly __typename?: 'Trait', readonly data: string, readonly id: string, readonly name: string, readonly index: number, readonly mimeType: string, readonly layer: { readonly __typename?: 'Layer', readonly name: string, readonly index: number, readonly contract: { readonly __typename?: 'Contract', readonly id: string } } }> };
+
+export type InviniteTraitsQueryVariables = Exact<{
+  skip: Scalars['Int'];
+  name: Scalars['String'];
+  contract: Scalars['String'];
+}>;
+
+
+export type InviniteTraitsQuery = { readonly __typename?: 'Query', readonly traits: ReadonlyArray<{ readonly __typename?: 'Trait', readonly data: string, readonly id: string, readonly name: string, readonly index: number, readonly mimeType: string, readonly layer: { readonly __typename?: 'Layer', readonly name: string, readonly index: number, readonly contract: { readonly __typename?: 'Contract', readonly id: string } } }> };
 
 
 export const ContractsDocument = gql`
@@ -581,8 +600,6 @@ export const ContractsDocument = gql`
   contracts(first: 5) {
     id
     address
-    maxSupply
-    minted
     layerNames
   }
 }
@@ -596,6 +613,7 @@ export const LayersDocument = gql`
   layers(first: 10) {
     id
     name
+    index
     contract {
       id
     }
@@ -608,12 +626,15 @@ export function useLayersQuery(options?: Omit<Urql.UseQueryArgs<LayersQueryVaria
 };
 export const TraitsDocument = gql`
     query Traits {
-  traits(first: 100) {
+  traits(first: 1000) {
     data
     id
     name
+    index
+    mimeType
     layer {
       name
+      index
       contract {
         id
       }
@@ -624,4 +645,30 @@ export const TraitsDocument = gql`
 
 export function useTraitsQuery(options?: Omit<Urql.UseQueryArgs<TraitsQueryVariables>, 'query'>) {
   return Urql.useQuery<TraitsQuery, TraitsQueryVariables>({ query: TraitsDocument, ...options });
+};
+export const InviniteTraitsDocument = gql`
+    query InviniteTraits($skip: Int!, $name: String!, $contract: String!) {
+  traits(
+    first: 50
+    skip: $skip
+    where: {layer_: {name_contains: $name}, layer_starts_with: $contract}
+  ) {
+    data
+    id
+    name
+    index
+    mimeType
+    layer {
+      name
+      index
+      contract {
+        id
+      }
+    }
+  }
+}
+    `;
+
+export function useInviniteTraitsQuery(options: Omit<Urql.UseQueryArgs<InviniteTraitsQueryVariables>, 'query'>) {
+  return Urql.useQuery<InviniteTraitsQuery, InviniteTraitsQueryVariables>({ query: InviniteTraitsDocument, ...options });
 };
