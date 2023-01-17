@@ -111,18 +111,20 @@ export interface MashInterface extends utils.Interface {
     "initialize()": FunctionFragment;
     "isApprovedForAll(address,address)": FunctionFragment;
     "isOperatorFilterEnabled()": FunctionFragment;
+    "mintActive()": FunctionFragment;
     "mintAndBuy(bytes6[7])": FunctionFragment;
     "mintIndex(uint256)": FunctionFragment;
     "name()": FunctionFragment;
     "owner()": FunctionFragment;
     "ownerOf(uint256)": FunctionFragment;
     "previewCollage(bytes6[7])": FunctionFragment;
-    "previewTokenCollage(uint256,uint256,(uint8,uint8,uint8,bool,uint8,uint8,uint8))": FunctionFragment;
+    "previewTokenCollage(uint256,uint256,(uint8,uint8,uint8,bool,uint8,int8,int8))": FunctionFragment;
     "render()": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
     "safeTransferFrom(address,address,uint256)": FunctionFragment;
     "safeTransferFrom(address,address,uint256,bytes)": FunctionFragment;
     "setApprovalForAll(address,bool)": FunctionFragment;
+    "setMintActive()": FunctionFragment;
     "setRender(address)": FunctionFragment;
     "startTokenId()": FunctionFragment;
     "supportsInterface(bytes4)": FunctionFragment;
@@ -136,6 +138,7 @@ export interface MashInterface extends utils.Interface {
     "transferFrom(address,address,uint256)": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
     "walletOfOwner(address)": FunctionFragment;
+    "withdraw()": FunctionFragment;
   };
 
   getFunction(
@@ -159,6 +162,7 @@ export interface MashInterface extends utils.Interface {
       | "initialize"
       | "isApprovedForAll"
       | "isOperatorFilterEnabled"
+      | "mintActive"
       | "mintAndBuy"
       | "mintIndex"
       | "name"
@@ -171,6 +175,7 @@ export interface MashInterface extends utils.Interface {
       | "safeTransferFrom(address,address,uint256)"
       | "safeTransferFrom(address,address,uint256,bytes)"
       | "setApprovalForAll"
+      | "setMintActive"
       | "setRender"
       | "startTokenId"
       | "supportsInterface"
@@ -184,6 +189,7 @@ export interface MashInterface extends utils.Interface {
       | "transferFrom"
       | "transferOwnership"
       | "walletOfOwner"
+      | "withdraw"
   ): FunctionFragment;
 
   encodeFunctionData(
@@ -268,6 +274,10 @@ export interface MashInterface extends utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
+    functionFragment: "mintActive",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
     functionFragment: "mintAndBuy",
     values: [PromiseOrValue<BytesLike>[]]
   ): string;
@@ -318,6 +328,10 @@ export interface MashInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "setApprovalForAll",
     values: [PromiseOrValue<string>, PromiseOrValue<boolean>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setMintActive",
+    values?: undefined
   ): string;
   encodeFunctionData(
     functionFragment: "setRender",
@@ -372,6 +386,7 @@ export interface MashInterface extends utils.Interface {
     functionFragment: "walletOfOwner",
     values: [PromiseOrValue<string>]
   ): string;
+  encodeFunctionData(functionFragment: "withdraw", values?: undefined): string;
 
   decodeFunctionResult(functionFragment: "MAX_LAYERS", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "MAX_SUPPLY", data: BytesLike): Result;
@@ -428,6 +443,7 @@ export interface MashInterface extends utils.Interface {
     functionFragment: "isOperatorFilterEnabled",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "mintActive", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "mintAndBuy", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "mintIndex", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "name", data: BytesLike): Result;
@@ -456,6 +472,10 @@ export interface MashInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "setApprovalForAll",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "setMintActive",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "setRender", data: BytesLike): Result;
@@ -498,6 +518,7 @@ export interface MashInterface extends utils.Interface {
     functionFragment: "walletOfOwner",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "withdraw", data: BytesLike): Result;
 
   events: {
     "Approval(address,address,uint256)": EventFragment;
@@ -725,6 +746,8 @@ export interface Mash extends BaseContract {
 
     isOperatorFilterEnabled(overrides?: CallOverrides): Promise<[boolean]>;
 
+    mintActive(overrides?: CallOverrides): Promise<[boolean]>;
+
     mintAndBuy(
       layerInfo: PromiseOrValue<BytesLike>[],
       overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
@@ -783,6 +806,10 @@ export interface Mash extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
+    setMintActive(
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
     setRender(
       _newRender: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -836,6 +863,10 @@ export interface Mash extends BaseContract {
       address_: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<[BigNumber[]]>;
+
+    withdraw(
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
   };
 
   MAX_LAYERS(overrides?: CallOverrides): Promise<BigNumber>;
@@ -932,6 +963,8 @@ export interface Mash extends BaseContract {
 
   isOperatorFilterEnabled(overrides?: CallOverrides): Promise<boolean>;
 
+  mintActive(overrides?: CallOverrides): Promise<boolean>;
+
   mintAndBuy(
     layerInfo: PromiseOrValue<BytesLike>[],
     overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
@@ -990,6 +1023,10 @@ export interface Mash extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
+  setMintActive(
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
   setRender(
     _newRender: PromiseOrValue<string>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -1043,6 +1080,10 @@ export interface Mash extends BaseContract {
     address_: PromiseOrValue<string>,
     overrides?: CallOverrides
   ): Promise<BigNumber[]>;
+
+  withdraw(
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
 
   callStatic: {
     MAX_LAYERS(overrides?: CallOverrides): Promise<BigNumber>;
@@ -1137,6 +1178,8 @@ export interface Mash extends BaseContract {
 
     isOperatorFilterEnabled(overrides?: CallOverrides): Promise<boolean>;
 
+    mintActive(overrides?: CallOverrides): Promise<boolean>;
+
     mintAndBuy(
       layerInfo: PromiseOrValue<BytesLike>[],
       overrides?: CallOverrides
@@ -1193,6 +1236,8 @@ export interface Mash extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
+    setMintActive(overrides?: CallOverrides): Promise<void>;
+
     setRender(
       _newRender: PromiseOrValue<string>,
       overrides?: CallOverrides
@@ -1244,6 +1289,8 @@ export interface Mash extends BaseContract {
       address_: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<BigNumber[]>;
+
+    withdraw(overrides?: CallOverrides): Promise<void>;
   };
 
   filters: {
@@ -1403,6 +1450,8 @@ export interface Mash extends BaseContract {
 
     isOperatorFilterEnabled(overrides?: CallOverrides): Promise<BigNumber>;
 
+    mintActive(overrides?: CallOverrides): Promise<BigNumber>;
+
     mintAndBuy(
       layerInfo: PromiseOrValue<BytesLike>[],
       overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
@@ -1461,6 +1510,10 @@ export interface Mash extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
+    setMintActive(
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
     setRender(
       _newRender: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -1513,6 +1566,10 @@ export interface Mash extends BaseContract {
     walletOfOwner(
       address_: PromiseOrValue<string>,
       overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    withdraw(
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
   };
 
@@ -1607,6 +1664,8 @@ export interface Mash extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
+    mintActive(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     mintAndBuy(
       layerInfo: PromiseOrValue<BytesLike>[],
       overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
@@ -1665,6 +1724,10 @@ export interface Mash extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
+    setMintActive(
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
     setRender(
       _newRender: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -1717,6 +1780,10 @@ export interface Mash extends BaseContract {
     walletOfOwner(
       address_: PromiseOrValue<string>,
       overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    withdraw(
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
   };
 }

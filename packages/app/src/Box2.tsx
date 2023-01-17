@@ -13,11 +13,13 @@ interface BoxProps {
 export const Box: React.FC<BoxProps> = ({ id, index, location, removeBox, handleLocationChange }) => {
 
   return (
-    <div className={` rounded-lg border-2 border-gray-800` }>
-      <div className="grid grid-cols-8 justify-items-stretch">
-        <div className="box-text justify-self-start col-span-3">{index} {location.name}</div>
+    <div className={`rounded-lg border-2 border-gray-800` }>
+      <div className="flex flex-row justify-between ml-2">
+        <div className="">{index+1}. {location.name}</div>
+        <div className='grid grid-flow-col'>
         <LocationForm loc={location} id={location.id} onChange={(coord:string,e:string) => handleLocationChange(coord, Number(e), id)} />
-        <button onClick={() => removeBox(id)} className="font-extrabold font-mono justify-self-end"> X</button>
+        <button onClick={() => removeBox(id)} className="font-extrabold font-mono justify-self-end mx-2"> X</button>
+        </div>
       </div>
     </div>
   )

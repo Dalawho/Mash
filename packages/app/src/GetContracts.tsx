@@ -12,6 +12,8 @@ gql`
       #maxSupply
       #minted
       layerNames
+      xSize
+      ySize
     }
   }
 `;

@@ -94,8 +94,12 @@ export declare namespace SharedStructs {
 export interface RenderInterface extends utils.Interface {
   functions: {
     "MAX_LAYERS()": FunctionFragment;
+    "getCollectionName(uint256)": FunctionFragment;
+    "getSVGForTrait(uint8,uint8,uint8)": FunctionFragment;
+    "getTraitData(address,uint8,uint8)": FunctionFragment;
     "getTraitDetails(address,uint8,uint8)": FunctionFragment;
     "initialize()": FunctionFragment;
+    "int8ToString(int8)": FunctionFragment;
     "mash()": FunctionFragment;
     "owner()": FunctionFragment;
     "previewCollage(tuple[7])": FunctionFragment;
@@ -108,8 +112,12 @@ export interface RenderInterface extends utils.Interface {
   getFunction(
     nameOrSignatureOrTopic:
       | "MAX_LAYERS"
+      | "getCollectionName"
+      | "getSVGForTrait"
+      | "getTraitData"
       | "getTraitDetails"
       | "initialize"
+      | "int8ToString"
       | "mash"
       | "owner"
       | "previewCollage"
@@ -124,6 +132,26 @@ export interface RenderInterface extends utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
+    functionFragment: "getCollectionName",
+    values: [PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getSVGForTrait",
+    values: [
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BigNumberish>
+    ]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getTraitData",
+    values: [
+      PromiseOrValue<string>,
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BigNumberish>
+    ]
+  ): string;
+  encodeFunctionData(
     functionFragment: "getTraitDetails",
     values: [
       PromiseOrValue<string>,
@@ -134,6 +162,10 @@ export interface RenderInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "initialize",
     values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "int8ToString",
+    values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(functionFragment: "mash", values?: undefined): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
@@ -164,10 +196,26 @@ export interface RenderInterface extends utils.Interface {
 
   decodeFunctionResult(functionFragment: "MAX_LAYERS", data: BytesLike): Result;
   decodeFunctionResult(
+    functionFragment: "getCollectionName",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getSVGForTrait",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getTraitData",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "getTraitDetails",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "initialize", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "int8ToString",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "mash", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(
@@ -242,6 +290,25 @@ export interface Render extends BaseContract {
   functions: {
     MAX_LAYERS(overrides?: CallOverrides): Promise<[BigNumber]>;
 
+    getCollectionName(
+      _collectionNr: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<[string] & { out: string }>;
+
+    getSVGForTrait(
+      _collectionId: PromiseOrValue<BigNumberish>,
+      _layerId: PromiseOrValue<BigNumberish>,
+      _traitId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<[string]>;
+
+    getTraitData(
+      _collection: PromiseOrValue<string>,
+      _layerId: PromiseOrValue<BigNumberish>,
+      _traitId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<[string]>;
+
     getTraitDetails(
       _collection: PromiseOrValue<string>,
       layerId: PromiseOrValue<BigNumberish>,
@@ -252,6 +319,11 @@ export interface Render extends BaseContract {
     initialize(
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
+
+    int8ToString(
+      num: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<[string]>;
 
     mash(overrides?: CallOverrides): Promise<[string]>;
 
@@ -286,6 +358,25 @@ export interface Render extends BaseContract {
 
   MAX_LAYERS(overrides?: CallOverrides): Promise<BigNumber>;
 
+  getCollectionName(
+    _collectionNr: PromiseOrValue<BigNumberish>,
+    overrides?: CallOverrides
+  ): Promise<string>;
+
+  getSVGForTrait(
+    _collectionId: PromiseOrValue<BigNumberish>,
+    _layerId: PromiseOrValue<BigNumberish>,
+    _traitId: PromiseOrValue<BigNumberish>,
+    overrides?: CallOverrides
+  ): Promise<string>;
+
+  getTraitData(
+    _collection: PromiseOrValue<string>,
+    _layerId: PromiseOrValue<BigNumberish>,
+    _traitId: PromiseOrValue<BigNumberish>,
+    overrides?: CallOverrides
+  ): Promise<string>;
+
   getTraitDetails(
     _collection: PromiseOrValue<string>,
     layerId: PromiseOrValue<BigNumberish>,
@@ -296,6 +387,11 @@ export interface Render extends BaseContract {
   initialize(
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
+
+  int8ToString(
+    num: PromiseOrValue<BigNumberish>,
+    overrides?: CallOverrides
+  ): Promise<string>;
 
   mash(overrides?: CallOverrides): Promise<string>;
 
@@ -330,6 +426,25 @@ export interface Render extends BaseContract {
   callStatic: {
     MAX_LAYERS(overrides?: CallOverrides): Promise<BigNumber>;
 
+    getCollectionName(
+      _collectionNr: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<string>;
+
+    getSVGForTrait(
+      _collectionId: PromiseOrValue<BigNumberish>,
+      _layerId: PromiseOrValue<BigNumberish>,
+      _traitId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<string>;
+
+    getTraitData(
+      _collection: PromiseOrValue<string>,
+      _layerId: PromiseOrValue<BigNumberish>,
+      _traitId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<string>;
+
     getTraitDetails(
       _collection: PromiseOrValue<string>,
       layerId: PromiseOrValue<BigNumberish>,
@@ -338,6 +453,11 @@ export interface Render extends BaseContract {
     ): Promise<IIndelible.TraitStructOutput>;
 
     initialize(overrides?: CallOverrides): Promise<void>;
+
+    int8ToString(
+      num: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<string>;
 
     mash(overrides?: CallOverrides): Promise<string>;
 
@@ -385,6 +505,25 @@ export interface Render extends BaseContract {
   estimateGas: {
     MAX_LAYERS(overrides?: CallOverrides): Promise<BigNumber>;
 
+    getCollectionName(
+      _collectionNr: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getSVGForTrait(
+      _collectionId: PromiseOrValue<BigNumberish>,
+      _layerId: PromiseOrValue<BigNumberish>,
+      _traitId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getTraitData(
+      _collection: PromiseOrValue<string>,
+      _layerId: PromiseOrValue<BigNumberish>,
+      _traitId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     getTraitDetails(
       _collection: PromiseOrValue<string>,
       layerId: PromiseOrValue<BigNumberish>,
@@ -394,6 +533,11 @@ export interface Render extends BaseContract {
 
     initialize(
       overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    int8ToString(
+      num: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     mash(overrides?: CallOverrides): Promise<BigNumber>;
@@ -430,6 +574,25 @@ export interface Render extends BaseContract {
   populateTransaction: {
     MAX_LAYERS(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
+    getCollectionName(
+      _collectionNr: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getSVGForTrait(
+      _collectionId: PromiseOrValue<BigNumberish>,
+      _layerId: PromiseOrValue<BigNumberish>,
+      _traitId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getTraitData(
+      _collection: PromiseOrValue<string>,
+      _layerId: PromiseOrValue<BigNumberish>,
+      _traitId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     getTraitDetails(
       _collection: PromiseOrValue<string>,
       layerId: PromiseOrValue<BigNumberish>,
@@ -439,6 +602,11 @@ export interface Render extends BaseContract {
 
     initialize(
       overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    int8ToString(
+      num: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     mash(overrides?: CallOverrides): Promise<PopulatedTransaction>;

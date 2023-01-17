@@ -8,6 +8,8 @@ export interface Locations {
     scale: number;
     x: number;
     y: number;
+    data: string;
+    mimeType: string;
   }
 
 type LocProps = {
@@ -25,7 +27,7 @@ export const LocationForm = (props: LocProps) => {
         <input className="w-10  text-center bg-amber-100"
             type="number" 
             value={props.loc.scale}
-            onChange={(e) => props.onChange("scale", e.target.value)}
+            onChange={(e) => props.onChange("scale", parseInt(e.target.value) > 0 ? e.target.value : "1")}
             required pattern="\d+"
           />
           <label className="">|</label>

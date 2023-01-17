@@ -49,7 +49,7 @@ interface Props {
                         ref={provided.innerRef}
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
-                        className="border-4"
+                        className=""
                       >
                         <Box
                         key={item.id}

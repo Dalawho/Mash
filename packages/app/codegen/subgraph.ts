@@ -34,6 +34,8 @@ export type Contract = {
   readonly id: Scalars['ID'];
   readonly layerNames: ReadonlyArray<Scalars['String']>;
   readonly layers: ReadonlyArray<Layer>;
+  readonly xSize: Scalars['Int'];
+  readonly ySize: Scalars['Int'];
 };
 
 
@@ -73,13 +75,31 @@ export type Contract_Filter = {
   readonly layerNames_not_contains?: InputMaybe<ReadonlyArray<Scalars['String']>>;
   readonly layerNames_not_contains_nocase?: InputMaybe<ReadonlyArray<Scalars['String']>>;
   readonly layers_?: InputMaybe<Layer_Filter>;
+  readonly xSize?: InputMaybe<Scalars['Int']>;
+  readonly xSize_gt?: InputMaybe<Scalars['Int']>;
+  readonly xSize_gte?: InputMaybe<Scalars['Int']>;
+  readonly xSize_in?: InputMaybe<ReadonlyArray<Scalars['Int']>>;
+  readonly xSize_lt?: InputMaybe<Scalars['Int']>;
+  readonly xSize_lte?: InputMaybe<Scalars['Int']>;
+  readonly xSize_not?: InputMaybe<Scalars['Int']>;
+  readonly xSize_not_in?: InputMaybe<ReadonlyArray<Scalars['Int']>>;
+  readonly ySize?: InputMaybe<Scalars['Int']>;
+  readonly ySize_gt?: InputMaybe<Scalars['Int']>;
+  readonly ySize_gte?: InputMaybe<Scalars['Int']>;
+  readonly ySize_in?: InputMaybe<ReadonlyArray<Scalars['Int']>>;
+  readonly ySize_lt?: InputMaybe<Scalars['Int']>;
+  readonly ySize_lte?: InputMaybe<Scalars['Int']>;
+  readonly ySize_not?: InputMaybe<Scalars['Int']>;
+  readonly ySize_not_in?: InputMaybe<ReadonlyArray<Scalars['Int']>>;
 };
 
 export enum Contract_OrderBy {
   Address = 'address',
   Id = 'id',
   LayerNames = 'layerNames',
-  Layers = 'layers'
+  Layers = 'layers',
+  XSize = 'xSize',
+  YSize = 'ySize'
 }
 
 export type Layer = {
@@ -573,7 +593,7 @@ export enum _SubgraphErrorPolicy_ {
 export type ContractsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type ContractsQuery = { readonly __typename?: 'Query', readonly contracts: ReadonlyArray<{ readonly __typename?: 'Contract', readonly id: string, readonly address: any, readonly layerNames: ReadonlyArray<string> }> };
+export type ContractsQuery = { readonly __typename?: 'Query', readonly contracts: ReadonlyArray<{ readonly __typename?: 'Contract', readonly id: string, readonly address: any, readonly layerNames: ReadonlyArray<string>, readonly xSize: number, readonly ySize: number }> };
 
 export type LayersQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -601,6 +621,8 @@ export const ContractsDocument = gql`
     id
     address
     layerNames
+    xSize
+    ySize
   }
 }
     `;

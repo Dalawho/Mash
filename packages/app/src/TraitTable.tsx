@@ -57,7 +57,7 @@ const TraitTable = ({ selectedValue, handlePiecesId }: TraitTableProps) => {
         }
     }, [result.data]);
      
-    console.log(result.data);
+    //console.log(result.data);
     useEffect(() => {
         setSkip(0);
         setItems([]);

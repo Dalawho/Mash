@@ -3,6 +3,7 @@ import type { NextPage } from "next";
 import React, { useEffect,useState, useCallback} from "react";
 import Select from 'react-select';
 import { ConnectButton } from "@rainbow-me/rainbowkit";
+import Image from "next/image";
 
 import { BuyAndMintButton } from "../BuyAndMintButton";
 import GetContracts from "../GetContracts";
@@ -18,6 +19,18 @@ import next from 'next';
 import { Trait } from '../sharedInterfaces';
 import TraitTable from "../TraitTable";
 import { useIsMounted } from '../useIsMounted';
+import { GetFullSVG } from '../GetFullSVG';
+import Modal from 'react-modal';
+
+interface Selector{
+  collection: number,
+  layer: string,
+}
+
+interface SelectTrait {
+  label: string;
+  value: number;
+}
 
 const HomePage:NextPage = () => {
     
@@ -25,16 +38,7 @@ const HomePage:NextPage = () => {
   //const [SVG, setSVG] = useState<string | null>(null);
   const [bytes, setBytes] = useState(Array.from({length: 7}, () => "0x000000000000"));
   const [pfpRender, setPfpRender] = useState(true);
-  
-  interface Selector{
-    collection: number,
-    layer: string,
-  }
-
-  interface SelectTrait {
-    label: string;
-    value: number;
-  }
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const [selectedValue, setSelectedValue] = useState<Selector>({collection: 0, layer: ""});
 
@@ -59,7 +63,7 @@ const HomePage:NextPage = () => {
   const handlePiecesId = (trait: Trait) => {
     if(locations.length >= 7) return;
     const maxId = locations.reduce((max, obj) => obj.id > max ? obj.id : max, 0);
-    const nextLocs = [...locations, {id: maxId+1, name: trait.name, contract: trait.contract, layerId: trait.layerNr, traitId: trait.traitNr, scale: 1, x: 0, y: 0}]
+    const nextLocs = [...locations, {id: maxId+1, name: trait.name, contract: trait.contract, layerId: trait.layerNr, traitId: trait.traitNr, scale: 1, x: 0, y: 0, data: trait.tokenURI, mimeType: trait.mimeType}]
     setLocations(nextLocs);
     const nextBytes = nextLocs.map((item) => encodeLayer(item, pfpRender));
     setBytes(nextBytes.concat(Array.from({length: 7-nextBytes.length}, () => "0x000000000000")));
@@ -78,13 +82,16 @@ const HomePage:NextPage = () => {
 
   const isMounted = useIsMounted();
 
+  const placeSVG = '<svg xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges" version="1.1" id="pixel" viewBox="0 0 32 32" width="320" height="320"><style>#pixel {image-rendering: pixelated; image-rendering: -moz-crisp-edges; image-rendering: -webkit-crisp-edges; -ms-interpolation-mode: nearest-neighbor;}</style></svg>';
+
   const encodeLayer = (layer: Locations, pfpRender: Boolean) => {
     let pfpRenderByte = ((pfpRender ? 1 : 0) << 7) | layer.scale;
     let array = new Uint8Array([layer.contract, layer.layerId, layer.traitId, pfpRenderByte, layer.x, layer.y]);
     return "0x" + array.reduce((output, elem) => output + elem.toString(16).padStart(2, '0'), '');
-}
+  }
 
-    const SVG = GetSVG({ inBytes: bytes});
+    //const SVG = GetSVG({ inBytes: bytes});
+    const SVG = GetFullSVG({locations:locations, pfpRender: pfpRender});
     const contracts = GetContracts();
     const traits = GetTraits();
     const layers = GetLayers();
@@ -102,27 +109,31 @@ const HomePage:NextPage = () => {
     });
 
     const placeholder = [{value: 0, label: "None", maxSupply: 0, minted: 0}]
-
+    //"bg-amber-100"
     return(
-      <div className="bg-amber-100">
-        <div className="flex flex-col bg-amber-100 text-slate-800 text-2xl font-proggy" >
+      <div className="" data-theme="halloween">
+        <div className="flex flex-col text-2xl font-proggy" >
           <nav className='m-4 flex flex-row justify-end'>
           <ConnectButton showBalance={false} accountStatus="address"/>
         </nav>
             <div className="flex flex-col gap-4 items-center p-8 mx-auto">
-              <div>
+              <div className='flex flex-col items-center'>
                 <h1 className='font-bold text-3xl'>
                   What is this, a crossover episode?
                 </h1>
                 <h2>
-                
+                  CC0X - an on-chain CC0 mashup
                 </h2>
+                <label htmlFor="my-modal" className="btn rounded-lg btn-outline text-2xl">What?</label>
               </div>
                 <div className="flex flex-row space-x-2">
-                {(isMounted && SVG ? parse(SVG.toString()) : null) ?? "??"}
+                {(isMounted && SVG ? parse(SVG.toString()) : parse(placeSVG)) ?? parse(placeSVG)}
                 {/* {SVG ? parse(SVG.toString()) : "No Layers added yet."} */}
               <div>
-                <h1>Nr. - Name - scale - xOffset - yOffset - Remove</h1>
+                <div className='flex flex-row justify-between'>
+                <h1 className='px-2'>Nr. Name |</h1>
+                <h2> scale | X | Y | X</h2>
+                </div>
                 <BoxContainer boxes={locations} setBoxes={handleOrderChange} handleLocationChange={handleLocationChange} />
                 <BuyAndMintButton inBytes={bytes} />
               </div>

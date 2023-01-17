@@ -11,7 +11,7 @@ const Panel = ({ trait, onClick }: PanelProps) => {
   //{picture && parse(picture)}
   //console.log(trait.tokenURI);
   return (
-    <button onClick={() => onClick(trait)} className="rounded-lg border-slate-900 border-4 m-1 flex flex-col items-center" >
+    <button onClick={() => onClick(trait)} className="rounded-lg border-slate-900 border-4 m-1 pt-1 flex flex-col items-center" >
       {trait.tokenURI ? parse(trait.tokenURI.toString()) : ""}
       
       <p>{trait.name}</p>
