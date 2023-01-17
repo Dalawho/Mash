@@ -17,7 +17,7 @@ interface IMash {
 }
 
 contract Render is Initializable, OwnableUpgradeable, SSt {
-    using Strings for *;
+    using Strings for uint256;
     using DynamicBuffer for bytes;
 
     uint256 public constant MAX_LAYERS = 7; 
@@ -56,7 +56,7 @@ contract Render is Initializable, OwnableUpgradeable, SSt {
         IIndelible.Trait[MAX_LAYERS] memory traitNames;
         for(uint256 i = 0; i < layerInfo.length; i++) {
             if(layerInfo[i].collection == 0) continue;
-            console.log(layerInfo[i].collection);
+            //console.log(layerInfo[i].collection);
             //_collections[i] = mash.getCollection(layerInfo[i].collection);
             (collectionNames[i],,,,,,) = IIndelible(_collections[i].collection).contractData();
             traitNames[i] = getTraitDetails(_collections[i].collection, layerInfo[i].layerId, layerInfo[i].traitId);
@@ -119,26 +119,31 @@ contract Render is Initializable, OwnableUpgradeable, SSt {
     function _drawTraits(LayerStruct[MAX_LAYERS] memory _layerInfo, CollectionInfo[MAX_LAYERS] memory _collections, IIndelible.Trait[MAX_LAYERS] memory traitNames) internal view returns(bytes memory) {
             bytes memory buffer = DynamicBuffer.allocate(2**18);
             //buffer.appendSafe(bytes(string.concat('<svg xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges" version="1.1" viewBox="0 0 ', Strings.toString(height), ' ', Strings.toString(width),'" width="',Strings.toString(height*5),'" height="',Strings.toString(width*5),'"> ')));
-            uint8 height = _collections[0].xSize*_layerInfo[0].scale;
-            uint8 width = _collections[0].ySize*_layerInfo[0].scale;
+            int256 height = int256(uint256(_collections[0].xSize*_layerInfo[0].scale));
+            int256 width = int256(uint256(_collections[0].ySize*_layerInfo[0].scale));
             for(uint256 i = 0; i < _layerInfo.length; i++) {
                 if(_layerInfo[i].collection == 0) continue;
                 _renderImg(_layerInfo[i], _collections[i], traitNames[i], buffer);
                 if(!_layerInfo[0].pfpRender) { 
-                    if(int256(uint256(_collections[i].ySize))*int256(uint256(_layerInfo[i].scale))+_layerInfo[i].yOffset > int256(height)) height = _collections[i].ySize*_layerInfo[i].scale+_layerInfo[i].yOffset;
-                    if(_collections[i].xSize*_layerInfo[i].scale+_layerInfo[i].xOffset > int256(width)) width = _collections[i].xSize*_layerInfo[i].scale+_layerInfo[i].xOffset;
+                    if(int256(uint256(_collections[i].ySize*_layerInfo[i].scale))+_layerInfo[i].yOffset > height) height = int256(uint256(_collections[i].ySize*_layerInfo[i].scale))+_layerInfo[i].yOffset;
+                    if(int256(uint256(_collections[i].xSize*_layerInfo[i].scale))+_layerInfo[i].xOffset > width) width = int256(uint256(_collections[i].xSize*_layerInfo[i].scale))+_layerInfo[i].xOffset;
                 }
             }
             buffer.appendSafe('<style>#pixel {image-rendering: pixelated; image-rendering: -moz-crisp-edges; image-rendering: -webkit-crisp-edges; -ms-interpolation-mode: nearest-neighbor;}</style></svg>');
-            return abi.encodePacked('<svg xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges" version="1.1" id="pixel" viewBox="0 0 ', Strings.toString(width), ' ', Strings.toString(height),'" width="',Strings.toString(uint256(width)*10),'" height="',Strings.toString(uint256(height)*10),'"> ', buffer);
+            return abi.encodePacked('<svg xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges" version="1.1" id="pixel" viewBox="0 0 ', Strings.toString(uint256(width)), ' ', Strings.toString(uint256(height)),'" width="',Strings.toString(uint256(width)*10),'" height="',Strings.toString(uint256(height)*10),'"> ', buffer);
     }
 
     function _renderImg(LayerStruct memory _currentLayer, CollectionInfo memory _currentCollection, IIndelible.Trait memory traitNames, bytes memory buffer) private view {
         //currently only renders as PNG this should also include gif! 
         bytes memory _traitData = getTraitData(_currentCollection.collection, _currentLayer.layerId, _currentLayer.traitId);
-        buffer.appendSafe(bytes(string.concat('<image x="', Strings.toString(_currentLayer.xOffset), '" y="', Strings.toString(_currentLayer.yOffset),'" width="', Strings.toString(_currentCollection.xSize*_currentLayer.scale), '" height="', Strings.toString(_currentCollection.ySize*_currentLayer.scale),
+        buffer.appendSafe(bytes(string.concat('<image x="', int8ToString(_currentLayer.xOffset), '" y="', int8ToString(_currentLayer.yOffset),'" width="', Strings.toString(_currentCollection.xSize*_currentLayer.scale), '" height="', Strings.toString(_currentCollection.ySize*_currentLayer.scale),
          '" href="data:', traitNames.mimetype , ';base64,'))); //add the gif/png selector
         buffer.appendSafe(bytes(Base64.encode(_traitData)));
         buffer.appendSafe(bytes('"/>'));
     }
+
+    function int8ToString(int8 num) public pure returns (string memory) {
+        return num < 0 ? string.concat("-", Strings.toString(uint8(-1 * num) )): Strings.toString(uint8(num));
+    }
+
 }

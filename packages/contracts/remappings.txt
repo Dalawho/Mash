@@ -4,3 +4,4 @@ openzeppelin-upgradable/=lib/openzeppelin-contracts-upgradeable/contracts/
 openzeppelin/=lib/openzeppelin-contracts/contracts/
 ethier/=lib/ethier/contracts/
 solmate/=lib/solmate/src/
+stringutils/=lib/solidity-stringutils/src/

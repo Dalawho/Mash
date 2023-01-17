@@ -4,10 +4,12 @@ pragma solidity ^0.8.12;
 // Two storage slots for each 
 
 import "openzeppelin-upgradable/access/OwnableUpgradeable.sol";
+
+//import {StringsUpgradeable as Strings} from "openzeppelin-upgradable/utils/StringsUpgradeable.sol";
 import "./ERC721G.sol";
 import "./DefaultOperatorFiltererUpgradeable.sol";
 import {SharedStructs as SSt} from "./sharedStructs.sol";
-import "forge-std/console.sol";
+//import "forge-std/console.sol";
 
 interface IRender {
     function tokenURI(uint256 tokenId, SSt.LayerStruct[7] memory layerIds, SSt.CollectionInfo[7] memory _collections) external view returns (string memory); 
@@ -15,7 +17,7 @@ interface IRender {
 }
 
 contract Mash is ERC721G, OwnableUpgradeable, DefaultOperatorFiltererUpgradeable {
-
+    //using Strings for uint8;
     event MetadataUpdate(uint256 _tokenId);
     event ContractAdded(uint256 indexed contractNr, address indexed contractAddress, uint16 maxSupply);
     event MintedFrom(uint256 indexed contractNr);
@@ -142,8 +144,8 @@ contract Mash is ERC721G, OwnableUpgradeable, DefaultOperatorFiltererUpgradeable
         uint8 scale = uint8(array[3] & 0x7f);
         int8 xOffset = int8(uint8(array[4]));
         int8 yOffset = int8(uint8(array[5]));
-        console.log("scale:", scale);
-        console.log("pfpRender:", pfpRender);
+        //console.log("scale:", scale);
+        //console.log(xOffset < 0 ? string.concat("-", Strings.toString(uint8(-1 * xOffset) )): Strings.toString(uint8(xOffset)));
         return LayerStruct(contractId, layerId, traitId, pfpRender, scale, xOffset, yOffset);
     }
 
