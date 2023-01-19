@@ -1,7 +1,7 @@
-import { useState, useEffect, useCallback } from 'react';
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-import { Box } from "./Box2";
-import { Locations } from "./Location";
+import { useCallback,useEffect, useState } from 'react';
+import { DragDropContext, Draggable,Droppable } from 'react-beautiful-dnd';
+
+import { LocationForm, Locations, ScaleForm } from "./Location";
 
 interface Props {
   boxes: Locations[];
@@ -36,37 +36,49 @@ interface Props {
         <DragDropContext onDragEnd={onDragEnd}>
           <div>
             {isBrowser ? (
+                <div className="overflow-x-auto">
+                <table className="table table-compact text-center text-xl min-w-[546px]">
+                  <thead >
+                    <tr >
+                        <th className='text-xl'>Nr.</th> 
+                        <th className='text-xl'>Name</th> 
+                        <th className='text-xl'>Scale</th> 
+                        <th className='text-xl'>X-Y</th> 
+                        <th className='text-xl'>Remove</th>
+                    </tr>
+                </thead> 
           <Droppable droppableId="droppable">
             {(provided, snapshot) => (
-              <div
+              <tbody
                 {...provided.droppableProps}
                 ref={provided.innerRef}
               >
                 {boxes.map((item, index) => (
                   <Draggable key={item.id} draggableId={item.id.toString()} index={index}>
                     {(provided, snapshot) => (
-                      <div
+                      <tr
                         ref={provided.innerRef}
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
                         className=""
                       >
-                        <Box
-                        key={item.id}
-                        id={item.id}
-                        index={index}
-                        location={item}
-                        removeBox={removeBox}
-                        handleLocationChange = {handleLocationChange}
-                        />
-                      </div>
+                        <td className='text-xl'>{index+1}</td>
+                        <td className='text-xl'>{item.name}</td>
+                        <td className='text-xl'><ScaleForm loc={item} id={item.id} onChange={(coord:string,e:string) => handleLocationChange(coord, Number(e), item.id)} /></td>
+                        <td className='text-xl'><LocationForm loc={item} id={item.id} onChange={(coord:string,e:string) => handleLocationChange(coord, Number(e), item.id)} /></td>
+                        <td>
+                            <button onClick={() => removeBox(item.id)} className="font-extrabold font-mono justify-self-end mx-2"> X</button>
+                        </td>
+                      </tr>
                     )}
                   </Draggable>
                 ))}
                 {provided.placeholder}
-              </div>
-            )}
+                </tbody>
+                )}
           </Droppable>
+          </table>
+          </div>
           ) : null}
           </div>
         </DragDropContext>

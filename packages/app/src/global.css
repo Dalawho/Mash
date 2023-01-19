@@ -3,3 +3,70 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+    --toastify-color-dark: #2b2b2b;
+    --toastify-font-family: ProggyTinyTTSZ;
+}
+
+.rangeselect {
+    height: 1rem/* 24px */;
+    width: 100%;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    --range-shdw: var(--bc);
+    overflow: hidden;
+    background-color: transparent;
+    border-radius: var(--rounded-box, 1rem);
+}
+.rangeselect:focus {
+    outline: none;
+}
+.rangeselect:focus-visible::-webkit-slider-thumb {
+    --focus-shadow: 0 0 0 6px hsl(var(--b1)) inset, 0 0 0 2rem hsl(var(--range-shdw)) inset;
+}
+.rangeselect:focus-visible::-moz-range-thumb {
+    --focus-shadow: 0 0 0 6px hsl(var(--b1)) inset, 0 0 0 2rem hsl(var(--range-shdw)) inset;
+}
+.rangeselect::-webkit-slider-runnable-track {
+    height: 0.25rem/* 4px */;
+    width: 100%;
+    border-radius: var(--rounded-box, 1rem);
+    background-color: hsla(var(--bc) / 0.1);
+}
+.rangeselect::-moz-range-track {
+    height: 0.25rem/* 4px */;
+    width: 100%;
+    border-radius: var(--rounded-box, 1rem);
+    background-color: hsla(var(--bc) / 0.1);
+}
+.rangeselect::-webkit-slider-thumb {
+    background-color: hsl(var(--b1));
+    position: relative;
+    height: 1rem/* 24px */;
+    width: 1rem/* 24px */;
+    border-style: none;
+    border-radius: var(--rounded-box, 1rem);
+    appearance: none;
+    -webkit-appearance: none;
+    top: 50%;
+    color: hsl(var(--range-shdw));
+    transform: translateY(-50%);
+    --filler-size: 0rem/* 1600px */;
+    --filler-offset: 0rem/* 9.6px */;
+    box-shadow: 0 0 0 3px hsl(var(--range-shdw)) inset, var(--focus-shadow, 0 0), calc(var(--filler-size) * -1 - var(--filler-offset)) 0 0 var(--filler-size);
+}
+.rangeselect::-moz-range-thumb {
+    background-color: hsl(var(--b1));
+    position: relative;
+    height: 1rem/* 24px */;
+    width: 1rem/* 24px */;
+    border-style: none;
+    border-radius: var(--rounded-box, 1rem);
+    top: 50%;
+    color: hsl(var(--range-shdw));
+    --filler-size: 0rem/* 1600px */;
+    --filler-offset: 0rem/* 8px */;
+    box-shadow: 0 0 0 3px hsl(var(--range-shdw)) inset, var(--focus-shadow, 0 0), calc(var(--filler-size) * -1 - var(--filler-offset)) 0 0 var(--filler-size);
+}

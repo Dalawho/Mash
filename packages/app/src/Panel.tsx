@@ -1,66 +1,19 @@
 import parse from 'html-react-parser';
-import { useRef,useState } from 'react';
+
+import { Trait } from './SharedInterfaces';
 
 interface PanelProps {
-  id: number,
-  picture: string,
-  description: string,
-  onClick: (id: number, layer: number) => void,
+  trait: Trait;
+  onClick: (trait:Trait) => void,
 }
 
-const Panel = ({ id, picture, description, onClick }: PanelProps) => {
-  const [showOverlay, setShowOverlay] = useState(false)
-  const [overlayX, setOverlayX] = useState(0)
-  const [overlayY, setOverlayY] = useState(0)
-  const overlayRef = useRef<HTMLDivElement>(null)
-
-  const handleClick = (event: React.MouseEvent) => {
-    setOverlayX(event.pageX)
-    setOverlayY(event.pageY)
-    setShowOverlay(true)
-  }
-
-  const handleSelect = (layer: number) => {
-    onClick(id, layer)
-    setShowOverlay(false)
-  }
-
-  const handleMouseLeave = () => {
-    if (overlayRef.current) {
-      setShowOverlay(false)
-    }
-  }
-
-  const layerNr = Array.from({length: 7}, (_, index) => index + 1)
-  //{picture && parse(picture)}
+const Panel = ({ trait, onClick }: PanelProps) => {
   return (
-    <div onClick={handleClick} className="rounded-lg border-slate-900 border-4 m-1" >
+    <button onClick={() => onClick(trait)} className="rounded-lg border-zinc-300 border-2 m-2 pt-1 flex flex-col items-center" >
+      {trait.tokenURI ? parse(trait.tokenURI.toString()) : ""}
       
-      <p>{description}</p>
-      {showOverlay && (
-        <div
-          ref={overlayRef}
-          style={{
-            position: 'absolute',
-            left: overlayX,
-            top: overlayY,
-          }}
-          onClick={event => event.stopPropagation()}
-          onMouseLeave={handleMouseLeave}
-          className="border-1 p-1 border-slate-700 bg-slate-100 rounded-2xl"
-        >
-          <p>Set to layer:</p>
-          <div className='space-x-2'>
-          {
-            layerNr.map(layer => (
-              <button key={layer} onClick={() => handleSelect(layer)} className="border-2 rounded-lg border-zinc-600 mx-auto px-1 my-auto">
-                {layer}
-              </button>
-            ))}
-          </div>
-        </div>
-      )}
-    </div>
+      <p>{trait.name}</p>
+    </button>
   )
 }
 

@@ -8,7 +8,7 @@
           width: 200,
           color: "#121234",
           padding: 0,
-          backgroundColor: "#18181b",
+          backgroundColor: "#1e1e1e",
           textColor: "white"
         })},
         
@@ -16,7 +16,7 @@
             return({
                 ...provided,
                 color: "#d4d4d8",
-                backgroundColor: isFocused ? "#27272a" :"#18181b"
+                backgroundColor: isFocused ? "#27272a" :"#1e1e1e"
             });
         },
 
@@ -29,7 +29,7 @@
         control: (styles) => ({
             ...styles,
              width: 200,
-             backgroundColor: "#fef2c9",
+             backgroundColor: "#1e1e1e",
              padding: 0
            })
       }

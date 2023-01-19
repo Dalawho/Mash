@@ -1,10 +1,11 @@
-import { gql } from "urql";
-import { useState, useEffect } from 'react';
-import { useInviniteTraitsQuery } from "../codegen/subgraph";
+import { useEffect,useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { Trait } from "./sharedInterfaces";
+import { gql } from "urql";
+
+import { useInviniteTraitsQuery } from "../codegen/subgraph";
 import { GetTraitSVG } from "./GetTraitSVG";
-import Panel from "./Panel2"
+import Panel from "./Panel"
+import { Trait } from "./SharedInterfaces";
 
 const ITEMS_PER_PAGE = 50;
 gql`
@@ -57,7 +58,6 @@ const TraitTable = ({ selectedValue, handlePiecesId }: TraitTableProps) => {
         }
     }, [result.data]);
      
-    //console.log(result.data);
     useEffect(() => {
         setSkip(0);
         setItems([]);
@@ -82,15 +82,16 @@ const TraitTable = ({ selectedValue, handlePiecesId }: TraitTableProps) => {
             dataLength={items.length}
             next={fetchMoreData}
             hasMore={hasMore}
-            loader={<h4>Loading...</h4>}
+            loader={
+              <div className='pb-[50vh]'>
+            <h4 className='pb-[50vh]'>Loading...</h4>
+            </div>}
         >
-            {/* {items.map(item => (
-                <div key={item.value}>{item.name}</div>
-            ))} */}
             <div className="grid grid-cols-5">
             {filteredTraits?.map(panel => (
                     <Panel
                     trait={panel}
+                    key={panel.value}
                     onClick={handlePiecesId}
                     />
                 ))}

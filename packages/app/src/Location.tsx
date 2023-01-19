@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 
 export interface Locations {
     id: number;
@@ -19,32 +20,58 @@ type LocProps = {
 }
 
 export const LocationForm = (props: LocProps) => {
-    
+
     return(
-        <div className="justify-self-center col-span-4">
-        <form className="grid grid-flow-col ">
-        {/* <label className="w-18 pl-1">{props.id} Scale - X - Y:  </label> */}
-        <input className="w-10  text-center bg-amber-100"
-            type="number" 
-            value={props.loc.scale}
-            onChange={(e) => props.onChange("scale", parseInt(e.target.value) > 0 ? e.target.value : "1")}
-            required pattern="\d+"
-          />
-          <label className="">|</label>
-          <input className="w-10  text-center bg-amber-100"
-            type="number" 
+        <div className="space-y-1">
+          <div className="form-control">
+          <label className="input-group input-group-xs">
+          <div className="tooltip" data-tip="Click to center">
+          <button onClick={(e) => props.onChange("x", "0")}>
+            <span className="text-xl">X</span>
+            </button>
+          </div>
+          <input className="w-40 text-center rangeselect my-auto"
+            type="range" min="-50" max="50"
             value={props.loc.x}
             onChange={(e) => props.onChange("x", e.target.value)}
             required pattern="\d+"
           />
-          <label className="">|</label>
-          <input className="w-10 text-center bg-amber-100 outline-none focus:outline-none"
-            type="number" 
+          </label>
+          </div>
+          <div className="form-control">
+          <label className="input-group input-group-xs">
+          <div className="tooltip" data-tip="Click to center">
+          <button onClick={(e) => props.onChange("y", "0")}>
+            <span className="text-xl">Y</span>
+            </button>
+          </div>
+            <input className="w-40 rangeselect my-auto"
+            type="range" min="-50" max="50"
             value={props.loc.y}
             onChange={(e) => props.onChange("y", e.target.value)}
             required pattern="\d+"
           />
-      </form>
-      </div>
+            </label>
+          </div>
+    </div>
+    )
+};
+
+export const ScaleForm = (props: LocProps) => {
+    const onKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+        if(e) e.preventDefault();
+    }
+    return(
+        <div className="form-control">
+        <label className="input-group input-group-sm">
+        <span className="text-xl">Scale:</span>
+        <input className=" w-14 input input-bordered input-sm"
+            type="number" min="1" max="10" id="scale" value={props.loc.scale}
+            onKeyDown={onKeyDown}
+            onChange={(e) => props.onChange("scale", parseInt(e.target.value) > 0 ? e.target.value : "1")}
+            required pattern="\d+"
+          />
+          </label>
+        </div>
     )
 };

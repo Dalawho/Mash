@@ -8,10 +8,10 @@ import {
   defaultChains,
   WagmiConfig,
 } from "wagmi";
-import { alchemyProvider } from "wagmi/providers/alchemy";
-import { publicProvider } from "wagmi/providers/public";
-import { jsonRpcProvider } from 'wagmi/providers/jsonRpc'
 import { localhost } from 'wagmi/chains'
+import { alchemyProvider } from "wagmi/providers/alchemy";
+import { jsonRpcProvider } from 'wagmi/providers/jsonRpc'
+import { publicProvider } from "wagmi/providers/public";
 
 // Will default to goerli if nothing set in the ENV
 export const targetChainId =
@@ -64,7 +64,7 @@ const myTheme = merge(lightTheme({}), {
     body: 'ProggyTinyTTSZ',
   },
   colors : {
-    connectButtonBackground: "#fef2c9",
+    //connectButtonBackground: "bg-primary",
     generalBorder: "rgb(100,100,100)",
 
     actionButtonBorder: "rgba(255, 0, 0, 1)",

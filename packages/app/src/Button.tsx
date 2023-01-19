@@ -27,7 +27,7 @@ export const Button = ({
   return (
     <button
       type={type || "button"}
-      className={classNames(buttonClasses, className)}
+      className={classNames("btn text-2xl btn-outline", className)}
       disabled={disabled || pending}
       {...props}
     >
