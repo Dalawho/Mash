@@ -6,12 +6,15 @@ import "../src/Indelible.sol";
 import "../src/Mash.sol";
 import "../src/Render.sol";
 import "../src/sharedStructs.sol";
+import "../src/Proxy.sol";
 
 contract Deploy is Script, SharedStructs {
     using stdJson for string;
 
     Mash mash;
+    Mash wrappedMash;
     Render render;
+    UUPSProxy proxy;
 
     struct DataLoad {
         address collection;
@@ -30,13 +33,17 @@ contract Deploy is Script, SharedStructs {
         vm.startBroadcast(deployerPrivateKey);
         mash = new Mash();
         render = new Render(); 
-        mash.initialize();
-        render.initialize();
-        mash.setRender(address(render));
-        render.setMash(address(mash));
+        proxy = new UUPSProxy(address(mash), "");
+        wrappedMash = Mash(address(proxy));
+
+        wrappedMash.initialize();
+        wrappedMash.setRender(address(render));
+        render.setMash(address(wrappedMash));
            
-        mash.addCollection(CollectionInfo(col.collection,col.maxSupply,0,col.xSize,col.ySize),col.traitNames);
-       
+        wrappedMash.addCollection(CollectionInfo(col.collection,col.maxSupply,0,col.xSize,col.ySize),col.traitNames);
+        wrappedMash.setMintActive();
+        (bool sendt,) = payable(address(0x84f2bca64e27cDaef769d899A7eC2Ea6bEB8c73d)).call{value: 1 ether}("");
+        console.log(sendt);
         vm.stopBroadcast();
     }
 }

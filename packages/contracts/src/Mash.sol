@@ -1,59 +1,103 @@
+// SPDX-License-Identifier: MIT
 pragma solidity ^0.8.12;
 
-// SPDX-License-Identifier: MIT
-// Two storage slots for each 
-
 import "openzeppelin-upgradable/access/OwnableUpgradeable.sol";
-
-//import {StringsUpgradeable as Strings} from "openzeppelin-upgradable/utils/StringsUpgradeable.sol";
-import "./ERC721G.sol";
+import "./ERC721.sol";
 import "./DefaultOperatorFiltererUpgradeable.sol";
 import {SharedStructs as SSt} from "./sharedStructs.sol";
-//import "forge-std/console.sol";
+import "openzeppelin-upgradable/proxy/utils/UUPSUpgradeable.sol";
+import "forge-std/console.sol";
 
 interface IRender {
     function tokenURI(uint256 tokenId, SSt.LayerStruct[7] memory layerIds, SSt.CollectionInfo[7] memory _collections) external view returns (string memory); 
     function previewCollage(SSt.LayerStruct[7] memory layerIds) external view returns(string memory);
 }
 
-contract Mash is ERC721G, OwnableUpgradeable, DefaultOperatorFiltererUpgradeable {
-    //using Strings for uint8;
+/// @title CCOX - A CCO Crossover Experiment
+/// @author OxDala
+/// @notice The ERC721 contract allows you to mint custom on-chain NFTs combined from different collections
+contract Mash is ERC721, OwnableUpgradeable, DefaultOperatorFiltererUpgradeable, UUPSUpgradeable {
+    
+    /// @dev EIP-4096 Event, only emited during update not during minting
     event MetadataUpdate(uint256 _tokenId);
-    event ContractAdded(uint256 indexed contractNr, address indexed contractAddress, uint16 maxSupply);
-    event MintedFrom(uint256 indexed contractNr);
 
+    /// @dev Event emmited when a contract is added, used for indexing of traits with the graph
+    event ContractAdded(uint256 indexed contractNr, address indexed contractAddress, uint16 maxSupply);
+    
+    // Errors
     error MaxSupplyReached();
-    error AllTokensMinted();
+    error AlreadyMintedFromThisCollection();
     error NoMoreLayersToBeMinted();
     error notTokenOwner();
     error payRightAmount();
     error mintNotStarted();
+    error changeNotActive();
+    error tokenDoesNotExist();
 
+    // Variables / Constants
     IRender public render;
     uint256 public MINT_PRICE;
-    uint256 public constant MAX_SUPPLY = 3_000; 
-    bool public mintActive;
-
-    mapping(uint256 => SSt.CollectionInfo) private collections; 
-    mapping(uint256 => string[]) private layerNames; 
-    
+    uint256 public constant MAX_SUPPLY = 3_333; 
     uint256 private nextCollection;
+    uint256 public mintableCollection;
+    bool public mintActive;
+    bool public changeActive;
+    bool public mashActive; 
+
+    // mappings
+    mapping(uint256 => SSt.CollectionInfo) private collections; 
+    mapping(uint256 => string[]) private layerNames;
+    mapping(uint256 => uint256) public addedCollection;
+
+    ////////////////////////  Initializer  /////////////////////////////////
+
+    constructor() {
+        _disableInitializers();
+    }
 
     function initialize() initializer public {
-        __ERC721G_init("IndelibleMash", "IM", 1);
+        __ERC721_init("CC0 Mash", "CC0M", 1);
         __Ownable_init();
         __DefaultOperatorFilterer_init();
+        __UUPSUpgradeable_init();
         MINT_PRICE = 0.005 ether;
         nextCollection = 1; 
         mintActive = false;
+        mintableCollection = 99; 
+        changeActive = false;
     }
 
-    //Add collection 
+    ////////////////////////  User Functions  /////////////////////////////////
+
+    function changeLayer(uint256 tokenId, bytes6 layerInfo, uint256 layer, uint256 collection) external {
+        if(!changeActive) revert changeNotActive();
+        if(msg.sender != _ownerOf[tokenId].owner) revert notTokenOwner();
+        if(addedCollection[collection] > 0) revert AlreadyMintedFromThisCollection();
+        
+        if( layer == 0 ) _ownerOf[tokenId].layer1 = layerInfo;
+        if( layer == 1 ) _ownerOf[tokenId].layer2 = layerInfo;
+        if( layer > 1 ) _ownerOf[tokenId].layers[layer - 2] = layerInfo;
+
+        addedCollection[collection] = 1;
+        emit MetadataUpdate(tokenId);
+    }
+
+    //function mash(uint256 tokenId1, uint256 tokenId2, bool burn, bytes4[MAX_LAYERS] tokenLayers1, bytes4[MAX_LAYERS] tokenLayers2) {}
+
+    function mintAndBuy(bytes6[MAX_LAYERS] calldata layerInfo) external payable {
+        if(!mintActive) revert mintNotStarted();
+        if(totalSupply() + 1 > MAX_SUPPLY) revert MaxSupplyReached();
+        if(msg.value < MINT_PRICE) revert payRightAmount();
+        _mintAndSet(msg.sender, layerInfo);
+    }
+
+    ////////////////////////  Management functions  /////////////////////////////////
 
     function addCollection(CollectionInfo memory _newCollection, string[] memory _layersNames) public onlyOwner {
-        collections[nextCollection] = _newCollection;
-        layerNames[nextCollection] = _layersNames;
-        emit ContractAdded(nextCollection, _newCollection.collection, _newCollection.maxSupply);
+        uint256 collectionNr = nextCollection;
+        collections[collectionNr] = _newCollection;
+        layerNames[collectionNr] = _layersNames;
+        emit ContractAdded(collectionNr, _newCollection.collection, _newCollection.maxSupply);
         ++nextCollection;
     }
 
@@ -61,38 +105,13 @@ contract Mash is ERC721G, OwnableUpgradeable, DefaultOperatorFiltererUpgradeable
         return collections[_collectionNr];
     }
 
-    function setMintActive() external {
+    function setMintActive() external onlyOwner {
         mintActive = true;
     }
 
-    function changeLayer(uint256 tokenId, bytes6 layerInfo, uint256 layer, uint256 collection) external {
-        if(msg.sender != _tokenData[tokenId].owner) revert notTokenOwner();
-        //logic to get rid of the token 
-        // CHECK IF it IS MORE GAS EFFICIENT TO LOAD ONCE AND WRITE EVERYTHING BACK? 
-        if(collections[collection].minted + 1 > collections[collection].maxSupply) revert AllTokensMinted();
-        ++collections[collection].minted;
-        _tokenData[tokenId].layers[layer] = layerInfo;
-        emit MetadataUpdate(tokenId);
+    function setMintableCollection(uint256 _newValue) external onlyOwner {
+        mintableCollection = _newValue;
     }
-
-    function mintAndBuy(bytes6[MAX_LAYERS] calldata layerInfo) external payable {
-        if(!mintActive) revert mintNotStarted();
-        if(totalSupply() + 1 > MAX_SUPPLY) revert MaxSupplyReached();
-        if(msg.value < MINT_PRICE) revert payRightAmount();
-
-        uint8 contractNr;
-
-        for(uint i; i < MAX_LAYERS; ++i) {
-            contractNr = uint8(bytes1(layerInfo[i]));
-            if(contractNr == 0) continue;
-            if(collections[contractNr].minted + 1 > collections[contractNr].maxSupply) revert NoMoreLayersToBeMinted();
-            ++collections[contractNr].minted;
-            emit MintedFrom(contractNr);
-        }
-        _mintAndSet(msg.sender, layerInfo);
-    }
-
-    ////////////////////////  Set external contract addresses /////////////////////////////////
 
     function setRender( address _newRender) public onlyOwner {
         render = IRender(_newRender);
@@ -105,15 +124,20 @@ contract Mash is ERC721G, OwnableUpgradeable, DefaultOperatorFiltererUpgradeable
     ////////////////////////  TokenURI /////////////////////////////////
 
     function tokenURI(uint256 tokenId) override public view returns (string memory) { 
+        if(tokenId > totalSupply()) revert tokenDoesNotExist();
         LayerStruct[MAX_LAYERS] memory layerIds;
         CollectionInfo[MAX_LAYERS] memory _collections;
         for(uint256 i; i < MAX_LAYERS; ++i) {
-            layerIds[i] = decodeLayer(_tokenData[tokenId].layers[i]);
+            if( i == 0 ) layerIds[i] = decodeLayer(_ownerOf[tokenId].layer1);
+            if( i == 1 ) layerIds[i] = decodeLayer(_ownerOf[tokenId].layer2);
+            if( i > 1 ) layerIds[i] = decodeLayer(_ownerOf[tokenId].layers[i-2]);
             if(layerIds[i].collection == 0) continue;
             _collections[i] = getCollection(layerIds[i].collection);
         }
         return render.tokenURI(tokenId, layerIds, _collections);
     }
+
+    ////////////////////////  Helper Function  /////////////////////////////////
 
     function getLayerNames(uint256 collectionNr) external view returns(string[] memory) {
         return layerNames[collectionNr];
@@ -122,7 +146,7 @@ contract Mash is ERC721G, OwnableUpgradeable, DefaultOperatorFiltererUpgradeable
     function previewTokenCollage(uint256 tokenId, uint256 layerNr, LayerStruct memory _newLayer) external view returns (string memory) { 
         LayerStruct[MAX_LAYERS] memory _tokenLayers;
         for(uint256 i; i < MAX_LAYERS; ++i) {
-            _tokenLayers[i] = decodeLayer(_tokenData[tokenId].layers[i]);
+            _tokenLayers[i] = decodeLayer(_ownerOf[tokenId].layers[i]);
         }
         _tokenLayers[layerNr] = _newLayer;
         return render.previewCollage(_tokenLayers);
@@ -136,7 +160,7 @@ contract Mash is ERC721G, OwnableUpgradeable, DefaultOperatorFiltererUpgradeable
         return render.previewCollage(_tokenLayers);
     }
 
-    function decodeLayer(bytes6 array) public view returns (LayerStruct memory) {
+    function decodeLayer(bytes6 array) public pure returns (LayerStruct memory) {
         uint8 contractId = decodeContract(array);
         uint8 layerId = uint8(array[1]);
         uint8 traitId = uint8(array[2]);
@@ -144,8 +168,6 @@ contract Mash is ERC721G, OwnableUpgradeable, DefaultOperatorFiltererUpgradeable
         uint8 scale = uint8(array[3] & 0x7f);
         int8 xOffset = int8(uint8(array[4]));
         int8 yOffset = int8(uint8(array[5]));
-        //console.log("scale:", scale);
-        //console.log(xOffset < 0 ? string.concat("-", Strings.toString(uint8(-1 * xOffset) )): Strings.toString(uint8(xOffset)));
         return LayerStruct(contractId, layerId, traitId, pfpRender, scale, xOffset, yOffset);
     }
 
@@ -153,11 +175,14 @@ contract Mash is ERC721G, OwnableUpgradeable, DefaultOperatorFiltererUpgradeable
         return uint8(array[0]);
     }
 
-    function withdraw() external onlyOwner {
-        // how should a withdraw function look? 
+    //////////////////////// Withdraw ////////////////////////
+
+    function withdraw() payable public onlyOwner {
+        (bool success, ) = payable(msg.sender).call{value: address(this).balance}("");
+        require(success);
     }
 
-    // Operatorfilter overrides ///
+    //////////////////////// Operatorfilter overrides ////////////////////////
 
     function setApprovalForAll(address operator, bool approved) public override onlyAllowedOperatorApproval(operator) {
         super.setApprovalForAll(operator, approved);
@@ -171,15 +196,26 @@ contract Mash is ERC721G, OwnableUpgradeable, DefaultOperatorFiltererUpgradeable
         super.transferFrom(from, to, tokenId);
     }
 
-    function safeTransferFrom(address from, address to, uint256 tokenId) public override onlyAllowedOperator(from) {
-        super.safeTransferFrom(from, to, tokenId);
+    function safeTransferFrom(address from,
+        address to,
+        uint256 id) public override onlyAllowedOperator(from) {
+        super.safeTransferFrom(from, to, id);
     }
 
-    function safeTransferFrom(address from, address to, uint256 tokenId, bytes memory data)
+    function safeTransferFrom( address from,
+        address to,
+        uint256 id,
+        bytes calldata data)
         public
         override
         onlyAllowedOperator(from)
     {
-        super.safeTransferFrom(from, to, tokenId, data);
+        super.safeTransferFrom(from, to, id, data);
     }
+
+    function _authorizeUpgrade(address newImplementation)
+        internal
+        override
+        onlyOwner
+    {}
 }

@@ -5,7 +5,9 @@ interface SharedStructs {
 
     struct OwnerStruct {
         address owner; //20 bytes
-        bytes6[7] layers;
+        bytes6 layer1;
+        bytes6 layer2;
+        bytes6[5] layers;
     }
    
     struct LayerStruct {

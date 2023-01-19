@@ -2,21 +2,19 @@
 pragma solidity ^0.8.12;
 
 
-import "openzeppelin-upgradable/access/OwnableUpgradeable.sol";
-import {StringsUpgradeable as Strings} from "openzeppelin-upgradable/utils/StringsUpgradeable.sol";
-import {Base64Upgradeable as Base64} from "openzeppelin-upgradable/utils/Base64Upgradeable.sol";
+import "openzeppelin/access/Ownable.sol";
+import { Strings} from "openzeppelin/utils/Strings.sol";
+import { Base64 } from "openzeppelin/utils/Base64.sol";
 import 'ethier/utils/DynamicBuffer.sol';
-import "openzeppelin-upgradable/proxy/utils/Initializable.sol";
 import {SharedStructs as SSt} from "./sharedStructs.sol";
 import "./interfaces/IIndelible.sol";
-import "forge-std/console.sol";
 
 interface IMash {
     function getCollection(uint256 _collectionNr) external view returns(SSt.CollectionInfo memory);
     function getLayerNames(uint256 collectionNr) external view returns(string[] memory);
 }
 
-contract Render is Initializable, OwnableUpgradeable, SSt {
+contract Render is Ownable, SSt {
     using Strings for uint256;
     using DynamicBuffer for bytes;
 
@@ -24,9 +22,7 @@ contract Render is Initializable, OwnableUpgradeable, SSt {
 
     IMash public mash;
 
-    function initialize() initializer public {
-        __Ownable_init();
-    }
+    //constructor() {}
 
     ////////////////////////  Setters /////////////////////////////////
 
@@ -73,10 +69,8 @@ contract Render is Initializable, OwnableUpgradeable, SSt {
             if(i > 0) _outString = string.concat(_outString,',');
               _outString = string.concat(
               _outString,
-             //'{"trait_type":"Layer #', Strings.toString(i), '","value":"', traitNames[i].name,' (from ', collectionNames[i] , ')"}'
              '{"trait_type":"',layerNames[layerInfo[i].layerId], '","value":"', traitNames[i].name,' (from ', collectionNames[i] , ')"}'
-             //'{"trait_type":"Layer #', Strings.toString(i), ' creator","value":"', string(abi.encodePacked(_layerInfos[i].creator)),'"},'
-            );
+             );
         }
 
         _outString = string.concat(_outString, ']');

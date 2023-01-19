@@ -183,7 +183,7 @@ abstract contract ERC721G is Initializable, SharedStructs {
         uint256 _endId = _startId + 1;
 
         //this is not great because of all the storage write, I guess to avoid this need to change the way layers
-        _tokenData[_startId] = OwnerStruct(to_, layerInfos);
+        _tokenData[_startId] = OwnerStruct(to_, layerInfos[0], layerInfos[1], [layerInfos[2], layerInfos[3], layerInfos[4], layerInfos[5], layerInfos[6]]);
 
         // process the balance changes and do a loop to phantom-mint the tokens to to_
         unchecked {
