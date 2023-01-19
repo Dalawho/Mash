@@ -127,7 +127,8 @@ const HomePage:NextPage = () => {
       setPfpRender(!pfpRender);
   }
   
-    const placeholder = [{value: 0, label: "None", maxSupply: 0, minted: 0}]
+    const empty = [{value: 0, label: "None", maxSupply: 0, minted: 0}]
+    const placeholder = [{value: 0, label: "Please connect", maxSupply: 0, minted: 0}]
 
     return(
       <div className="" data-theme="halloween">
@@ -167,9 +168,9 @@ const HomePage:NextPage = () => {
               <div className='flex flex-row space-x-3 text-center pt-2'>
                 <h1 className="my-auto">Filter by: </h1>
                 <p className="my-auto">Collection </p>
-                <Select styles={customStyles} options={contracts ? [placeholder[0], ...contracts] : placeholder } onChange={(newValue) => handleFilter("collection", newValue)}/>
+                <Select styles={customStyles} options={contracts ? [empty[0], ...contracts] : placeholder } onChange={(newValue) => handleFilter("collection", newValue)}/>
                 <p className="my-auto">Layer </p>
-                <Select styles={customStyles} options={filteredLayers ? [placeholder[0], ...filteredLayers] : placeholder } onChange={(newValue) => handleFilter("layer", newValue)}/>
+                <Select styles={customStyles} options={filteredLayers ? [empty[0], ...filteredLayers] : placeholder } onChange={(newValue) => handleFilter("layer", newValue)}/>
               </div>
               <h2 className="text-3xl text-bold">Select layers</h2>
               <div>

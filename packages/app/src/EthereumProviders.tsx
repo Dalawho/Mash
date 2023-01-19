@@ -8,19 +8,19 @@ import {
   defaultChains,
   WagmiConfig,
 } from "wagmi";
-import { localhost } from 'wagmi/chains'
+//import { localhost } from 'wagmi/chains'
 import { alchemyProvider } from "wagmi/providers/alchemy";
-import { jsonRpcProvider } from 'wagmi/providers/jsonRpc'
+//import { jsonRpcProvider } from 'wagmi/providers/jsonRpc'
 import { publicProvider } from "wagmi/providers/public";
 
 // Will default to goerli if nothing set in the ENV
 export const targetChainId =
-  parseInt(process.env.NEXT_PUBLIC_CHAIN_ID || "0") || 5;
+  parseInt(process.env.NEXT_PUBLIC_CHAIN_ID || "0") || 1;
 
 // filter down to just mainnet + optional target testnet chain so that rainbowkit can tell
 // the user to switch network if they're on an alternative one
 const targetChains = defaultChains.filter(
-  (chain) => chain.id === targetChainId || chain.id === 1
+  (chain) => chain.id === 1
 );
 
 const provs = process.env.NEXT_PUBLIC_ALCHEMY_API_KEY ? 
@@ -32,20 +32,20 @@ const provs = process.env.NEXT_PUBLIC_ALCHEMY_API_KEY ?
   publicProvider(),
 ];
 
-// export const { chains, provider, webSocketProvider } = configureChains(
-//   targetChains, provs
-// );
+export const { chains, provider, webSocketProvider } = configureChains(
+  targetChains, provs
+);
 
-const { chains, provider } = configureChains(
-  [localhost],
-  [
-    jsonRpcProvider({
-      rpc: (chain) => ({
-        http: `http://127.0.0.1:8545`,
-      }),
-    }),
-  ],
-)
+// const { chains, provider } = configureChains(
+//   [localhost],
+//   [
+//     jsonRpcProvider({
+//       rpc: (chain) => ({
+//         http: `http://127.0.0.1:8545`,
+//       }),
+//     }),
+//   ],
+// )
 
 const { connectors } = getDefaultWallets({
   appName: "Mash",
