@@ -10,7 +10,7 @@ import { BuyAndMintButton } from "../BuyAndMintButton";
 import { customStyles } from "../formStyles";
 import GetContracts from "../GetContracts";
 import { GetFullSVG } from '../GetFullSVG';
-import { GetSVG } from "../GetSVG";
+//import { GetSVG } from "../GetSVG";
 import GetLayers from "../GetLayers";
 import GetTraits from "../GetTraits";
 import { Locations } from "../Location";
