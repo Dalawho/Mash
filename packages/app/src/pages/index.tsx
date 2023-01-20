@@ -90,7 +90,7 @@ const HomePage:NextPage = () => {
         setSelectedValue({...selectedValue, [filter]: i.label.toString() === "None" ? "" : i.label.toString()}) }
 
       if(filter === "collection") {
-        setSelectedValue({...selectedValue, [filter]: i.value}) }
+        setSelectedValue({layer: "", collection: i.value}) }
       }
   }
 
