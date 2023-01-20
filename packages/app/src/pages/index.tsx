@@ -10,7 +10,7 @@ import { BuyAndMintButton } from "../BuyAndMintButton";
 import { customStyles } from "../formStyles";
 import GetContracts from "../GetContracts";
 import { GetFullSVG } from '../GetFullSVG';
-//import { GetSVG } from "../GetSVG";
+import { GetSVG } from "../GetSVG";
 import GetLayers from "../GetLayers";
 import GetTraits from "../GetTraits";
 import { Locations } from "../Location";
@@ -105,19 +105,19 @@ const HomePage:NextPage = () => {
   }
 
     //const SVG = GetSVG({ inBytes: bytes});
-    const SVG = GetFullSVG({locations:locations, pfpRender: pfpRender});
-    const contracts = GetContracts();
+   const contracts = GetContracts();
     const traits = GetTraits();
     const layers = GetLayers();
     const deBouncedLocations = useDebounce(locations); 
-
+    const SVG = GetFullSVG({locations:locations, pfpRender: pfpRender, contracts: contracts ? contracts : undefined});
+    
     useEffect(() => {
       const nextBytes = deBouncedLocations.map((item) => encodeLayer(item, pfpRender));
       setBytes(nextBytes.concat(Array.from({length: 7-nextBytes.length}, () => "0x000000000000")));
 
     }, [deBouncedLocations])
 
-    console.log(bytes);
+    //console.log(bytes);
     const filteredLayers = layers?.filter(layer => {
        if(selectedValue.collection === 0) { return layers; }
       return layer.contract === selectedValue.collection;
