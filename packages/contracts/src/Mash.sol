@@ -13,15 +13,12 @@ interface IRender {
     function previewCollage(SSt.LayerStruct[7] memory layerIds) external view returns(string memory);
 }
 
-/// @title CCOX - A CCO Crossover Experiment
+/// @title CCO Mash - A CCO Mashup
 /// @author OxDala
 /// @notice The ERC721 contract allows you to mint custom on-chain NFTs combined from different collections
 contract Mash is ERC721, OwnableUpgradeable, DefaultOperatorFiltererUpgradeable, UUPSUpgradeable {
     
-    /// @dev EIP-4096 Event, only emited during update not during minting
     event MetadataUpdate(uint256 _tokenId);
-
-    /// @dev Event emmited when a contract is added, used for indexing of traits with the graph
     event ContractAdded(uint256 indexed contractNr, address indexed contractAddress, uint16 maxSupply);
     
     // Errors
