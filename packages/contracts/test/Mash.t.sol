@@ -52,22 +52,24 @@ contract CounterTest is Test, SharedStructs {
         //        string[] private LAYER_NAMES = [unicode"Eyes", unicode"Head", unicode"Snout", unicode"Accessory", unicode"Body Accessory", unicode"Type", unicode"Background"];
         bytes6 l5 = bytes6(0x020501010000);
         bytes6 l6 = bytes6(0x030001010101);
-        wrappedMash.mintAndBuy{ value: 0.005 ether }([l1,l3,l2,l4,l5,l6, empty]);
+        //wrappedMash.mintAndBuy{ value: 0.005 ether }([l1,l3,l2,l4,l5,l6, empty]);
+    wrappedMash.mintAndBuy{ value: 0.005 ether }([l1,empty,empty,empty, empty, empty, empty]);
     }
 
     function testPreview() public {
         bytes6 empty = bytes6(0);
-        bytes6 l1 = bytes6(0x010501010000);
+        bytes6 l1 = bytes6(0x010507810000);
         bytes6 l2 = bytes6(0x010401010000);
         bytes6 l3 = bytes6(0x010301010000);
         bytes6 l4 = bytes6(0x010207010000);
         bytes6 l5 = bytes6(0x020501010000);
         bytes6 l6 = bytes6(0x030001010101);
-        //console.log(wrappedMash.previewCollage([l1,l3,l2,l4,l5,l6, empty]));
+        console.log(wrappedMash.previewCollage([l1,l3,l2,l4,l5,l6, empty]));
     }
 
     function testAll() public {
         testMint();
+        console.log(wrappedMash.tokenURI(1));
     }
 
     function testWithdraw() public {
@@ -81,6 +83,23 @@ contract CounterTest is Test, SharedStructs {
         testMint();
         vm.prank(address(0));
         wrappedMash.withdraw();
+    }
+
+    function testTotalSupply() public {
+        assertEq(wrappedMash.totalSupply(), 0);
+        testMint();
+        assertEq(wrappedMash.totalSupply(), 1);
+        testMint();
+        assertEq(wrappedMash.totalSupply(), 2);
+    }
+
+    function testMaxMint() public {
+        for(uint i; i < 3333; ++i) {
+            assertEq(wrappedMash.totalSupply(), i);
+            testMint();
+        }
+        vm.expectRevert();
+        testMint();
     }
 
     // Function to receive Ether. msg.data must be empty

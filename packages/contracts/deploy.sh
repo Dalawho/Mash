@@ -2,4 +2,4 @@
 
 source .env
 
-forge script script/TestnetDeploy.s.sol:Deploy --rpc-url $GOERLI_RPC_URL --broadcast --verify -vvvv
+forge script script/MainnetDeploy.s.sol:Deploy --rpc-url $MAIN_RPC_URL --broadcast --verify -vvv

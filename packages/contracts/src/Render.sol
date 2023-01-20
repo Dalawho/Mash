@@ -104,6 +104,10 @@ contract Render is Ownable, SSt {
         buffer.appendSafe(bytes(string.concat('<image width="100%" height="100%" href="data:', _traitDetails.mimetype , ';base64,'))); //add the gif/png selector
         buffer.appendSafe(bytes(Base64.encode(_traitData)));
         buffer.appendSafe(bytes('"/>'));
+        // buffer.appendSafe(bytes(string.concat('<foreignObject width="100%" height="100%"> <img width="100%" height="100%" src="data:', _traitDetails.mimetype , ';base64,'))); //add the gif/png selector
+        // buffer.appendSafe(bytes(Base64.encode(_traitData)));
+        // buffer.appendSafe(bytes('"/> </foreignObject>'));
+        
         buffer.appendSafe('<style>#pixel {image-rendering: pixelated; image-rendering: -moz-crisp-edges; image-rendering: -webkit-crisp-edges; -ms-interpolation-mode: nearest-neighbor;}</style></svg>');
         return string(abi.encodePacked('<svg xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges" version="1.1" id="pixel" viewBox="0 0 ', Strings.toString(_collectionInfo.xSize), ' ', Strings.toString(_collectionInfo.ySize),'" width="1200" height="1200"> ', buffer));
     }
@@ -134,6 +138,13 @@ contract Render is Ownable, SSt {
          '" href="data:', traitNames.mimetype , ';base64,'))); //add the gif/png selector
         buffer.appendSafe(bytes(Base64.encode(_traitData)));
         buffer.appendSafe(bytes('"/>'));
+        //<foreignObject x="${loc.x}" y="${loc.y}" width="${32 * loc.scale}" height="${32 * loc.scale}">
+        // <img width="100%" height="100%" src="data:${loc.mimeType};base64,${substring}"/>
+        // </foreignObject>
+        // buffer.appendSafe(bytes(string.concat('<foreignObject x="', int8ToString(_currentLayer.xOffset), '" y="', int8ToString(_currentLayer.yOffset),'" width="', Strings.toString(_currentCollection.xSize*_currentLayer.scale), '" height="', Strings.toString(_currentCollection.ySize*_currentLayer.scale),
+        //  '"> <img width="100%" height="100%" src="data:', traitNames.mimetype , ';base64,'))); //add the gif/png selector
+        // buffer.appendSafe(bytes(Base64.encode(_traitData)));
+        // buffer.appendSafe(bytes('"/> </foreignObject>'));
     }
 
     function int8ToString(int8 num) public pure returns (string memory) {

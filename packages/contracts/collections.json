@@ -58,5 +58,13 @@
         "traitNames" : ["Curated Instruments", "Accent", "Curated Frame", "Instruments", "Frame", "Canvas"],
         "xSize" : 25 ,
         "ySize" :  25
+    },
+    "FrogCentral" : {
+        "collection" : "0x5A8e04A84fb2f6AD4002C824045c7c1bDe10Cb81" ,
+        "maxSupply" : 1000 ,
+        "minted" : 0 ,
+        "traitNames" : ["Accessory", "Hands", "Eyes", "Mouth", "Skin", "Background"],
+        "xSize" : 32 ,
+        "ySize" :  32
     }
 }
