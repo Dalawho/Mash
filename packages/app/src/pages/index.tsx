@@ -117,7 +117,7 @@ const HomePage:NextPage = () => {
 
     }, [deBouncedLocations])
 
-
+    console.log(bytes);
     const filteredLayers = layers?.filter(layer => {
        if(selectedValue.collection === 0) { return layers; }
       return layer.contract === selectedValue.collection;

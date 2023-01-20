@@ -34,6 +34,7 @@ export type Contract = {
   readonly id: Scalars['ID'];
   readonly layerNames: ReadonlyArray<Scalars['String']>;
   readonly layers: ReadonlyArray<Layer>;
+  readonly name: Scalars['String'];
   readonly xSize: Scalars['Int'];
   readonly ySize: Scalars['Int'];
 };
@@ -75,6 +76,26 @@ export type Contract_Filter = {
   readonly layerNames_not_contains?: InputMaybe<ReadonlyArray<Scalars['String']>>;
   readonly layerNames_not_contains_nocase?: InputMaybe<ReadonlyArray<Scalars['String']>>;
   readonly layers_?: InputMaybe<Layer_Filter>;
+  readonly name?: InputMaybe<Scalars['String']>;
+  readonly name_contains?: InputMaybe<Scalars['String']>;
+  readonly name_contains_nocase?: InputMaybe<Scalars['String']>;
+  readonly name_ends_with?: InputMaybe<Scalars['String']>;
+  readonly name_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  readonly name_gt?: InputMaybe<Scalars['String']>;
+  readonly name_gte?: InputMaybe<Scalars['String']>;
+  readonly name_in?: InputMaybe<ReadonlyArray<Scalars['String']>>;
+  readonly name_lt?: InputMaybe<Scalars['String']>;
+  readonly name_lte?: InputMaybe<Scalars['String']>;
+  readonly name_not?: InputMaybe<Scalars['String']>;
+  readonly name_not_contains?: InputMaybe<Scalars['String']>;
+  readonly name_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  readonly name_not_ends_with?: InputMaybe<Scalars['String']>;
+  readonly name_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  readonly name_not_in?: InputMaybe<ReadonlyArray<Scalars['String']>>;
+  readonly name_not_starts_with?: InputMaybe<Scalars['String']>;
+  readonly name_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  readonly name_starts_with?: InputMaybe<Scalars['String']>;
+  readonly name_starts_with_nocase?: InputMaybe<Scalars['String']>;
   readonly xSize?: InputMaybe<Scalars['Int']>;
   readonly xSize_gt?: InputMaybe<Scalars['Int']>;
   readonly xSize_gte?: InputMaybe<Scalars['Int']>;
@@ -98,6 +119,7 @@ export enum Contract_OrderBy {
   Id = 'id',
   LayerNames = 'layerNames',
   Layers = 'layers',
+  Name = 'name',
   XSize = 'xSize',
   YSize = 'ySize'
 }
@@ -593,7 +615,7 @@ export enum _SubgraphErrorPolicy_ {
 export type ContractsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type ContractsQuery = { readonly __typename?: 'Query', readonly contracts: ReadonlyArray<{ readonly __typename?: 'Contract', readonly id: string, readonly address: any, readonly layerNames: ReadonlyArray<string>, readonly xSize: number, readonly ySize: number }> };
+export type ContractsQuery = { readonly __typename?: 'Query', readonly contracts: ReadonlyArray<{ readonly __typename?: 'Contract', readonly id: string, readonly address: any, readonly layerNames: ReadonlyArray<string>, readonly xSize: number, readonly ySize: number, readonly name: string }> };
 
 export type LayersQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -617,12 +639,13 @@ export type InviniteTraitsQuery = { readonly __typename?: 'Query', readonly trai
 
 export const ContractsDocument = gql`
     query Contracts {
-  contracts(first: 5) {
+  contracts(first: 100) {
     id
     address
     layerNames
     xSize
     ySize
+    name
   }
 }
     `;
@@ -632,7 +655,7 @@ export function useContractsQuery(options?: Omit<Urql.UseQueryArgs<ContractsQuer
 };
 export const LayersDocument = gql`
     query Layers {
-  layers(first: 10) {
+  layers(first: 100) {
     id
     name
     index
@@ -671,7 +694,7 @@ export function useTraitsQuery(options?: Omit<Urql.UseQueryArgs<TraitsQueryVaria
 export const InviniteTraitsDocument = gql`
     query InviniteTraits($skip: Int!, $name: String!, $contract: String!) {
   traits(
-    first: 50
+    first: 100
     skip: $skip
     where: {layer_: {name_contains: $name}, layer_starts_with: $contract}
   ) {

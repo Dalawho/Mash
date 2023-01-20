@@ -6,7 +6,7 @@ import { useIsMounted } from "./useIsMounted";
 
 gql`
   query Layers {
-    layers(first: 10) {
+    layers(first: 100) {
       id
       name
       index

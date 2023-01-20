@@ -6,14 +6,13 @@ import { useIsMounted } from "./useIsMounted";
 
 gql`
   query Contracts {
-    contracts(first: 5) {
+    contracts(first: 100) {
       id
       address
-      #maxSupply
-      #minted
       layerNames
       xSize
       ySize
+      name
     }
   }
 `;
@@ -42,7 +41,7 @@ const GetContracts = ()  => {
       }
       return("no Image found");
     }
-  const returnData = query.data?.contracts.map((item, index) => { return {value: parseInt(item.id), label: `${item.id} - ${"item.maxSupply - item.minted"} left`, maxSupply: 100, minted: 0 } } ).sort( (a,b) => a.value - b.value );
+  const returnData = query.data?.contracts.map((item, index) => { return {value: parseInt(item.id), label: `${item.name}`, maxSupply: 100, minted: 0 } } ).sort( (a,b) => a.value - b.value );
 
   return returnData;
 };

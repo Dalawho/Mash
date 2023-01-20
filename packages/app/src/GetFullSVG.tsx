@@ -23,5 +23,8 @@ const getImage = (loc: Locations) => {
     const start = loc.data.indexOf("base64,");
     const end = loc.data.indexOf("/>", start);
     const substring = loc.data.substring(start+7, end-1);
-    return `<image x="${loc.x}" y="${loc.y}" width="${32 * loc.scale}" height="${32 * loc.scale}" href="data:${loc.mimeType};base64,${substring}"/>`;
+    return ` <foreignObject x="${loc.x}" y="${loc.y}" width="${32 * loc.scale}" height="${32 * loc.scale}">
+    <img width="100%" height="100%" src="data:${loc.mimeType};base64,${substring}"/>
+    </foreignObject>`;
+    //return `<image x="${loc.x}" y="${loc.y}" width="${32 * loc.scale}" height="${32 * loc.scale}" href="data:${loc.mimeType};base64,${substring}"/>`;
 }

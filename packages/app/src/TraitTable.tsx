@@ -7,11 +7,11 @@ import { GetTraitSVG } from "./GetTraitSVG";
 import Panel from "./Panel"
 import { Trait } from "./SharedInterfaces";
 
-const ITEMS_PER_PAGE = 50;
+const ITEMS_PER_PAGE = 100;
 gql`
   query InviniteTraits($skip: Int!, $name: String!, $contract: String!) {
         traits(
-            first: 50
+            first: 100
             skip: $skip
             where: {layer_: {name_contains: $name}, layer_starts_with: $contract}
             ) {
@@ -88,10 +88,10 @@ const TraitTable = ({ selectedValue, handlePiecesId }: TraitTableProps) => {
             </div>}
         >
             <div className="grid grid-cols-5">
-            {filteredTraits?.map(panel => (
+            {filteredTraits?.map( (panel, index) => (
                     <Panel
                     trait={panel}
-                    key={panel.value}
+                    key={index}
                     onClick={handlePiecesId}
                     />
                 ))}

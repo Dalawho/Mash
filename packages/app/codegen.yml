@@ -1,5 +1,6 @@
 #schema: https://api.thegraph.com/subgraphs/name/dalawho/indelt
-schema: https://api.thegraph.com/subgraphs/name/dalawho/testmainnetindel
+#schema: https://api.thegraph.com/subgraphs/name/dalawho/testmainnetindel
+schema: https://api.thegraph.com/subgraphs/name/dalawho/cc0mash 
 documents: "src/**/*.{ts,tsx,graphql}"
 generates:
   ./codegen/subgraph.ts:
