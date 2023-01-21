@@ -23,8 +23,8 @@ export const BuyAndMintButton = ( {inBytes} : {inBytes : string[] } ) => {
     <Button className="btn-primary" onClick={() => write?.()} disabled={((isLoading || (isSuccess && !txSuccess) || !write))} >
     {isLoading && <div>Confirm in Wallet</div>}
     {(isSuccess && !txSuccess) && <div>Transaction submitted</div>}
-    {(!isLoading && !isSuccess) && <div>Mint for {price}</div>}
-    {(!isLoading && isSuccess && txSuccess) && <div>Mint for {price}</div>}
+    {(!isLoading && !isSuccess) && <div>Mint</div>}
+    {(!isLoading && isSuccess && txSuccess) && <div>Mint</div>}
     </Button>
     </div>
   );

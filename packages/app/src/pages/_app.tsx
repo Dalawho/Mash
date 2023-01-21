@@ -35,7 +35,7 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
       <li>3. Adjust scale and position for each layer</li>
       <li>4. Toggle pfp mode <br/>(size is determined by the background layer)</li>
       <li>5. Mint your creation!</li>
-      <p className="py-4">Total Supply: 3333. Price: 0.005 Eth</p>
+      {/* <p className="py-4">Total Supply: 3333. Price: 0.005 Eth</p> */}
     </ul>
   </label>
 </label>
