@@ -64,7 +64,7 @@ const myTheme = merge(lightTheme({}), {
     body: 'ProggyTinyTTSZ',
   },
   colors : {
-    //connectButtonBackground: "bg-primary",
+    connectButtonBackground: "rgb(211,211,211)",
     generalBorder: "rgb(100,100,100)",
 
     actionButtonBorder: "rgba(255, 0, 0, 1)",

@@ -4,6 +4,7 @@ import type { NextPage } from "next";
 import React, { useEffect,useState} from "react";
 import Select from 'react-select';
 import { toast } from "react-toastify";
+import Image from "next/image";
 
 import { BoxContainer } from "../BoxContainer";
 import { BuyAndMintButton } from "../BuyAndMintButton";
@@ -133,7 +134,13 @@ const HomePage:NextPage = () => {
     return(
       <div className="" data-theme="halloween">
         <div className="flex flex-col text-2xl font-proggy" >
-          <nav className='m-4 flex flex-row justify-end'>
+          <nav className='m-4 flex flex-row justify-end space-x-5 h-11'>
+            {/* <a href="https://twitter.com/Cc0Mash">
+              <Image src="/Twitter social icons - circle - white.png" width={44} height={44}  />
+            </a> */}
+            <a href="https://etherscan.io/address/0x9acff3827d5ada3d946433ecf65e4568cc6ef50d" className="p-0 m-0 h-[50px]">
+            <Image src="/etherscan-logo-light-circle.png" width={44} height={44} />
+            </a>
           <ConnectButton showBalance={false} accountStatus="address"/>
         </nav>
             <div className="flex flex-col gap-4 items-center p-8 mx-auto">
