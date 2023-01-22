@@ -1,10 +1,10 @@
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import parse from 'html-react-parser';
 import type { NextPage } from "next";
+import Image from "next/image";
 import React, { useEffect,useState} from "react";
 import Select from 'react-select';
 import { toast } from "react-toastify";
-import Image from "next/image";
 
 import { BoxContainer } from "../BoxContainer";
 import { BuyAndMintButton } from "../BuyAndMintButton";
@@ -69,7 +69,7 @@ const HomePage:NextPage = () => {
       return;
     }
     const maxId = locations.reduce((max, obj) => obj.id > max ? obj.id : max, 0);
-    const nextLocs = [...locations, {id: maxId+1, name: trait.name, contract: trait.contract, layerId: trait.layerNr, traitId: trait.traitNr, scale: 1, x: 0, y: 0, data: trait.tokenURI, mimeType: trait.mimeType}]
+    const nextLocs = [...locations, {id: maxId+1, name: trait.name, contract: trait.contract, layerId: trait.layerNr, traitId: trait.traitNr, scale: 1, x: 0, y: 0, data: trait.data, mimeType: trait.mimeType}]
     setLocations(nextLocs);
     toast(`Added ${trait.name} as layer ${nextLocs.length}!`, {
       

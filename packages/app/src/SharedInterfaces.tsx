@@ -8,4 +8,5 @@ export interface Trait {
     traitNr: number; 
     name: string;
     mimeType: string;
+    data: string;
 }

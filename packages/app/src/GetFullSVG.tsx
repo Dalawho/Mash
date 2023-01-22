@@ -30,11 +30,30 @@ export const GetFullSVG = ({locations, pfpRender, contracts} : { locations: Loca
 }
 
 const getImage = (loc: Locations, x:number, y:number) => {
-    const start = loc.data.indexOf("base64,");
-    const end = loc.data.indexOf("/>", start);
-    const substring = loc.data.substring(start+7, end-1);
-    return ` <foreignObject x="${loc.x}" y="${loc.y}" width="${x * loc.scale}" height="${y * loc.scale}">
-    <img width="100%" height="100%" src="data:${loc.mimeType};base64,${substring}"/>
-    </foreignObject>`;
+    let image = "";
+    if(loc.data.startsWith("<?xml")) {
+        image = Buffer.from(loc.data).toString("base64");
+        return returnSVG(loc, x, y, image);
+    }
+    
+    if(loc.data.startsWith("0x")) {
+        image = Buffer.from(loc.data.substring(2),'hex').toString('base64');
+        return returnForeign(loc, x, y, image);
+    }
+    else{ 
+        image =  loc.data;
+        return returnForeign(loc, x, y, image);
+    }
+
+    
     //return `<image x="${loc.x}" y="${loc.y}" width="${32 * loc.scale}" height="${32 * loc.scale}" href="data:${loc.mimeType};base64,${substring}"/>`;
+}
+
+const returnForeign = (loc: Locations, x:number, y:number, image:string) => {
+    return ` <foreignObject x="${loc.x}" y="${loc.y}" width="${x * loc.scale}" height="${y * loc.scale}">
+    <img width="100%" height="100%" src="data:${loc.mimeType};base64,${image}"/>
+    </foreignObject>`;
+}
+const returnSVG = (loc: Locations, x:number, y:number, image:string) => {
+    return `<image x="${loc.x}" y="${loc.y}" width="${x * loc.scale}" height="${y * loc.scale}" href="data:image/svg+xml;base64,${image}"/>`;
 }
