@@ -44,9 +44,6 @@ const getImage = (loc: Locations, x:number, y:number) => {
         image =  loc.data;
         return returnForeign(loc, x, y, image);
     }
-
-    
-    //return `<image x="${loc.x}" y="${loc.y}" width="${32 * loc.scale}" height="${32 * loc.scale}" href="data:${loc.mimeType};base64,${substring}"/>`;
 }
 
 const returnForeign = (loc: Locations, x:number, y:number, image:string) => {

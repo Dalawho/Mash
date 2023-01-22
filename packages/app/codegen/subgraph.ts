@@ -694,7 +694,7 @@ export function useTraitsQuery(options?: Omit<Urql.UseQueryArgs<TraitsQueryVaria
 export const InviniteTraitsDocument = gql`
     query InviniteTraits($skip: Int!, $name: String!, $contract: String!) {
   traits(
-    first: 100
+    first: 50
     skip: $skip
     where: {layer_: {name_contains: $name}, layer_starts_with: $contract}
   ) {

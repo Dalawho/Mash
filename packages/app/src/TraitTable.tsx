@@ -7,11 +7,11 @@ import { GetTraitSVG } from "./GetTraitSVG";
 import Panel from "./Panel"
 import { Trait } from "./SharedInterfaces";
 
-const ITEMS_PER_PAGE = 100;
+const ITEMS_PER_PAGE = 50;
 gql`
   query InviniteTraits($skip: Int!, $name: String!, $contract: String!) {
         traits(
-            first: 100
+            first: 50
             skip: $skip
             where: {layer_: {name_contains: $name}, layer_starts_with: $contract}
             ) {
