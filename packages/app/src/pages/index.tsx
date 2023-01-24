@@ -3,11 +3,13 @@ import parse from 'html-react-parser';
 import type { NextPage } from "next";
 import Image from "next/image";
 import React, { useEffect,useState} from "react";
+import { GithubPicker } from "react-color";
 import Select from 'react-select';
 import { toast } from "react-toastify";
 
 import { BoxContainer } from "../BoxContainer";
 import { BuyAndMintButton } from "../BuyAndMintButton";
+import ColorPicker from "../ColorPicker";
 import { customStyles } from "../formStyles";
 import GetContracts from "../GetContracts";
 import { GetFullSVG } from '../GetFullSVG';
@@ -36,8 +38,18 @@ const HomePage:NextPage = () => {
   //const [SVG, setSVG] = useState<string | null>(null);
   const [bytes, setBytes] = useState(Array.from({length: 7}, () => "0x000000000000"));
   const [pfpRender, setPfpRender] = useState(true);
-  
   const [selectedValue, setSelectedValue] = useState<Selector>({collection: 0, layer: ""});
+  
+  const colors = [{hex: "transparent", tailwind: "bg-[#00000000]"}, 
+                  {hex: "#ff8b8b", tailwind: "bg-[#ff8b8b]"},
+                  {hex: "#f2f890", tailwind: "bg-[#f2f890]"},
+                  {hex: "#82ff82", tailwind: "bg-[#82ff82]"},
+                  {hex: "#8bedff", tailwind: "bg-[#8bedff]"},
+                  {hex: "#4731ff", tailwind: "bg-[#4731ff]"},
+                  {hex: "#7551ff", tailwind: "bg-[#7551ff]"},
+                  {hex: "#621b62", tailwind: "bg-[#621b62]"} ];
+
+  const [selColor, setSelColor] = useState(colors[0]);
 
   const handleLocationChange = (coord:string,e:number, index:number) => {
     const nextLocs = locations.map(item => {
@@ -101,6 +113,7 @@ const HomePage:NextPage = () => {
 
   const encodeLayer = (layer: Locations, pfpRender: boolean) => {
     const pfpRenderByte = ((pfpRender ? 1 : 0) << 7) | layer.scale;
+    //fix here for blitmap and for background 
     const array = new Uint8Array([layer.contract, layer.layerId, layer.traitId, pfpRenderByte, layer.x, layer.y]);
     return "0x" + array.reduce((output, elem) => output + elem.toString(16).padStart(2, '0'), '');
   }
@@ -110,13 +123,17 @@ const HomePage:NextPage = () => {
     const traits = GetTraits();
     const layers = GetLayers();
     const deBouncedLocations = useDebounce(locations); 
-    const SVG = GetFullSVG({locations:locations, pfpRender: pfpRender, contracts: contracts ? contracts : undefined});
+    const SVG = GetFullSVG({locations:locations, pfpRender: pfpRender, contracts: contracts ? contracts : undefined, bgColor: selColor});
     
     useEffect(() => {
       const nextBytes = deBouncedLocations.map((item) => encodeLayer(item, pfpRender));
       setBytes(nextBytes.concat(Array.from({length: 7-nextBytes.length}, () => "0x000000000000")));
 
     }, [deBouncedLocations])
+
+    const onColorPick = (color: string) => {
+      return;
+    }
 
     //console.log(bytes);
     const filteredLayers = layers?.filter(layer => {
@@ -168,6 +185,19 @@ const HomePage:NextPage = () => {
                     <span className="label-text text-2xl mx-3">PFP mode</span> 
                     <input type="checkbox" checked={pfpRender} onClick={toggle} className="toggle" />
                   </label>
+                </div>
+                <div>
+                {/* <div className="form-control ">
+                  <label className="label cursor-pointer justify-center">
+                    <span className="label-text text-2xl mx-3">Background</span> 
+                    <input type="checkbox" checked={pfpRender} onClick={toggle} className="toggle" />
+                  </label>
+                  {<TwitterPicker/>} */}
+                  <ColorPicker onChange={setSelColor} selectedColor={selColor} colors={colors}/>
+                  {/* <div className="">
+                  <button className=" text-2xl btn btn-outline btn-primary">Set Background</button>
+                  <GithubPicker colors={['#B80000', '#DB3E00', '#FCCB00', '#008B02', '#006B76', '#1273DE', '#004DCF']} />
+                  </div> */}
                 </div>
                 <BuyAndMintButton inBytes={bytes} />
               </div>

@@ -1,4 +1,7 @@
+import { getBoundingClientObj } from "react-select/dist/declarations/src/utils";
+
 import { Locations } from "./Location";
+import { Color } from "./SharedInterfaces";
 
 interface Contract {
     value: number;
@@ -9,13 +12,19 @@ interface Contract {
     y: number;
 }
 
-export const GetFullSVG = ({locations, pfpRender, contracts} : { locations: Locations[], pfpRender: boolean, contracts?: Contract[]}) => {
+export const GetFullSVG = ({locations, pfpRender, contracts, bgColor} : { locations: Locations[], pfpRender: boolean, contracts?: Contract[], bgColor: Color}) => {
     //add variable viewbox but fixed size
     if(!contracts) return;
+    if(locations.length == 0 && bgColor.hex != "transparent") return onlyBg(bgColor);
     if(locations.length == 0) return;
     let out = "";
     let height = contracts[locations[0].contract-1].x * locations[0].scale;
     let width = contracts[locations[0].contract-1].y * locations[0].scale;
+    if(bgColor.hex != "transparent") {
+        out = out + `<rect width="100%" height="100%" fill="${bgColor.hex}" />`
+    }
+
+    console.log(bgColor);
     for(let i = 0; i < locations.length; i++) {
         out = out + getImage(locations[i], contracts[locations[i].contract-1].x, contracts[locations[i].contract-1].y);
         if(!pfpRender) {
@@ -27,6 +36,13 @@ export const GetFullSVG = ({locations, pfpRender, contracts} : { locations: Loca
     return `<svg xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges" version="1.1" id="pixel" viewBox="0 0 ${width} ${height}" width="320" height="320">
     ${out}
     <style>#pixel {image-rendering: pixelated; image-rendering: -moz-crisp-edges; image-rendering: -webkit-crisp-edges; -ms-interpolation-mode: nearest-neighbor;}</style></svg>`;
+}
+
+const onlyBg = (bgColor: Color) => {
+    return `<svg xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges" version="1.1" id="pixel" viewBox="0 0 ${32} ${32}" width="320" height="320">
+    <rect width="100%" height="100%" fill="${bgColor.hex}" />
+    <style>#pixel {image-rendering: pixelated; image-rendering: -moz-crisp-edges; image-rendering: -webkit-crisp-edges; -ms-interpolation-mode: nearest-neighbor;}</style></svg>`;
+
 }
 
 const getImage = (loc: Locations, x:number, y:number) => {

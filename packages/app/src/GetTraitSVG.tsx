@@ -1,5 +1,5 @@
 export const GetTraitSVG = ({traitData , mimeType} : { traitData: string, mimeType:string}) => {
-    let base64String = getBase64(traitData);
+    const base64String = getBase64(traitData);
     if(traitData.startsWith("<?xml")) {
         return `<svg xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges" version="1.1" id="pixel" viewBox="0 0 50 50" width="80%" height="80%"> '
         <image x="0"" y="0" width="100%" height="100%" href="data:image/svg+xml;base64,${base64String}"/>

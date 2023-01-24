@@ -70,3 +70,7 @@
     --filler-offset: 0rem/* 8px */;
     box-shadow: 0 0 0 3px hsl(var(--range-shdw)) inset, var(--focus-shadow, 0 0), calc(var(--filler-size) * -1 - var(--filler-offset)) 0 0 var(--filler-size);
 }
+
+.github-picker {
+    background: blue;
+}

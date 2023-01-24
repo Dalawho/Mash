@@ -10,3 +10,8 @@ export interface Trait {
     mimeType: string;
     data: string;
 }
+
+export interface Color {
+    hex: string,
+    tailwind: string
+}
