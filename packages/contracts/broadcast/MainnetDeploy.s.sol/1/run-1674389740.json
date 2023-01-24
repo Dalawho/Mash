@@ -1,0 +1,35 @@
+{
+  "transactions": [
+    {
+      "hash": "0x1c49b179c52f51e92d8b19da32f21a7ed70097657d4b072eb1e46e7539e8aef9",
+      "transactionType": "CALL",
+      "contractName": "UUPSProxy",
+      "contractAddress": "0x9AcFf3827d5adA3d946433eCf65e4568CC6ef50D",
+      "function": null,
+      "arguments": null,
+      "rpc": "https://eth-mainnet.g.alchemy.com/v2/HDTL1ubfVBzCD2IkhXNdk-kDB0mteTCG",
+      "transaction": {
+        "type": "0x02",
+        "from": "0xef421d02f19ccbb7f22eeed2d2ee9584dcd2a8ff",
+        "to": "0x9acff3827d5ada3d946433ecf65e4568cc6ef50d",
+        "gas": "0x1cfc1",
+        "value": "0x0",
+        "data": "0xa0cfcf350000000000000000000000008d04a8c79ceb0889bdd12acdf3fa9d207ed3ff63000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000c0000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000000",
+        "nonce": "0xb",
+        "accessList": []
+      },
+      "additionalContracts": []
+    }
+  ],
+  "receipts": [],
+  "libraries": [],
+  "pending": [
+    "0x1c49b179c52f51e92d8b19da32f21a7ed70097657d4b072eb1e46e7539e8aef9"
+  ],
+  "path": "/Users/nope/NFTs/eth/indelible/collage/packages/contracts/broadcast/MainnetDeploy.s.sol/1/run-latest.json",
+  "returns": {},
+  "timestamp": 1674389740,
+  "chain": 1,
+  "multi": false,
+  "commit": "7e7af94"
+}

@@ -58,5 +58,37 @@
         "traitNames" : ["Curated Instruments", "Accent", "Curated Frame", "Instruments", "Frame", "Canvas"],
         "xSize" : 25 ,
         "ySize" :  25
+    },
+    "Blitmap" : {
+        "collection" : "0x8d04a8c79cEB0889Bdd12acdF3Fa9D207eD3Ff63" ,
+        "maxSupply" : 0 ,
+        "minted" : 0 ,
+        "traitNames" : [""],
+        "xSize" : 32 ,
+        "ySize" :  32
+    },
+    "Flipmap" : {
+        "collection" : "0x0E4B8e24789630618aA90072F520711D3d9Db647" ,
+        "maxSupply" : 0 ,
+        "minted" : 0 ,
+        "traitNames" : [""],
+        "xSize" : 32 ,
+        "ySize" :  32
+    },
+    "OnChainKevin" : {
+        "collection" : "0xaC3AE179bB3c0edf2aB2892a2B6A4644A71627B6" ,
+        "maxSupply" : 0 ,
+        "minted" : 0 ,
+        "traitNames" : ["Lasers", "Head Accessory", "Mouth", "Face Accessory", "Eyes", "Nose", "Shirt", "Skin", "Background"] ,
+        "xSize" : 32 ,
+        "ySize" :  32
+    },
+    "Nouns" : {
+        "collection" : "0x9C8fF314C9Bc7F6e59A9d9225Fb22946427eDC03" ,
+        "maxSupply" : 0 ,
+        "minted" : 0 ,
+        "traitNames" : ["Body", "Accessory", "Head", "Glasses"] ,
+        "xSize" : 32 ,
+        "ySize" :  32
     }
 }

@@ -14,6 +14,32 @@ interface IMash {
     function getLayerNames(uint256 collectionNr) external view returns(string[] memory);
 }
 
+interface IBlitmap {
+    function tokenNameOf(uint256 tokenId) external view returns(string memory);
+    function tokenSvgDataOf(uint256 tokenId) external view returns(string memory);
+}
+
+interface IKevin {
+    function traitTypes(uint256 layer, uint256 trait, uint256 selector) external view returns(string memory);
+}
+
+interface INounsDescriptorV2 {
+    function palettes(uint8 paletteIndex) external view returns (bytes memory);
+    function backgrounds(uint256 index) external view returns (string memory);
+    function bodies(uint256 index) external view returns (bytes memory);
+    function accessories(uint256 index) external view returns (bytes memory);
+    function heads(uint256 index) external view returns (bytes memory);
+    function glasses(uint256 index) external view returns (bytes memory);
+}
+
+interface ISVGRenderer {
+    struct Part {
+        bytes image;
+        bytes palette;
+    }
+    function generateSVGPart(Part memory part) external view returns (string memory partialSVG);
+}
+
 contract Render is Ownable, SSt {
     using Strings for uint256;
     using DynamicBuffer for bytes;
@@ -21,6 +47,15 @@ contract Render is Ownable, SSt {
     uint256 public constant MAX_LAYERS = 7; 
 
     IMash public mash;
+
+
+    //Non indelible collections that need special treatment are here 
+    address constant blitmap = 0x8d04a8c79cEB0889Bdd12acdF3Fa9D207eD3Ff63;
+    address constant flipmap = 0x0E4B8e24789630618aA90072F520711D3d9Db647;
+    address constant onChainKevin = 0xaC3AE179bB3c0edf2aB2892a2B6A4644A71627B6;
+    address constant nounsToken = 0x9C8fF314C9Bc7F6e59A9d9225Fb22946427eDC03;
+    INounsDescriptorV2 constant nounsDescriptor = INounsDescriptorV2(0x6229c811D04501523C6058bfAAc29c91bb586268);
+    ISVGRenderer constant nounsRenderer = ISVGRenderer(0x81d94554A4b072BFcd850205f0c79e97c92aab56);
 
     //constructor() {}
 
@@ -30,18 +65,51 @@ contract Render is Ownable, SSt {
         mash = IMash(_newMash);
     }
 
-    ////////////////////////  IIndelible functions /////////////////////////////////
+    ////////////////////////  Trait Data functions functions /////////////////////////////////
 
     function getTraitDetails(address _collection, uint8 layerId, uint8 traitId) public view returns(IIndelible.Trait memory) {
+        uint16 id = (uint16(layerId) << 8) | uint16(traitId);
+        if(_collection == blitmap) return IIndelible.Trait(IBlitmap(blitmap).tokenNameOf(id),"image/svg+xml");
+        if(_collection == flipmap) return IIndelible.Trait(string.concat("Flipmap #", Strings.toString(id)), "image/svg+xml");
+        if(_collection == onChainKevin) return IIndelible.Trait(IKevin(onChainKevin).traitTypes(layerId, traitId, 0), "image/png");
+        if(_collection == nounsToken) return IIndelible.Trait(getNounsTraits(layerId, traitId), "image/svg+xml");
         return IIndelible(_collection).traitDetails(layerId, traitId);
     }
 
     function getTraitData(address _collection, uint8 _layerId, uint8 _traitId) public view returns(bytes memory) {
+        if(_collection == blitmap || _collection == flipmap) {
+            uint16 id = (uint16(_layerId) << 8) | uint16(_traitId);
+            return bytes(IBlitmap(_collection).tokenSvgDataOf(id));
+        }
+        if(_collection == onChainKevin) return bytes(IKevin(onChainKevin).traitTypes(_layerId, _traitId, 1));
+        if(_collection == nounsToken) {
+            return bytes(string.concat('<svg width="320" height="320" viewBox="0 0 320 320" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">', getNounsData(_layerId, _traitId), '</svg>')); 
+        }
         return bytes(IIndelible(_collection).traitData(_layerId, _traitId));
     }
 
-    function getCollectionName(uint256 _collectionNr) public view returns(string memory out) {
-        (out,,,,,,) = IIndelible(mash.getCollection(_collectionNr).collection).contractData();
+    function getCollectionName(address _collection) public view returns(string memory) {
+        if(_collection == blitmap) return "Blitmap";
+        if(_collection == flipmap) return "Flipmap";
+        if(_collection == onChainKevin) return "On Chain Kevin";
+        if(_collection == nounsToken) return "Nouns";
+        (string memory out,,,,,,) = IIndelible(_collection).contractData();
+        return out;
+    }
+
+    //// special collection functions
+    function getNounsTraits(uint8 layerId, uint8 traitId) private pure returns (string memory) {
+        if(layerId == 0) return string.concat("Body #", Strings.toString(traitId));
+        if(layerId == 1) return string.concat("Accessory #", Strings.toString(traitId));
+        if(layerId == 2) return string.concat("Head #", Strings.toString(traitId));
+        return string.concat("Glasses #", Strings.toString(traitId));
+    }
+    
+    function getNounsData(uint8 layerId, uint8 traitId) private view returns(string memory) {
+        if(layerId == 0) return nounsRenderer.generateSVGPart( ISVGRenderer.Part (nounsDescriptor.bodies(traitId), nounsDescriptor.palettes(0)));
+        if(layerId == 1) return nounsRenderer.generateSVGPart( ISVGRenderer.Part (nounsDescriptor.accessories(traitId), nounsDescriptor.palettes(0)));
+        if(layerId == 2) return nounsRenderer.generateSVGPart( ISVGRenderer.Part (nounsDescriptor.heads(traitId), nounsDescriptor.palettes(0)));
+        return nounsRenderer.generateSVGPart( ISVGRenderer.Part (nounsDescriptor.glasses(traitId), nounsDescriptor.palettes(0)));
     }
 
     ////////////////////////  TokenURI and preview /////////////////////////////////
@@ -52,11 +120,9 @@ contract Render is Ownable, SSt {
         IIndelible.Trait[MAX_LAYERS] memory traitNames;
         for(uint256 i = 0; i < layerInfo.length; i++) {
             if(layerInfo[i].collection == 0) continue;
-            //console.log(layerInfo[i].collection);
-            //_collections[i] = mash.getCollection(layerInfo[i].collection);
-            (collectionNames[i],,,,,,) = IIndelible(_collections[i].collection).contractData();
-            traitNames[i] = getTraitDetails(_collections[i].collection, layerInfo[i].layerId, layerInfo[i].traitId);
             numberOfLayers++; 
+            collectionNames[i] = getCollectionName(_collections[i].collection);
+            traitNames[i] = getTraitDetails(_collections[i].collection, layerInfo[i].layerId, layerInfo[i].traitId);   
         }
         string memory _outString = string.concat('data:application/json,', '{', '"name" : "Indelible Mashup #' , Strings.toString(tokenId), '", ',
             '"description" : "What Is This, a Crossover Episode?"');
@@ -69,7 +135,7 @@ contract Render is Ownable, SSt {
             if(i > 0) _outString = string.concat(_outString,',');
               _outString = string.concat(
               _outString,
-             '{"trait_type":"',layerNames[layerInfo[i].layerId], '","value":"', traitNames[i].name,' (from ', collectionNames[i] , ')"}'
+             '{"trait_type":"', _collections[i].collection == blitmap ? "Blitmap" : _collections[i].collection == flipmap ? "Flipmap" :  layerNames[layerInfo[i].layerId], '","value":"', traitNames[i].name,' (from ', collectionNames[i] , ')"}'
              );
         }
 
@@ -129,10 +195,10 @@ contract Render is Ownable, SSt {
 
     function _renderImg(LayerStruct memory _currentLayer, CollectionInfo memory _currentCollection, IIndelible.Trait memory traitNames, bytes memory buffer) private view {
         //currently only renders as PNG this should also include gif! 
-        bytes memory _traitData = getTraitData(_currentCollection.collection, _currentLayer.layerId, _currentLayer.traitId);
+        bytes memory _traitData = (_currentCollection.collection == blitmap || _currentCollection.collection == flipmap ) ? bytes(IBlitmap(_currentCollection.collection).tokenSvgDataOf( _currentLayer.layerId * _currentLayer.traitId )) : getTraitData(_currentCollection.collection, _currentLayer.layerId, _currentLayer.traitId);
         buffer.appendSafe(bytes(string.concat('<image x="', int8ToString(_currentLayer.xOffset), '" y="', int8ToString(_currentLayer.yOffset),'" width="', Strings.toString(_currentCollection.xSize*_currentLayer.scale), '" height="', Strings.toString(_currentCollection.ySize*_currentLayer.scale),
-         '" href="data:', traitNames.mimetype , ';base64,'))); //add the gif/png selector
-        buffer.appendSafe(bytes(Base64.encode(_traitData)));
+         '" href="data:', traitNames.mimetype , ';base64,'))); //add the gif/png/svg selector
+        buffer.appendSafe(_currentCollection.collection == onChainKevin ? _traitData : bytes(Base64.encode(_traitData)));
         buffer.appendSafe(bytes('"/>'));
     }
 

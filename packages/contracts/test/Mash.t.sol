@@ -3,7 +3,7 @@ pragma solidity ^0.8.13;
 
 import "forge-std/Test.sol";
 import "src/Mash.sol";
-import "src/Render.sol";
+import "src/RenderV2.sol";
 import "src/sharedStructs.sol";
 import "src/Proxy.sol";
 
@@ -13,7 +13,7 @@ contract CounterTest is Test, SharedStructs {
     Render render; 
     UUPSProxy proxy;
     Mash wrappedMash;
-    string[] public collections = ["1337", "CryptoBabyTeddies", "pksl", "TinyBones", "TinyPussies", "ProofOfPepe", "TonalMuse"];
+    string[] public collections = ["Nouns", "1337", "CryptoBabyTeddies", "pksl", "TinyBones", "OnChainKevin", "ProofOfPepe", "TonalMuse", "Blitmap", "Flipmap"];
     struct DataLoad {
         address collection;
         uint16 maxSupply; 
@@ -41,18 +41,31 @@ contract CounterTest is Test, SharedStructs {
         wrappedMash.setMintActive();
     }
 
+    // function testFlipMap() public {
+    //     console.log(IBlitmap(0x0E4B8e24789630618aA90072F520711D3d9Db647).tokenSvgDataOf(1));
+    // }
+
+    function testFlipTokenURI() public {
+        //testCollectionAddition();
+        //        string[] private LAYER_NAMES = [unicode"5p3c141", unicode"0v32", unicode"3y35", unicode"und32", unicode"5ku115", unicode"84ck920und"];
+        bytes6 empty = bytes6(0);
+        bytes6 l5 = bytes6(0x090001011010);
+        wrappedMash.mintAndBuy{ value: 0.005 ether }([l5,empty,empty,empty,empty,empty, empty]);
+    }
+
     function testMint() public {
         //testCollectionAddition();
         //        string[] private LAYER_NAMES = [unicode"5p3c141", unicode"0v32", unicode"3y35", unicode"und32", unicode"5ku115", unicode"84ck920und"];
         bytes6 empty = bytes6(0);
-        bytes6 l1 = bytes6(0x010501010000);
-        bytes6 l2 = bytes6(0x010401010000);
-        bytes6 l3 = bytes6(0x010301010000);
-        bytes6 l4 = bytes6(0x010207010000);
+        bytes6 l1 = bytes6(0x010201010000);
+        bytes6 l2 = bytes6(0x010301010000);
+        bytes6 l3 = bytes6(0x010001010000);
+        bytes6 l4 = bytes6(0x050503010000);
         //        string[] private LAYER_NAMES = [unicode"Eyes", unicode"Head", unicode"Snout", unicode"Accessory", unicode"Body Accessory", unicode"Type", unicode"Background"];
-        bytes6 l5 = bytes6(0x020501010000);
-        bytes6 l6 = bytes6(0x030001010101);
-        wrappedMash.mintAndBuy{ value: 0.005 ether }([l1,l3,l2,l4,l5,l6, empty]);
+        //bytes6 l5 = bytes6(0x020501010000);
+        bytes6 l5 = bytes6(0x090001021010);
+        bytes6 l6 = bytes6(0x080001010101);
+        wrappedMash.mintAndBuy{ value: 0.005 ether }([l1,l2,l3,empty,empty,empty, empty]);
     }
 
     function testPreview() public {
@@ -68,6 +81,7 @@ contract CounterTest is Test, SharedStructs {
 
     function testAll() public {
         testMint();
+        console.log(wrappedMash.tokenURI(1));
     }
 
     function testWithdraw() public {
