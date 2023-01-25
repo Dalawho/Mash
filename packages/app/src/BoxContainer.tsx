@@ -3,10 +3,12 @@ import { DragDropContext, Draggable,Droppable } from 'react-beautiful-dnd';
 
 import { LocationForm, Locations, ScaleForm } from "./Location";
 
+import { Contract } from "./SharedInterfaces";
+
 interface Props {
   boxes: Locations[];
   setBoxes: (boxes: Locations[]) => void;
-  handleLocationChange: (coord:string,e:number, index:number) => void;
+  handleLocationChange: (coord:string,e:string, index:number) => void;
 }
   
   export const BoxContainer = ({boxes, setBoxes, handleLocationChange}: Props) =>  {
@@ -64,8 +66,8 @@ interface Props {
                       >
                         <td className='text-xl'>{index+1}</td>
                         <td className='text-xl'>{item.name}</td>
-                        <td className='text-xl'><ScaleForm loc={item} id={item.id} onChange={(coord:string,e:string) => handleLocationChange(coord, Number(e), item.id)} /></td>
-                        <td className='text-xl'><LocationForm loc={item} id={item.id} onChange={(coord:string,e:string) => handleLocationChange(coord, Number(e), item.id)} /></td>
+                        <td className='text-xl'><ScaleForm loc={item} id={item.id} onChange={(coord:string,e:string) => handleLocationChange(coord, e, item.id)} /></td>
+                        <td className='text-xl'><LocationForm loc={item} id={item.id} onChange={(coord:string,e:string) => handleLocationChange(coord, e, item.id)} /></td>
                         <td>
                             <button onClick={() => removeBox(item.id)} className="font-extrabold font-mono justify-self-end mx-2"> X</button>
                         </td>

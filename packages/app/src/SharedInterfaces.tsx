@@ -12,6 +12,16 @@ export interface Trait {
 }
 
 export interface Color {
-    hex: string,
-    tailwind: string
+    hex: string;
+    tailwind: string;
+    index: number;
+}
+
+export interface Contract {
+    value: number;
+    label: string;
+    maxSupply: number;
+    minted: number;
+    x: number;
+    y: number;
 }

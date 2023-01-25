@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { Contract } from "./SharedInterfaces";
 
 export interface Locations {
     id: number;
@@ -13,20 +13,20 @@ export interface Locations {
     mimeType: string;
   }
 
-type LocProps = {
+type ScaleProps = {
   loc: Locations;
   id: number;
   onChange: (trait: string, value: string) => void;
 }
 
-export const LocationForm = (props: LocProps) => {
+export const LocationForm = (props: ScaleProps) => {
 
     return(
         <div className="space-y-1">
           <div className="form-control">
           <label className="input-group input-group-xs">
           <div className="tooltip" data-tip="Click to center">
-          <button onClick={(e) => props.onChange("x", "0")}>
+          <button onClick={(e) => props.onChange("x", "center")}>
             <span className="text-xl">X</span>
             </button>
           </div>
@@ -41,7 +41,7 @@ export const LocationForm = (props: LocProps) => {
           <div className="form-control">
           <label className="input-group input-group-xs">
           <div className="tooltip" data-tip="Click to center">
-          <button onClick={(e) => props.onChange("y", "0")}>
+          <button onClick={(e) => props.onChange("y", "center")}>
             <span className="text-xl">Y</span>
             </button>
           </div>
@@ -57,7 +57,7 @@ export const LocationForm = (props: LocProps) => {
     )
 };
 
-export const ScaleForm = (props: LocProps) => {
+export const ScaleForm = (props: ScaleProps) => {
     const onKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
         if(e) e.preventDefault();
     }

@@ -3,7 +3,6 @@ import parse from 'html-react-parser';
 import type { NextPage } from "next";
 import Image from "next/image";
 import React, { useEffect,useState} from "react";
-import { GithubPicker } from "react-color";
 import Select from 'react-select';
 import { toast } from "react-toastify";
 
@@ -20,7 +19,6 @@ import { Locations } from "../Location";
 import { Trait } from '../SharedInterfaces';
 import TraitTable from "../TraitTable";
 import useDebounce from '../useDebounce';
-import { useIsMounted } from '../useIsMounted';
 
 interface Selector{
   collection: number,
@@ -40,21 +38,36 @@ const HomePage:NextPage = () => {
   const [pfpRender, setPfpRender] = useState(true);
   const [selectedValue, setSelectedValue] = useState<Selector>({collection: 0, layer: ""});
   
-  const colors = [{hex: "transparent", tailwind: "bg-[#00000000]"}, 
-                  {hex: "#ff8b8b", tailwind: "bg-[#ff8b8b]"},
-                  {hex: "#f2f890", tailwind: "bg-[#f2f890]"},
-                  {hex: "#82ff82", tailwind: "bg-[#82ff82]"},
-                  {hex: "#8bedff", tailwind: "bg-[#8bedff]"},
-                  {hex: "#4731ff", tailwind: "bg-[#4731ff]"},
-                  {hex: "#7551ff", tailwind: "bg-[#7551ff]"},
-                  {hex: "#621b62", tailwind: "bg-[#621b62]"} ];
+  const colors = [{hex: "transparent", tailwind: "bg-[#00000000]", index: 0}, 
+                  {hex: "#ff8b8b", tailwind: "bg-[#ff8b8b]", index: 1},
+                  {hex: "#f2f890", tailwind: "bg-[#f2f890]", index: 2},
+                  {hex: "#82ff82", tailwind: "bg-[#82ff82]", index: 3},
+                  {hex: "#8bedff", tailwind: "bg-[#8bedff]", index: 4},
+                  {hex: "#4731ff", tailwind: "bg-[#4731ff]", index: 5},
+                  {hex: "#7551ff", tailwind: "bg-[#7551ff]", index: 6},
+                  {hex: "#621b62", tailwind: "bg-[#621b62]", index: 7} ];
 
   const [selColor, setSelColor] = useState(colors[0]);
 
-  const handleLocationChange = (coord:string,e:number, index:number) => {
+  const handleLocationChange = (coord:string,e:string, index:number) => {
+    let newLoc = 0;
+    if(e === "center") {
+      //get right location object
+      const currentLoc = locations.filter( item => item.id === index)[0];
+      //get right contract
+      const curContr = contracts!.filter(item => item.value === currentLoc.contract)[0];
+      if(coord === "x") {
+        newLoc = Math.floor( (width - curContr.x*currentLoc.scale)/2);
+      }
+      else {
+        newLoc = Math.floor( (heigth - curContr.y*currentLoc.scale)/2);
+      }
+    }
+    else {newLoc = Number(e); }
+    console.log(newLoc);
     const nextLocs = locations.map(item => {
       if (item.id === index) {
-          return {...item, [coord]: e};
+          return {...item, [coord]: newLoc};
       }
       return item;
     });
@@ -107,23 +120,29 @@ const HomePage:NextPage = () => {
       }
   }
 
-  const isMounted = useIsMounted();
-
   const placeSVG = '<svg xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges" version="1.1" id="pixel" viewBox="0 0 32 32" width="320" height="320"><style>#pixel {image-rendering: pixelated; image-rendering: -moz-crisp-edges; image-rendering: -webkit-crisp-edges; -ms-interpolation-mode: nearest-neighbor;}</style></svg>';
 
   const encodeLayer = (layer: Locations, pfpRender: boolean) => {
-    const pfpRenderByte = ((pfpRender ? 1 : 0) << 7) | layer.scale;
+    const pfpRenderByte = (((pfpRender ? 1 : 0) << 7) | (selColor.index & 0x07) << 4 ) | layer.scale ;
     //fix here for blitmap and for background 
-    const array = new Uint8Array([layer.contract, layer.layerId, layer.traitId, pfpRenderByte, layer.x, layer.y]);
+    let array = new Uint8Array();
+    if(layer.contract == 4) {
+      let traitIdHigh = (layer.traitId & 0xFF00) >> 8;
+      let traitIdLow = layer.traitId & 0x00FF;
+      array = new Uint8Array([layer.contract, traitIdHigh, traitIdLow, pfpRenderByte, layer.x, layer.y]);
+    }
+    else {
+      array = new Uint8Array([layer.contract, layer.layerId, layer.traitId, pfpRenderByte, layer.x, layer.y]);
+    }
     return "0x" + array.reduce((output, elem) => output + elem.toString(16).padStart(2, '0'), '');
   }
 
     //const SVG = GetSVG({ inBytes: bytes});
    const contracts = GetContracts();
-    const traits = GetTraits();
+    //const traits = GetTraits();
     const layers = GetLayers();
     const deBouncedLocations = useDebounce(locations); 
-    const SVG = GetFullSVG({locations:locations, pfpRender: pfpRender, contracts: contracts ? contracts : undefined, bgColor: selColor});
+    const [width, heigth, SVG] = GetFullSVG({locations:locations, pfpRender: pfpRender, contracts: contracts ? contracts : undefined, bgColor: selColor});
     
     useEffect(() => {
       const nextBytes = deBouncedLocations.map((item) => encodeLayer(item, pfpRender));
@@ -131,11 +150,6 @@ const HomePage:NextPage = () => {
 
     }, [deBouncedLocations])
 
-    const onColorPick = (color: string) => {
-      return;
-    }
-
-    //console.log(bytes);
     const filteredLayers = layers?.filter(layer => {
        if(selectedValue.collection === 0) { return layers; }
       return layer.contract === selectedValue.collection;
@@ -146,9 +160,9 @@ const HomePage:NextPage = () => {
   }
   
     const empty = [{value: 0, label: "None", maxSupply: 0, minted: 0}]
-    const placeholder = [{value: 0, label: "Please connect", maxSupply: 0, minted: 0}]
-    console.log(contracts);
-    console.log(selectedValue);
+    const placeholder = [{value: 0, label: "Please connect", maxSupply: 0, minted: 0, x:0, y:0}]
+    // console.log(contracts);
+    // console.log(selectedValue);
 
     return(
       <div className="" data-theme="halloween">
@@ -176,8 +190,8 @@ const HomePage:NextPage = () => {
                 <label htmlFor="my-modal-4" className="btn rounded-lg btn-outline btn-primary text-2xl">What?</label>
               </div>
                 <div className="flex flex-row space-x-2">
-                  <div className="border border-1 h-[322px]">
-                {(isMounted && SVG ? parse(SVG.toString()) : parse(placeSVG)) ?? parse(placeSVG)}
+                  <div className="border border-1 h-[322px]"> 
+                {(SVG ? parse(SVG.toString()) : parse(placeSVG)) ?? parse(placeSVG)}
                   </div>
                 {/* {SVG ? parse(SVG.toString()) : "No Layers added yet."} */}
               <div className='flex flex-col text-center'>
@@ -224,3 +238,4 @@ const HomePage:NextPage = () => {
 };
 
 export default HomePage;
+//isMounted && 
