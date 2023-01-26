@@ -19,6 +19,7 @@ import { Locations } from "../Location";
 import { Trait } from '../SharedInterfaces';
 import TraitTable from "../TraitTable";
 import useDebounce from '../useDebounce';
+import { IsSafari } from "../IsSafari";
 
 interface Selector{
   collection: number,
@@ -136,13 +137,15 @@ const HomePage:NextPage = () => {
     }
     return "0x" + array.reduce((output, elem) => output + elem.toString(16).padStart(2, '0'), '');
   }
-
+// Detect Safari
+  let isSafari = false;
+  if (typeof window !== "undefined") isSafari = IsSafari();
     //const SVG = GetSVG({ inBytes: bytes});
    const contracts = GetContracts();
     //const traits = GetTraits();
     const layers = GetLayers();
     const deBouncedLocations = useDebounce(locations); 
-    const [width, heigth, SVG] = GetFullSVG({locations:locations, pfpRender: pfpRender, contracts: contracts ? contracts : undefined, bgColor: selColor});
+    const [width, heigth, SVG] = GetFullSVG({locations:locations, pfpRender: pfpRender, contracts: contracts ? contracts : undefined, bgColor: selColor, isSafari: isSafari});
     
     useEffect(() => {
       const nextBytes = deBouncedLocations.map((item) => encodeLayer(item, pfpRender));

@@ -3,8 +3,6 @@ import { DragDropContext, Draggable,Droppable } from 'react-beautiful-dnd';
 
 import { LocationForm, Locations, ScaleForm } from "./Location";
 
-import { Contract } from "./SharedInterfaces";
-
 interface Props {
   boxes: Locations[];
   setBoxes: (boxes: Locations[]) => void;
