@@ -40,12 +40,12 @@ const HomePage:NextPage = () => {
   const [selectedValue, setSelectedValue] = useState<Selector>({collection: 0, layer: ""});
   
   const colors = [{hex: "transparent", tailwind: "bg-[#00000000]", index: 0}, 
-                  {hex: "#ff8b8b", tailwind: "bg-[#ff8b8b]", index: 1},
-                  {hex: "#f2f890", tailwind: "bg-[#f2f890]", index: 2},
-                  {hex: "#82ff82", tailwind: "bg-[#82ff82]", index: 3},
-                  {hex: "#8bedff", tailwind: "bg-[#8bedff]", index: 4},
-                  {hex: "#4731ff", tailwind: "bg-[#4731ff]", index: 5},
-                  {hex: "#7551ff", tailwind: "bg-[#7551ff]", index: 6},
+                  {hex: "#e1d7d5", tailwind: "bg-[#e1d7d5]", index: 1},
+                  {hex: "#fbe3ab", tailwind: "bg-[#fbe3ab]", index: 2},
+                  {hex: "#72969e", tailwind: "bg-[#72969e]", index: 3},
+                  {hex: "#d51e29", tailwind: "bg-[#d51e29]", index: 4},
+                  {hex: "#174f87", tailwind: "bg-[#174f87]", index: 5},
+                  {hex: "#2afd2f", tailwind: "bg-[#2afd2f]", index: 6},
                   {hex: "#621b62", tailwind: "bg-[#621b62]", index: 7} ];
 
   const [selColor, setSelColor] = useState(colors[0]);
@@ -123,7 +123,7 @@ const HomePage:NextPage = () => {
 
   const placeSVG = '<svg xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges" version="1.1" id="pixel" viewBox="0 0 32 32" width="320" height="320"><style>#pixel {image-rendering: pixelated; image-rendering: -moz-crisp-edges; image-rendering: -webkit-crisp-edges; -ms-interpolation-mode: nearest-neighbor;}</style></svg>';
 
-  const encodeLayer = (layer: Locations, pfpRender: boolean) => {
+  const encodeLayer = (layer: Locations) => {
     const pfpRenderByte = (((pfpRender ? 1 : 0) << 7) | (selColor.index & 0x07) << 4 ) | layer.scale ;
     //fix here for blitmap and for background 
     let array = new Uint8Array();
@@ -148,10 +148,10 @@ const HomePage:NextPage = () => {
     const [width, heigth, SVG] = GetFullSVG({locations:locations, pfpRender: pfpRender, contracts: contracts ? contracts : undefined, bgColor: selColor, isSafari: isSafari});
     
     useEffect(() => {
-      const nextBytes = deBouncedLocations.map((item) => encodeLayer(item, pfpRender));
+      const nextBytes = deBouncedLocations.map((item) => encodeLayer(item));
       setBytes(nextBytes.concat(Array.from({length: 7-nextBytes.length}, () => "0x000000000000")));
 
-    }, [deBouncedLocations])
+    }, [deBouncedLocations, pfpRender, selColor])
 
     const filteredLayers = layers?.filter(layer => {
        if(selectedValue.collection === 0) { return layers; }
@@ -161,6 +161,7 @@ const HomePage:NextPage = () => {
     const toggle = () => {
       setPfpRender(!pfpRender);
   }
+  console.log(bytes);
   
     const empty = [{value: 0, label: "None", maxSupply: 0, minted: 0}]
     const placeholder = [{value: 0, label: "Please connect", maxSupply: 0, minted: 0, x:0, y:0}]

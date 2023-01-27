@@ -31,7 +31,7 @@ export const LocationForm = (props: ScaleProps) => {
             </button>
           </div>
           <input className="w-40 text-center rangeselect my-auto"
-            type="range" min="-50" max="50"
+            type="range" min="-64" max="64"
             value={props.loc.x}
             onChange={(e) => props.onChange("x", e.target.value)}
             required pattern="\d+"
@@ -46,7 +46,7 @@ export const LocationForm = (props: ScaleProps) => {
             </button>
           </div>
             <input className="w-40 rangeselect my-auto"
-            type="range" min="-50" max="50"
+            type="range" min="-64" max="64"
             value={props.loc.y}
             onChange={(e) => props.onChange("y", e.target.value)}
             required pattern="\d+"
