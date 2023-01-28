@@ -50,7 +50,7 @@ const GetTraits = ()  => {
     }
   //const returnData = query.data?.contracts.map((item, index) => { return {value: parseInt(item.id), label: `${item.id} - ${item.name}`, price: parseInt(item.price), tokenURI: getImageFromTokenURI(item.tokenURI)}}).sort( (a,b) => a.value - b.value );
     
-  const out = query.data?.traits.map((item, index) => {return {value: parseInt(item.id), label: `${item.id}`, tokenURI: GetTraitSVG( {traitData: item.data, mimeType: item.mimeType}), data: item.data, layer: item.layer.name, contract: parseInt(item.layer.contract.id), mimeType: item.mimeType, layerNr: item.layer.index, traitNr: item.index, name: item.name}});
+  const out = query.data?.traits.map((item, index) => {return {value: parseInt(item.id), label: `${item.id}`, tokenURI: GetTraitSVG( {traitData: item.data, mimeType: item.mimeType, contract: parseInt(item.layer.contract.id)}), data: item.data, layer: item.layer.name, contract: parseInt(item.layer.contract.id), mimeType: item.mimeType, layerNr: item.layer.index, traitNr: item.index, name: item.name}});
   
   //console.log(query.data?.contracts);
   return out;
