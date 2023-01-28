@@ -141,6 +141,8 @@ const HomePage:NextPage = () => {
   let isSafari = false;
   if (typeof window !== "undefined") isSafari = IsSafari();
     //const SVG = GetSVG({ inBytes: bytes});
+    //const width = 32;
+    //const heigth = 32;
    const contracts = GetContracts();
     //const traits = GetTraits();
     const layers = GetLayers();
@@ -172,9 +174,9 @@ const HomePage:NextPage = () => {
       <div className="" data-theme="halloween">
         <div className="flex flex-col text-2xl font-proggy" >
           <nav className='m-4 flex flex-row justify-end space-x-5 h-10'>
-            {/* <a href="https://twitter.com/Cc0Mash">
-              <Image src="/Twitter social icons - circle - white.png" width={44} height={44}  />
-            </a> */}
+            <a href="https://twitter.com/Cc0Mash" className="p-0 my-auto flex">
+              <Image src="/Twitter social icons - circle - white.png" width={33} height={33}  />
+            </a>
             <a href="https://etherscan.io/address/0x9acff3827d5ada3d946433ecf65e4568cc6ef50d" className="p-0 my-auto flex">
             <Image src="/etherscan-logo-light-circle.png" width={33} height={33} className="my-auto" />
             </a>

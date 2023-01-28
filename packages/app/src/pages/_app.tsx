@@ -27,7 +27,7 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
       <input type="checkbox" id="my-modal-4" className="modal-toggle" />
 <label htmlFor="my-modal-4" className="modal cursor-pointer">
 <label className="modal-box relative font-proggy" htmlFor="">
-    <h3 className="font-bold text-3xl">Mix and match layers from your favourite Indelible Labs CC0 projects</h3>
+    <h3 className="font-bold text-3xl">Mix and match layers from your favourite CC0 projects</h3>
     <p className="py-4 text-2xl">Instructions:</p>
     <ul className="text-2xl">
       <li>1. Select layers from the listed traits.</li>
