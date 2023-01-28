@@ -35,22 +35,29 @@ const onlyBg = (bgColor: Color) => {
 
 }
 
-const getImage = (loc: Locations, x:number, y:number, isSafari: boolean) => {
-    let image = "";
-    if(loc.data.startsWith("<?xml")) {
-        image = Buffer.from(loc.data).toString("base64");
-        return returnSVG(loc, x, y, image);
-    }
+// const getImage = (loc: Locations, x:number, y:number, isSafari: boolean) => {
+//     let image = "";
+//     if(loc.data.startsWith("<?xml")) {
+//         image = Buffer.from(loc.data).toString("base64");
+//         return returnSVG(loc, x, y, image);
+//     }
     
-    if(loc.data.startsWith("0x")) {
-        image = Buffer.from(loc.data.substring(2),'hex').toString('base64');
-        return isSafari ? returnForeign(loc, x, y, image): returnPNG(loc, x, y, image) ;
-    }
-    else{ 
-        image =  loc.data;
-        return isSafari ? returnForeign(loc, x, y, image): returnPNG(loc, x, y, image);
-    }
+//     if(loc.data.startsWith("0x")) {
+//         image = Buffer.from(loc.data.substring(2),'hex').toString('base64');
+//         return isSafari ? returnForeign(loc, x, y, image): returnPNG(loc, x, y, image) ;
+//     }
+//     else{ 
+//         image =  loc.data;
+//         return isSafari ? returnForeign(loc, x, y, image): returnPNG(loc, x, y, image);
+//     }
+// }
+
+const getImage = (loc: Locations, x:number, y:number, isSafari: boolean) => {
+    if(loc.data.startsWith("<?xml")) {return returnSVG(loc, x, y, loc.data); }
+    if(loc.data.startsWith("0x")) { return isSafari ? returnForeign(loc, x, y, loc.data): returnPNG(loc, x, y, loc.data) ; }
+    return isSafari ? returnForeign(loc, x, y, loc.data): returnPNG(loc, x, y, loc.data);
 }
+
 
 const returnForeign = (loc: Locations, x:number, y:number, image:string) => {
     return ` <foreignObject x="${loc.x}" y="${loc.y}" width="${x * loc.scale}" height="${y * loc.scale}">

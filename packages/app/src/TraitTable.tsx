@@ -3,7 +3,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import { gql } from "urql";
 
 import { useInviniteTraitsQuery } from "../codegen/subgraph";
-import { GetTraitSVG } from "./GetTraitSVG";
+import { GetTraitSVG, getBase64 } from "./GetTraitSVG";
 import Panel from "./Panel"
 import { Trait } from "./SharedInterfaces";
 
@@ -50,9 +50,10 @@ const TraitTable = ({ selectedValue, handlePiecesId }: TraitTableProps) => {
         variables: { skip, name: selectedValue.layer, contract: selectedValue.collection === 0 ? "": selectedValue.collection.toString() + "-"  },
         requestPolicy: 'network-only',
     });
+
     useEffect(() => {
         if (result.data) {
-            const traitResults = result.data?.traits.map((item, index) => {return {value: parseInt(item.id), label: `${item.id}`, tokenURI: GetTraitSVG( {traitData: item.data, mimeType: item.mimeType}), layer: item.layer.name, data: item.data, contract: parseInt(item.layer.contract.id), mimeType: item.mimeType, layerNr: item.layer.index, traitNr: item.index, name: item.name}});
+            const traitResults = result.data?.traits.map((item, index) => {return {value: parseInt(item.id), label: `${item.id}`, tokenURI: GetTraitSVG( {traitData: item.data, mimeType: item.mimeType, contract: parseInt(item.layer.contract.id)}), layer: item.layer.name, data: getBase64(item.data, parseInt(item.layer.contract.id)), contract: parseInt(item.layer.contract.id), mimeType: item.mimeType, layerNr: item.layer.index, traitNr: item.index, name: item.name}});
             setItems(prevItems => [...prevItems, ...traitResults]);
             setHasMore(result.data.traits.length === ITEMS_PER_PAGE);
         }
