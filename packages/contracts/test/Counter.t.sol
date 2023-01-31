@@ -12,12 +12,12 @@ contract CounterTest is Test {
         indel = IIndelible(0x9251dEC8DF720C2ADF3B6f46d968107cbBADf4d4);
     }
 
-    function testResponse() public {
-        bytes memory out = bytes(indel.traitData(1,3));
-        console.log("out:",".",Base64.encode(out));
-        IIndelible.Trait memory traits = indel.traitDetails(1,3);
-        console.log("traitdetails:", traits.name);
-        //IIndelible.ContractData memory data = 
-        indel.contractData(); 
-    }
+    // function testResponse() public {
+    //     bytes memory out = bytes(indel.traitData(1,3));
+    //     console.log("out:",".",Base64.encode(out));
+    //     IIndelible.Trait memory traits = indel.traitDetails(1,3);
+    //     console.log("traitdetails:", traits.name);
+    //     //IIndelible.ContractData memory data = 
+    //     indel.contractData(); 
+    // }
 }

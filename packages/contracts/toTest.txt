@@ -1,0 +1,4 @@
+Opensea display  - check
+rendering with new contracts - check
+new decoding and storage - check
+

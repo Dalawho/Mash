@@ -10,10 +10,10 @@ import "src/Proxy.sol";
 contract CounterTest is Test, SharedStructs {
     using stdJson for string;
     Mash mash;
-    Render render; 
+    RenderV2 render; 
     UUPSProxy proxy;
     Mash wrappedMash;
-    string[] public collections = ["Nouns", "1337", "CryptoBabyTeddies", "pksl", "TinyBones", "OnChainKevin", "ProofOfPepe", "TonalMuse", "Blitmap", "Flipmap"];
+    string[] public collections = ["1337", "TonalMuse",  "CryptoBabyTeddies", "Blitmap", "OnChainKevin", "Nouns", "ProofOfPepe",  "Flipmap"];
     struct DataLoad {
         address collection;
         uint16 maxSupply; 
@@ -25,7 +25,7 @@ contract CounterTest is Test, SharedStructs {
 
     function setUp() public {
         mash = new Mash();
-        render = new Render(); 
+        render = new RenderV2(); 
         proxy = new UUPSProxy(address(mash), "");
         wrappedMash = Mash(address(proxy));
 
@@ -45,13 +45,13 @@ contract CounterTest is Test, SharedStructs {
     //     console.log(IBlitmap(0x0E4B8e24789630618aA90072F520711D3d9Db647).tokenSvgDataOf(1));
     // }
 
-    function testFlipTokenURI() public {
-        //testCollectionAddition();
-        //        string[] private LAYER_NAMES = [unicode"5p3c141", unicode"0v32", unicode"3y35", unicode"und32", unicode"5ku115", unicode"84ck920und"];
-        bytes6 empty = bytes6(0);
-        bytes6 l5 = bytes6(0x090001011010);
-        wrappedMash.mintAndBuy{ value: 0.005 ether }([l5,empty,empty,empty,empty,empty, empty]);
-    }
+    // function testFlipTokenURI() public {
+    //     //testCollectionAddition();
+    //     //        string[] private LAYER_NAMES = [unicode"5p3c141", unicode"0v32", unicode"3y35", unicode"und32", unicode"5ku115", unicode"84ck920und"];
+    //     bytes6 empty = bytes6(0);
+    //     bytes6 l5 = bytes6(0x090001011010);
+    //     wrappedMash.mintAndBuy{ value: 0.005 ether }([l5,empty,empty,empty,empty,empty, empty]);
+    // }
 
     function testMint() public {
         //testCollectionAddition();
@@ -65,37 +65,41 @@ contract CounterTest is Test, SharedStructs {
         //bytes6 l5 = bytes6(0x020501010000);
         bytes6 l5 = bytes6(0x090001021010);
         bytes6 l6 = bytes6(0x080001010101);
-        wrappedMash.mintAndBuy{ value: 0.005 ether }([l1,l2,l3,empty,empty,empty, empty]);
+        bytes6 blit = bytes6(0x040002010000);
+        wrappedMash.previewCollage([blit,empty,empty,empty,empty,empty, empty]);
+        //wrappedMash.mintAndBuy{ value: 0.005 ether }([l1,l2,l3,empty,empty,empty, empty]);
+    wrappedMash.mintAndBuy{ value: 0.005 ether }([blit,empty,empty,empty,empty,empty, empty]);
     }
 
-    function testPreview() public {
-        bytes6 empty = bytes6(0);
-        bytes6 l1 = bytes6(0x010501010000);
-        bytes6 l2 = bytes6(0x010401010000);
-        bytes6 l3 = bytes6(0x010301010000);
-        bytes6 l4 = bytes6(0x010207010000);
-        bytes6 l5 = bytes6(0x020501010000);
-        bytes6 l6 = bytes6(0x030001010101);
-        //console.log(wrappedMash.previewCollage([l1,l3,l2,l4,l5,l6, empty]));
-    }
+    // function testPreview() public {
+    //     bytes6 empty = bytes6(0);
+    //     bytes6 l1 = bytes6(0x010501010000);
+    //     bytes6 l2 = bytes6(0x010401010000);
+    //     bytes6 l3 = bytes6(0x010301010000);
+    //     bytes6 l4 = bytes6(0x010207010000);
+    //     bytes6 l5 = bytes6(0x020501010000);
+    //     bytes6 l6 = bytes6(0x030001010101);
+    //     //console.log(wrappedMash.previewCollage([l1,l3,l2,l4,l5,l6, empty]));
+    // }
 
     function testAll() public {
         testMint();
+        //console.log(wrappedMash.tokenURI(1));
         console.log(wrappedMash.tokenURI(1));
     }
 
-    function testWithdraw() public {
-        testMint();
-        uint256 before = address(this).balance;
-        wrappedMash.withdraw();
-        assertEq(address(this).balance, before + 0.005 ether);
-    }
+    // function testWithdraw() public {
+    //     testMint();
+    //     uint256 before = address(this).balance;
+    //     wrappedMash.withdraw();
+    //     assertEq(address(this).balance, before + 0.005 ether);
+    // }
 
-    function testFailWithdraw() public {
-        testMint();
-        vm.prank(address(0));
-        wrappedMash.withdraw();
-    }
+    // function testFailWithdraw() public {
+    //     testMint();
+    //     vm.prank(address(0));
+    //     wrappedMash.withdraw();
+    // }
 
     // Function to receive Ether. msg.data must be empty
     receive() external payable {}

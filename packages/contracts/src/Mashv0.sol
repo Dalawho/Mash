@@ -148,7 +148,7 @@ contract Mashv0 is ERC721G, OwnableUpgradeable, DefaultOperatorFiltererUpgradeab
         int8 yOffset = int8(uint8(array[5]));
         //console.log("scale:", scale);
         //console.log(xOffset < 0 ? string.concat("-", Strings.toString(uint8(-1 * xOffset) )): Strings.toString(uint8(xOffset)));
-        return LayerStruct(contractId, layerId, traitId, pfpRender, scale, xOffset, yOffset);
+        return LayerStruct(contractId, layerId, traitId, pfpRender, 0, scale, xOffset, yOffset);
     }
 
     function decodeContract(bytes6 array) public pure returns (uint8) {

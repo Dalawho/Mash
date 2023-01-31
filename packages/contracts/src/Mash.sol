@@ -101,6 +101,12 @@ contract Mash is ERC721, OwnableUpgradeable, DefaultOperatorFiltererUpgradeable,
         ++nextCollection;
     }
 
+    function replaceCollection(CollectionInfo memory _newCollection, string[] memory _layersNames, uint256 collectionNr) public onlyOwner {
+        collections[collectionNr] = _newCollection;
+        layerNames[collectionNr] = _layersNames;
+        emit ContractAdded(collectionNr, _newCollection.collection, _newCollection.maxSupply);
+    }
+
     function getCollection(uint256 _collectionNr) public view returns(CollectionInfo memory) {
         return collections[_collectionNr];
     }
@@ -165,10 +171,11 @@ contract Mash is ERC721, OwnableUpgradeable, DefaultOperatorFiltererUpgradeable,
         uint8 layerId = uint8(array[1]);
         uint8 traitId = uint8(array[2]);
         bool pfpRender = uint8(array[3] >> 7) == 1 ? true : false;
-        uint8 scale = uint8(array[3] & 0x7f);
+        uint8 background = uint8(array[3] & 0x70) >> 4;
+        uint8 scale = uint8(array[3] & 0x0f);
         int8 xOffset = int8(uint8(array[4]));
         int8 yOffset = int8(uint8(array[5]));
-        return LayerStruct(contractId, layerId, traitId, pfpRender, scale, xOffset, yOffset);
+        return LayerStruct(contractId, layerId, traitId, pfpRender, background, scale, xOffset, yOffset);
     }
 
     function decodeContract(bytes6 array) public pure returns (uint8) {

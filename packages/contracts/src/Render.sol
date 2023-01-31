@@ -22,6 +22,8 @@ contract Render is Ownable, SSt {
 
     IMash public mash;
 
+    uint24[7] colors = [0xe1d7d5, 0xfbe3ab, 0x72969e, 0xd51e29, 0x174f87, 0x2afd2f, 0x621b62];
+
     //constructor() {}
 
     ////////////////////////  Setters /////////////////////////////////
@@ -115,6 +117,9 @@ contract Render is Ownable, SSt {
             //buffer.appendSafe(bytes(string.concat('<svg xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges" version="1.1" viewBox="0 0 ', Strings.toString(height), ' ', Strings.toString(width),'" width="',Strings.toString(height*5),'" height="',Strings.toString(width*5),'"> ')));
             int256 height = int256(uint256(_collections[0].xSize*_layerInfo[0].scale));
             int256 width = int256(uint256(_collections[0].ySize*_layerInfo[0].scale));
+            if(_layerInfo[0].background != 0) {
+                buffer.appendSafe(bytes(string.concat('<rect width="100%" height="100%" fill="#', bytes2hex(colors[_layerInfo[0].background-1]) ,'" />')));
+            }
             for(uint256 i = 0; i < _layerInfo.length; i++) {
                 if(_layerInfo[i].collection == 0) continue;
                 _renderImg(_layerInfo[i], _collections[i], traitNames[i], buffer);
@@ -140,4 +145,19 @@ contract Render is Ownable, SSt {
         return num < 0 ? string.concat("-", Strings.toString(uint8(-1 * num) )): Strings.toString(uint8(num));
     }
 
+    function bytes2hex(uint24 u) internal pure returns (string memory) {
+    bytes memory b = new bytes(6);
+    for (uint256 j = 0; j < 6; j++) {
+      b[5 - j] = _getHexChar(uint8(uint24(u) & 0x0f));
+      u = u >> 4;
+    }
+    return string(b);
+  }
+
+    function _getHexChar(uint8 char) internal pure returns (bytes1) {
+    return
+      (char > 9)
+        ? bytes1(char + 87) // ascii a-f
+        : bytes1(char + 48); // ascii 0-9
+  }
 }

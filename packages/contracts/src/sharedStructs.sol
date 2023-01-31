@@ -15,6 +15,7 @@ interface SharedStructs {
         uint8 layerId;
         uint8 traitId;
         bool pfpRender;
+        uint8 background;
         uint8 scale;
         int8 xOffset;
         int8 yOffset;

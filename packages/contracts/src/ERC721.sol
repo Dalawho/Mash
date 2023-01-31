@@ -217,10 +217,12 @@ abstract contract ERC721 is SharedStructs, Initializable {
         virtual
     {
         // cannot mint to 0x0
-        require(to != address(0), "ERC721G: _mintInternal to 0x0");
+        require(to != address(0), "INVALID_RECIPIENT");
 
         // process the token id data
         uint256 id = tokenIndex;
+
+        require(_ownerOf[id].owner == address(0), "ALREADY_MINTED");
 
         //this is not great because of all the storage write, I guess to avoid this need to change the way layers
         _ownerOf[id] = OwnerStruct(to, layerInfos[0], layerInfos[1], [layerInfos[2], layerInfos[3], layerInfos[4], layerInfos[5], layerInfos[6]]);
@@ -232,6 +234,9 @@ abstract contract ERC721 is SharedStructs, Initializable {
 
         // set the new token index
         tokenIndex = id + 1;
+
+        emit Transfer(address(0), to, id);
+
     }
 
     /*//////////////////////////////////////////////////////////////

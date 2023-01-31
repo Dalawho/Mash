@@ -8,6 +8,8 @@ import { Base64 } from "openzeppelin/utils/Base64.sol";
 import 'ethier/utils/DynamicBuffer.sol';
 import {SharedStructs as SSt} from "./sharedStructs.sol";
 import "./interfaces/IIndelible.sol";
+import {IGenericRender} from "./interfaces/IGenericRender.sol";
+import "forge-std/console.sol";
 
 interface IMash {
     function getCollection(uint256 _collectionNr) external view returns(SSt.CollectionInfo memory);
@@ -40,13 +42,15 @@ interface ISVGRenderer {
     function generateSVGPart(Part memory part) external view returns (string memory partialSVG);
 }
 
-contract Render is Ownable, SSt {
+contract RenderV2 is Ownable, SSt {
     using Strings for uint256;
     using DynamicBuffer for bytes;
 
     uint256 public constant MAX_LAYERS = 7; 
 
     IMash public mash;
+
+    uint24[7] colors = [0xe1d7d5, 0xfbe3ab, 0x72969e, 0xd51e29, 0x174f87, 0x2afd2f, 0x621b62];
 
 
     //Non indelible collections that need special treatment are here 
@@ -57,12 +61,23 @@ contract Render is Ownable, SSt {
     INounsDescriptorV2 constant nounsDescriptor = INounsDescriptorV2(0x6229c811D04501523C6058bfAAc29c91bb586268);
     ISVGRenderer constant nounsRenderer = ISVGRenderer(0x81d94554A4b072BFcd850205f0c79e97c92aab56);
 
+    //other contracts that are handled by a seperate renderer are in this mapping
+    mapping (address => address) renderers;
+
     //constructor() {}
 
     ////////////////////////  Setters /////////////////////////////////
 
-    function setMash( address _newMash) public onlyOwner {
+    function setMash( address _newMash) external onlyOwner {
         mash = IMash(_newMash);
+    }
+
+    function setColore(uint24[7] calldata _newcolors) external onlyOwner {
+        colors = _newcolors;
+    }
+
+    function addContract(address _collection, address _render) external onlyOwner {
+        renderers[_collection] = _render;
     }
 
     ////////////////////////  Trait Data functions functions /////////////////////////////////
@@ -73,18 +88,22 @@ contract Render is Ownable, SSt {
         if(_collection == flipmap) return IIndelible.Trait(string.concat("Flipmap #", Strings.toString(id)), "image/svg+xml");
         if(_collection == onChainKevin) return IIndelible.Trait(IKevin(onChainKevin).traitTypes(layerId, traitId, 0), "image/png");
         if(_collection == nounsToken) return IIndelible.Trait(getNounsTraits(layerId, traitId), "image/svg+xml");
+        if(renderers[_collection] != address(0)) return IGenericRender(renderers[_collection]).getTraitDetails(layerId, traitId);
         return IIndelible(_collection).traitDetails(layerId, traitId);
     }
 
     function getTraitData(address _collection, uint8 _layerId, uint8 _traitId) public view returns(bytes memory) {
+        console.log("layer, trait, id");
+        uint16 id = (uint16(_layerId) << 8) | uint16(_traitId);
+        
         if(_collection == blitmap || _collection == flipmap) {
-            uint16 id = (uint16(_layerId) << 8) | uint16(_traitId);
             return bytes(IBlitmap(_collection).tokenSvgDataOf(id));
         }
         if(_collection == onChainKevin) return bytes(IKevin(onChainKevin).traitTypes(_layerId, _traitId, 1));
         if(_collection == nounsToken) {
             return bytes(string.concat('<svg width="320" height="320" viewBox="0 0 320 320" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">', getNounsData(_layerId, _traitId), '</svg>')); 
         }
+        if(renderers[_collection] != address(0)) return IGenericRender(renderers[_collection]).getTraitData(_layerId, _traitId);
         return bytes(IIndelible(_collection).traitData(_layerId, _traitId));
     }
 
@@ -93,6 +112,7 @@ contract Render is Ownable, SSt {
         if(_collection == flipmap) return "Flipmap";
         if(_collection == onChainKevin) return "On Chain Kevin";
         if(_collection == nounsToken) return "Nouns";
+        if(renderers[_collection] != address(0)) return IGenericRender(renderers[_collection]).getCollectionName();
         (string memory out,,,,,,) = IIndelible(_collection).contractData();
         return out;
     }
@@ -124,7 +144,7 @@ contract Render is Ownable, SSt {
             collectionNames[i] = getCollectionName(_collections[i].collection);
             traitNames[i] = getTraitDetails(_collections[i].collection, layerInfo[i].layerId, layerInfo[i].traitId);   
         }
-        string memory _outString = string.concat('data:application/json,', '{', '"name" : "Indelible Mashup #' , Strings.toString(tokenId), '", ',
+        string memory _outString = string.concat('data:application/json,', '{', '"name" : "CC0 Mash #' , Strings.toString(tokenId), '", ',
             '"description" : "What Is This, a Crossover Episode?"');
         
         _outString = string.concat(_outString, ',"attributes":[');
@@ -162,17 +182,17 @@ contract Render is Ownable, SSt {
         return string(_drawTraits(layerInfo, _collections, traitNames));
     }
 
-    function getSVGForTrait(uint8 _collectionId, uint8 _layerId, uint8 _traitId) external view returns (string memory) {
-        bytes memory buffer = DynamicBuffer.allocate(2**18);
-        CollectionInfo memory _collectionInfo = mash.getCollection(_collectionId);
-        bytes memory _traitData = getTraitData(_collectionInfo.collection, _layerId, _traitId);
-        IIndelible.Trait memory _traitDetails = getTraitDetails(_collectionInfo.collection, _layerId, _traitId);
-        buffer.appendSafe(bytes(string.concat('<image width="100%" height="100%" href="data:', _traitDetails.mimetype , ';base64,'))); //add the gif/png selector
-        buffer.appendSafe(bytes(Base64.encode(_traitData)));
-        buffer.appendSafe(bytes('"/>'));
-        buffer.appendSafe('<style>#pixel {image-rendering: pixelated; image-rendering: -moz-crisp-edges; image-rendering: -webkit-crisp-edges; -ms-interpolation-mode: nearest-neighbor;}</style></svg>');
-        return string(abi.encodePacked('<svg xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges" version="1.1" id="pixel" viewBox="0 0 ', Strings.toString(_collectionInfo.xSize), ' ', Strings.toString(_collectionInfo.ySize),'" width="1200" height="1200"> ', buffer));
-    }
+    // function getSVGForTrait(uint8 _collectionId, uint8 _layerId, uint8 _traitId) external view returns (string memory) {
+    //     bytes memory buffer = DynamicBuffer.allocate(2**18);
+    //     CollectionInfo memory _collectionInfo = mash.getCollection(_collectionId);
+    //     bytes memory _traitData = getTraitData(_collectionInfo.collection, _layerId, _traitId);
+    //     IIndelible.Trait memory _traitDetails = getTraitDetails(_collectionInfo.collection, _layerId, _traitId);
+    //     buffer.appendSafe(bytes(string.concat('<image width="100%" height="100%" href="data:', _traitDetails.mimetype , ';base64,'))); //add the gif/png selector
+    //     buffer.appendSafe(bytes(Base64.encode(_traitData)));
+    //     buffer.appendSafe(bytes('"/>'));
+    //     buffer.appendSafe('<style>#pixel {image-rendering: pixelated; image-rendering: -moz-crisp-edges; image-rendering: -webkit-crisp-edges; -ms-interpolation-mode: nearest-neighbor;}</style></svg>');
+    //     return string(abi.encodePacked('<svg xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges" version="1.1" id="pixel" viewBox="0 0 ', Strings.toString(_collectionInfo.xSize), ' ', Strings.toString(_collectionInfo.ySize),'" width="1200" height="1200"> ', buffer));
+    // }
 
     ////////////////////////  SVG functions /////////////////////////////////
 
@@ -181,6 +201,9 @@ contract Render is Ownable, SSt {
             //buffer.appendSafe(bytes(string.concat('<svg xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges" version="1.1" viewBox="0 0 ', Strings.toString(height), ' ', Strings.toString(width),'" width="',Strings.toString(height*5),'" height="',Strings.toString(width*5),'"> ')));
             int256 height = int256(uint256(_collections[0].xSize*_layerInfo[0].scale));
             int256 width = int256(uint256(_collections[0].ySize*_layerInfo[0].scale));
+            if(_layerInfo[0].background != 0) {
+                buffer.appendSafe(bytes(string.concat('<rect width="100%" height="100%" fill="#', bytes2hex(colors[_layerInfo[0].background-1]) ,'" />')));
+            }
             for(uint256 i = 0; i < _layerInfo.length; i++) {
                 if(_layerInfo[i].collection == 0) continue;
                 _renderImg(_layerInfo[i], _collections[i], traitNames[i], buffer);
@@ -195,15 +218,31 @@ contract Render is Ownable, SSt {
 
     function _renderImg(LayerStruct memory _currentLayer, CollectionInfo memory _currentCollection, IIndelible.Trait memory traitNames, bytes memory buffer) private view {
         //currently only renders as PNG this should also include gif! 
-        bytes memory _traitData = (_currentCollection.collection == blitmap || _currentCollection.collection == flipmap ) ? bytes(IBlitmap(_currentCollection.collection).tokenSvgDataOf( _currentLayer.layerId * _currentLayer.traitId )) : getTraitData(_currentCollection.collection, _currentLayer.layerId, _currentLayer.traitId);
+        bytes memory _traitData = getTraitData(_currentCollection.collection, _currentLayer.layerId, _currentLayer.traitId);
         buffer.appendSafe(bytes(string.concat('<image x="', int8ToString(_currentLayer.xOffset), '" y="', int8ToString(_currentLayer.yOffset),'" width="', Strings.toString(_currentCollection.xSize*_currentLayer.scale), '" height="', Strings.toString(_currentCollection.ySize*_currentLayer.scale),
          '" href="data:', traitNames.mimetype , ';base64,'))); //add the gif/png/svg selector
         buffer.appendSafe(_currentCollection.collection == onChainKevin ? _traitData : bytes(Base64.encode(_traitData)));
         buffer.appendSafe(bytes('"/>'));
     }
 
-    function int8ToString(int8 num) public pure returns (string memory) {
+    function int8ToString(int8 num) internal pure returns (string memory) {
         return num < 0 ? string.concat("-", Strings.toString(uint8(-1 * num) )): Strings.toString(uint8(num));
     }
+
+    function bytes2hex(uint24 u) internal pure returns (string memory) {
+        bytes memory b = new bytes(6);
+        for (uint256 j = 0; j < 6; j++) {
+        b[5 - j] = _getHexChar(uint8(uint24(u) & 0x0f));
+        u = u >> 4;
+        }
+    return string(b);
+    }
+
+    function _getHexChar(uint8 char) internal pure returns (bytes1) {
+    return
+      (char > 9)
+        ? bytes1(char + 87) // ascii a-f
+        : bytes1(char + 48); // ascii 0-9
+    } 
 
 }

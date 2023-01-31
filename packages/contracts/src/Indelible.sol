@@ -10,7 +10,7 @@ contract IndelibleTest is IIndelible {
     constructor() {
         for(uint i; i < 2; i++) {
             for(uint j; j < 3; j++) {
-                traits[j][i] = Trait("m", "nm");
+                traits[j][i] = Trait("m", "image/png");
             }
         }
         

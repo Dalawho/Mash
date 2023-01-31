@@ -13,7 +13,7 @@ contract Deploy is Script, SharedStructs {
 
     Mash mash;
     Mash wrappedMash;
-    Render render;
+    RenderV2 render;
     UUPSProxy proxy;
 
     struct DataLoad {
@@ -25,21 +25,24 @@ contract Deploy is Script, SharedStructs {
         uint8 ySize;
     }
 
-    string[] public collections = ["Blitmap"];//,"1337", "TonalMuse" , "pksl", "TinyBones", "TinyPussies", "ProofOfPepe", "TonalMuse", "FrogCentral"];
+    string[] public collections = ["OnChainKevin"];//"Blitmap"];//,"1337", "TonalMuse" , "pksl", "TinyBones", "TinyPussies", "ProofOfPepe", "TonalMuse", "FrogCentral"];
 
     function run() public {
         uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
         vm.startBroadcast(deployerPrivateKey);
-        // mash = new Mash();
-        // render = new Render(); 
+        wrappedMash = Mash(0x9AcFf3827d5adA3d946433eCf65e4568CC6ef50D);
+        // render = new RenderV2(); //new render
+        // render = RenderV2(0x4Ad77332F4e3aDb6d6ca7c9e43c7e83DCC4DC08A);
+        // render.setMash(address(wrappedMash));
+        // wrappedMash.setRender(address(render));
+         //deploy the new Mash
         // proxy = new UUPSProxy(address(mash), "");
         // wrappedMash = Mash(address(proxy));
-
         // wrappedMash.initialize();
-        
-        wrappedMash = Mash(0x9AcFf3827d5adA3d946433eCf65e4568CC6ef50D);
         // wrappedMash.setRender(address(render));
         // render.setMash(address(wrappedMash));
+        // mash = new Mash();
+        // wrappedMash.upgradeTo(address(mash));
            
         string memory _in = vm.readFile("./collections.json");
         for(uint256 i; i < collections.length; ++i) {
