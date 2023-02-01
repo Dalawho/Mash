@@ -48,7 +48,7 @@ contract CounterTest is Test {
     function testMoon() public {
         //console.log(moon.artworkURI(21,1));
         //moon.artworkURI(21,1);
-        moon.artworkURI(IMoonBirds.Features(1, 0, 0, 0, 0, 0, 0), IMoonBirds.Mutators(0), 1);
+        console.log(moon.artworkURI(IMoonBirds.Features(1, 2, 1, 2, 0, 0, 0), IMoonBirds.Mutators(0), 10));
     }
 
     function testMoonName() public {
@@ -67,7 +67,7 @@ contract CounterTest is Test {
     function testMoonData() public {
         //console.log(moon.artworkURI(21,1));
         //moon.artworkURI(21,1);
-        console.log(string(render.getTraitData(0,1)));
+        //console.log(string(render.getTraitData(2,9)));
     }
 
     // function testResponse() public {

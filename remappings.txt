@@ -5,3 +5,4 @@ openzeppelin/=packages/contracts/lib/openzeppelin-contracts/contracts/
 ethier/=packages/contracts/lib/ethier/contracts/
 solmate/=packages/contracts/lib/solmate/src/
 stringutils/=packages/contracts/lib/solidity-stringutils/src/
+bytesutils/=packages/contracts/lib/solidity-bytes-utils/contracts/

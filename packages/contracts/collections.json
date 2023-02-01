@@ -5,7 +5,8 @@
         "minted" : 0 ,
         "traitNames" : ["5p3c141", "0v32", "3y35", "und32", "5ku115", "84ck920und"],
         "xSize" : 32 ,
-        "ySize" :  32
+        "ySize" :  32,
+        "zrender" : false
         
     },
     "CryptoBabyTeddies" : {
@@ -15,7 +16,8 @@
 
         "traitNames" : ["Eyes", "Head", "Snout", "Accessory", "Body Accessory", "Type", "Background"],
         "xSize" : 39 ,
-        "ySize" :  39 
+        "ySize" :  39 ,
+        "zrender" : false
     },
     "pksl" : {
         "collection" : "0x5c9Dd18B69B2778aDf344D29e910A0DcFAbfb5B3" ,
@@ -23,7 +25,8 @@
         "minted" : 0 ,
         "traitNames" : ["Texture", "Face", "Head", "Background", "Luck"],
         "xSize" : 32 ,
-        "ySize" :  32 
+        "ySize" :  32 ,
+        "zrender" : false
     },
     "TinyBones" : {
         "collection" : "0x0Cc27400A9C11CF07a3b6528cB0c94b8b89Dfa3D" ,
@@ -31,7 +34,8 @@
         "minted" : 0 ,
         "traitNames" : ["Eyes", "Headwear", "Accessories", "Body", "Head", "Background"], 
         "xSize" : 24 ,
-        "ySize" :  24 
+        "ySize" :  24 ,
+        "zrender" : false
     },
     "TinyPussies" : {
         "collection" : "0xc2CAd8FA3aE2c079993F827437B078B5E7ac1695" ,
@@ -39,7 +43,8 @@
         "minted" : 0 ,
         "traitNames" : ["Special", "Head", "Face", "Eyes", "Feet", "Belly", "Body", "Background"],
         "xSize" : 16 ,
-        "ySize" :  16
+        "ySize" :  16,
+        "zrender" : false
     },
     "ProofOfPepe" : {
         "collection" : "0x2f46E37477Ca4033D74986b15F0572e9913B4858" ,
@@ -47,7 +52,8 @@
         "minted" : 0 ,
         "traitNames" : ["Legendaries", "Mouth", "Eyewear", "Nose", "Headwear", "Eyes", "Clothing", "Lips", "Body", "Skill", "Background"],
         "xSize" : 48 ,
-        "ySize" :  48
+        "ySize" :  48,
+        "zrender" : false
         
     },
     "TonalMuse" : {
@@ -57,7 +63,8 @@
 
         "traitNames" : ["Curated Instruments", "Accent", "Curated Frame", "Instruments", "Frame", "Canvas"],
         "xSize" : 25 ,
-        "ySize" :  25
+        "ySize" :  25,
+        "zrender" : false
     },
     "Blitmap" : {
         "collection" : "0x8d04a8c79cEB0889Bdd12acdF3Fa9D207eD3Ff63" ,
@@ -65,7 +72,8 @@
         "minted" : 0 ,
         "traitNames" : [""],
         "xSize" : 32 ,
-        "ySize" :  32
+        "ySize" :  32,
+        "zrender" : false
     },
     "Flipmap" : {
         "collection" : "0x0E4B8e24789630618aA90072F520711D3d9Db647" ,
@@ -73,7 +81,8 @@
         "minted" : 0 ,
         "traitNames" : [""],
         "xSize" : 32 ,
-        "ySize" :  32
+        "ySize" :  32,
+        "zrender" : false
     },
     "OnChainKevin" : {
         "collection" : "0xaC3AE179bB3c0edf2aB2892a2B6A4644A71627B6" ,
@@ -81,7 +90,8 @@
         "minted" : 0 ,
         "traitNames" : ["Lasers", "Head Accessory", "Mouth", "Face Accessory", "Eyes", "Nose", "Shirt", "Skin", "Background"] ,
         "xSize" : 32 ,
-        "ySize" :  32
+        "ySize" :  32 ,
+        "zrender" : false
     },
     "Nouns" : {
         "collection" : "0x9C8fF314C9Bc7F6e59A9d9225Fb22946427eDC03" ,
@@ -89,6 +99,16 @@
         "minted" : 0 ,
         "traitNames" : ["Body", "Accessory", "Head", "Glasses"] ,
         "xSize" : 32 ,
-        "ySize" :  32
+        "ySize" :  32,
+        "zrender" : false
+    },
+    "Moonbirds" : {
+        "collection" : "0x23581767a106ae21c074b2276D25e5C3e136a68b" ,
+        "maxSupply" : 0 ,
+        "minted" : 0 ,
+        "traitNames" : ["Background", "Beak", "Body", "Eyes", "Eyewear","Headware","Outerwear"] ,
+        "xSize" : 42 ,
+        "ySize" :  42,
+        "zrender" : true
     }
 }

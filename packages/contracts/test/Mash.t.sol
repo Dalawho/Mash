@@ -6,6 +6,7 @@ import "src/Mash.sol";
 import "src/RenderV2.sol";
 import "src/sharedStructs.sol";
 import "src/Proxy.sol";
+import "src/MoonRender.sol";
 
 contract CounterTest is Test, SharedStructs {
     using stdJson for string;
@@ -13,7 +14,8 @@ contract CounterTest is Test, SharedStructs {
     RenderV2 render; 
     UUPSProxy proxy;
     Mash wrappedMash;
-    string[] public collections = ["1337", "TonalMuse",  "CryptoBabyTeddies", "Blitmap", "OnChainKevin", "Nouns", "ProofOfPepe",  "Flipmap"];
+    MoonRender moon;
+    string[] public collections = ["1337", "TonalMuse",  "CryptoBabyTeddies", "Blitmap", "OnChainKevin", "Nouns","Moonbirds" , "ProofOfPepe",  "Flipmap"];
     struct DataLoad {
         address collection;
         uint16 maxSupply; 
@@ -21,12 +23,14 @@ contract CounterTest is Test, SharedStructs {
         string[] traitNames;
         uint8 xSize;
         uint8 ySize;
+        bool zrender;
     }
 
     function setUp() public {
         mash = new Mash();
         render = new RenderV2(); 
         proxy = new UUPSProxy(address(mash), "");
+        moon = new MoonRender();
         wrappedMash = Mash(address(proxy));
 
         wrappedMash.initialize();
@@ -37,6 +41,11 @@ contract CounterTest is Test, SharedStructs {
             bytes memory rawJson = _in.parseRaw(collections[i]);
             DataLoad memory col = abi.decode(rawJson, (DataLoad));
             wrappedMash.addCollection(CollectionInfo(col.collection,col.maxSupply,0,col.xSize,col.ySize),col.traitNames);
+            if (col.zrender) {
+                if(col.collection == 0x23581767a106ae21c074b2276D25e5C3e136a68b) {
+                    render.addContract(col.collection, address(moon));
+                }
+            }
         }
         wrappedMash.setMintActive();
     }
@@ -63,12 +72,15 @@ contract CounterTest is Test, SharedStructs {
         bytes6 l4 = bytes6(0x050503010000);
         //        string[] private LAYER_NAMES = [unicode"Eyes", unicode"Head", unicode"Snout", unicode"Accessory", unicode"Body Accessory", unicode"Type", unicode"Background"];
         //bytes6 l5 = bytes6(0x020501010000);
-        bytes6 l5 = bytes6(0x090001021010);
-        bytes6 l6 = bytes6(0x080001010101);
-        bytes6 blit = bytes6(0x040002010000);
+        bytes6 l5 = bytes6(0x070200020000);
+        bytes6 l6 = bytes6(0x070301020000);
+        bytes6 blit = bytes6(0x070101320000);
+
+        bytes6 back = bytes6(0x070005320000);
+
         wrappedMash.previewCollage([blit,empty,empty,empty,empty,empty, empty]);
         //wrappedMash.mintAndBuy{ value: 0.005 ether }([l1,l2,l3,empty,empty,empty, empty]);
-    wrappedMash.mintAndBuy{ value: 0.005 ether }([blit,empty,empty,empty,empty,empty, empty]);
+        wrappedMash.mintAndBuy{ value: 0.005 ether }([back,l5,l6, blit,empty,empty, empty]);
     }
 
     // function testPreview() public {
