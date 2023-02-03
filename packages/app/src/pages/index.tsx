@@ -14,12 +14,12 @@ import GetContracts from "../GetContracts";
 import { GetFullSVG } from '../GetFullSVG';
 //import { GetSVG } from "../GetSVG";
 import GetLayers from "../GetLayers";
-import GetTraits from "../GetTraits";
+import { IsSafari } from "../IsSafari";
+//import GetTraits from "../GetTraits";
 import { Locations } from "../Location";
 import { Trait } from '../SharedInterfaces';
 import TraitTable from "../TraitTable";
 import useDebounce from '../useDebounce';
-import { IsSafari } from "../IsSafari";
 
 interface Selector{
   collection: number,
@@ -128,8 +128,8 @@ const HomePage:NextPage = () => {
     //fix here for blitmap and for background 
     let array = new Uint8Array();
     if(layer.contract == 4) {
-      let traitIdHigh = (layer.traitId & 0xFF00) >> 8;
-      let traitIdLow = layer.traitId & 0x00FF;
+      const traitIdHigh = (layer.traitId & 0xFF00) >> 8;
+      const traitIdLow = layer.traitId & 0x00FF;
       array = new Uint8Array([layer.contract, traitIdHigh, traitIdLow, pfpRenderByte, layer.x, layer.y]);
     }
     else {
@@ -140,12 +140,13 @@ const HomePage:NextPage = () => {
 // Detect Safari
   let isSafari = false;
   if (typeof window !== "undefined") isSafari = IsSafari();
-    //const SVG = GetSVG({ inBytes: bytes});
-    //const width = 32;
-    //const heigth = 32;
-   const contracts = GetContracts();
+    // const SVG = GetSVG({ inBytes: bytes});
+    // const width = 32;
+    // const heigth = 32;
     //const traits = GetTraits();
     const layers = GetLayers();
+
+   const contracts = GetContracts();
     const deBouncedLocations = useDebounce(locations); 
     const [width, heigth, SVG] = GetFullSVG({locations:locations, pfpRender: pfpRender, contracts: contracts ? contracts : undefined, bgColor: selColor, isSafari: isSafari});
     

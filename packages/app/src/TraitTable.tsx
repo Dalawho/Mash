@@ -3,15 +3,15 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import { gql } from "urql";
 
 import { useInviniteTraitsQuery } from "../codegen/subgraph";
-import { GetTraitSVG, getBase64 } from "./GetTraitSVG";
+import { GetBase64,GetTraitSVG } from "./GetTraitSVG";
 import Panel from "./Panel"
 import { Trait } from "./SharedInterfaces";
 
-const ITEMS_PER_PAGE = 50;
+const ITEMS_PER_PAGE = 20;
 gql`
   query InviniteTraits($skip: Int!, $name: String!, $contract: String!) {
         traits(
-            first: 50
+            first: 20
             skip: $skip
             where: {layer_: {name_contains: $name}, layer_starts_with: $contract}
             ) {
@@ -53,7 +53,8 @@ const TraitTable = ({ selectedValue, handlePiecesId }: TraitTableProps) => {
 
     useEffect(() => {
         if (result.data) {
-            const traitResults = result.data?.traits.map((item, index) => {return {value: parseInt(item.id), label: `${item.id}`, tokenURI: GetTraitSVG( {traitData: item.data, mimeType: item.mimeType, contract: parseInt(item.layer.contract.id)}), layer: item.layer.name, data: getBase64(item.data, parseInt(item.layer.contract.id)), contract: parseInt(item.layer.contract.id), mimeType: item.mimeType, layerNr: item.layer.index, traitNr: item.index, name: item.name}});
+            let traitResults = result.data?.traits.map((item, index) => {return {value: parseInt(item.id), label: `${item.id}`, tokenURI: "", layer: item.layer.name, data: GetBase64(item.data, parseInt(item.layer.contract.id), item.layer.name, item.index), contract: parseInt(item.layer.contract.id), mimeType: item.mimeType, layerNr: item.layer.index, traitNr: item.index, name: item.name}});
+            traitResults = traitResults.map((item) => {return {...item, tokenURI: GetTraitSVG({traitData: item.data, mimeType: item.mimeType})}})
             setItems(prevItems => [...prevItems, ...traitResults]);
             setHasMore(result.data.traits.length === ITEMS_PER_PAGE);
         }
@@ -71,12 +72,12 @@ const TraitTable = ({ selectedValue, handlePiecesId }: TraitTableProps) => {
         executeQuery({ requestPolicy: 'network-only' });
     };
 
-    const filteredTraits = items?.filter(trait => {
-        if(selectedValue.collection === 0 && selectedValue.layer === "") { return items; }
-        if(selectedValue.collection === 0) { return trait.layer === selectedValue.layer; }
-        if(selectedValue.layer === "") { return trait.contract == selectedValue.collection}
-        return trait.contract === selectedValue.collection && trait.layer === selectedValue.layer;
-      });
+    // const filteredTraits = items?.filter(trait => {
+    //     if(selectedValue.collection === 0 && selectedValue.layer === "") { return items; }
+    //     if(selectedValue.collection === 0) { return trait.layer === selectedValue.layer; }
+    //     if(selectedValue.layer === "") { return trait.contract == selectedValue.collection}
+    //     return trait.contract === selectedValue.collection && trait.layer === selectedValue.layer;
+    //   });
 
     return (
         <InfiniteScroll
@@ -89,7 +90,7 @@ const TraitTable = ({ selectedValue, handlePiecesId }: TraitTableProps) => {
             </div>}
         >
             <div className="grid grid-cols-5">
-            {filteredTraits?.map( (panel, index) => (
+            {items?.map( (panel, index) => (
                     <Panel
                     trait={panel}
                     key={index}

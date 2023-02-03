@@ -61,6 +61,7 @@ export type Contract_Filter = {
   readonly address_not?: InputMaybe<Scalars['Bytes']>;
   readonly address_not_contains?: InputMaybe<Scalars['Bytes']>;
   readonly address_not_in?: InputMaybe<ReadonlyArray<Scalars['Bytes']>>;
+  readonly and?: InputMaybe<ReadonlyArray<InputMaybe<Contract_Filter>>>;
   readonly id?: InputMaybe<Scalars['ID']>;
   readonly id_gt?: InputMaybe<Scalars['ID']>;
   readonly id_gte?: InputMaybe<Scalars['ID']>;
@@ -96,6 +97,7 @@ export type Contract_Filter = {
   readonly name_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
   readonly name_starts_with?: InputMaybe<Scalars['String']>;
   readonly name_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  readonly or?: InputMaybe<ReadonlyArray<InputMaybe<Contract_Filter>>>;
   readonly xSize?: InputMaybe<Scalars['Int']>;
   readonly xSize_gt?: InputMaybe<Scalars['Int']>;
   readonly xSize_gte?: InputMaybe<Scalars['Int']>;
@@ -145,6 +147,7 @@ export type LayerTraitsArgs = {
 export type Layer_Filter = {
   /** Filter for the block changed event. */
   readonly _change_block?: InputMaybe<BlockChangedFilter>;
+  readonly and?: InputMaybe<ReadonlyArray<InputMaybe<Layer_Filter>>>;
   readonly contract?: InputMaybe<Scalars['String']>;
   readonly contract_?: InputMaybe<Contract_Filter>;
   readonly contract_contains?: InputMaybe<Scalars['String']>;
@@ -202,6 +205,7 @@ export type Layer_Filter = {
   readonly name_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
   readonly name_starts_with?: InputMaybe<Scalars['String']>;
   readonly name_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  readonly or?: InputMaybe<ReadonlyArray<InputMaybe<Layer_Filter>>>;
   readonly traits_?: InputMaybe<Trait_Filter>;
 };
 
@@ -411,6 +415,7 @@ export type Token = {
 export type Token_Filter = {
   /** Filter for the block changed event. */
   readonly _change_block?: InputMaybe<BlockChangedFilter>;
+  readonly and?: InputMaybe<ReadonlyArray<InputMaybe<Token_Filter>>>;
   readonly id?: InputMaybe<Scalars['ID']>;
   readonly id_gt?: InputMaybe<Scalars['ID']>;
   readonly id_gte?: InputMaybe<Scalars['ID']>;
@@ -419,6 +424,7 @@ export type Token_Filter = {
   readonly id_lte?: InputMaybe<Scalars['ID']>;
   readonly id_not?: InputMaybe<Scalars['ID']>;
   readonly id_not_in?: InputMaybe<ReadonlyArray<Scalars['ID']>>;
+  readonly or?: InputMaybe<ReadonlyArray<InputMaybe<Token_Filter>>>;
   readonly owner?: InputMaybe<Scalars['Bytes']>;
   readonly owner_contains?: InputMaybe<Scalars['Bytes']>;
   readonly owner_gt?: InputMaybe<Scalars['Bytes']>;
@@ -470,6 +476,7 @@ export type Trait = {
 export type Trait_Filter = {
   /** Filter for the block changed event. */
   readonly _change_block?: InputMaybe<BlockChangedFilter>;
+  readonly and?: InputMaybe<ReadonlyArray<InputMaybe<Trait_Filter>>>;
   readonly data?: InputMaybe<Scalars['String']>;
   readonly data_contains?: InputMaybe<Scalars['String']>;
   readonly data_contains_nocase?: InputMaybe<Scalars['String']>;
@@ -567,6 +574,7 @@ export type Trait_Filter = {
   readonly name_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
   readonly name_starts_with?: InputMaybe<Scalars['String']>;
   readonly name_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  readonly or?: InputMaybe<ReadonlyArray<InputMaybe<Trait_Filter>>>;
 };
 
 export enum Trait_OrderBy {
@@ -694,7 +702,7 @@ export function useTraitsQuery(options?: Omit<Urql.UseQueryArgs<TraitsQueryVaria
 export const InviniteTraitsDocument = gql`
     query InviniteTraits($skip: Int!, $name: String!, $contract: String!) {
   traits(
-    first: 50
+    first: 20
     skip: $skip
     where: {layer_: {name_contains: $name}, layer_starts_with: $contract}
   ) {

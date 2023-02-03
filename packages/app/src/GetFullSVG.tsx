@@ -1,6 +1,5 @@
 import { Locations } from "./Location";
-import { Color } from "./SharedInterfaces";
-import { Contract } from "./SharedInterfaces";
+import { Color, Contract } from "./SharedInterfaces";
 
 
 export const GetFullSVG = ({locations, pfpRender, contracts, bgColor, isSafari} : { locations: Locations[], pfpRender: boolean, contracts?: Contract[], bgColor: Color, isSafari: boolean}): [number, number, string] => {
