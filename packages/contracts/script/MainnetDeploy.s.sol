@@ -25,7 +25,7 @@ contract Deploy is Script, SharedStructs {
         uint8 ySize;
     }
 
-    string[] public collections = ["OnChainKevin"];//"Blitmap"];//,"1337", "TonalMuse" , "pksl", "TinyBones", "TinyPussies", "ProofOfPepe", "TonalMuse", "FrogCentral"];
+    string[] public collections = ["Nouns"];//"OnChainKevin"];//"Blitmap"];//,"1337", "TonalMuse" , "pksl", "TinyBones", "TinyPussies", "ProofOfPepe", "TonalMuse", "FrogCentral"];
 
     function run() public {
         uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");

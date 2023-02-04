@@ -110,5 +110,23 @@
         "xSize" : 42 ,
         "ySize" :  42,
         "zrender" : true
+    },
+    "SmolPhunks" : {
+        "collection" : "0x6C1C678428CC3793A53471c9304Fc0372594DBbc" ,
+        "maxSupply" : 0 ,
+        "minted" : 0 ,
+        "traitNames" : ["Outline 1/1", "Head", "Ear", "Eyes", "Nose", "Mouth", "Background"] ,
+        "xSize" : 16 ,
+        "ySize" :  16,
+        "zrender" : false
+    },
+    "ChainRunners" : {
+        "collection" : "0x97597002980134beA46250Aa0510C9B90d87A587" ,
+        "maxSupply" : 0,
+        "minted" : 0,
+        "traitNames" : ["Background", "Race", "Face", "Mouth", "Nose", "Eyes", "Ear Accessory", "Face Accessory", "Mask", "Head Below", "Eye Accessory", "Head Above", "Mouth Accessory" ],
+        "xSize" : 32,
+        "ySize" :  32,
+        "zrender" : true
     }
 }

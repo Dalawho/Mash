@@ -48,20 +48,20 @@ contract CounterTest is Test {
     function testMoon() public {
         //console.log(moon.artworkURI(21,1));
         //moon.artworkURI(21,1);
-        console.log(moon.artworkURI(IMoonBirds.Features(1, 2, 1, 2, 0, 0, 0), IMoonBirds.Mutators(0), 10));
+       // console.log(moon.artworkURI(IMoonBirds.Features(1, 2, 1, 2, 0, 0, 0), IMoonBirds.Mutators(0), 10));
     }
 
     function testMoonName() public {
         //console.log(moon.artworkURI(21,1));
         //moon.artworkURI(21,1);
-        console.log(render.getCollectionName());
+        //console.log(render.getCollectionName());
     }
 
     function testMoonDescr() public {
         //console.log(moon.artworkURI(21,1));
         //moon.artworkURI(21,1);
-        console.log(render.getTraitDetails(0,1).name);
-        console.log(render.getTraitDetails(0,1).mimetype);
+        // console.log(render.getTraitDetails(0,1).name);
+        // console.log(render.getTraitDetails(0,1).mimetype);
     }
 
     function testMoonData() public {

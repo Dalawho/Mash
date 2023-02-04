@@ -4,7 +4,7 @@ pragma solidity ^0.8.12;
 
 import "openzeppelin/access/Ownable.sol";
 import { Strings} from "openzeppelin/utils/Strings.sol";
-import { Base64 } from "openzeppelin/utils/Base64.sol";
+import { Base64 } from "solady/utils/Base64.sol";
 import 'ethier/utils/DynamicBuffer.sol';
 import {SharedStructs as SSt} from "./sharedStructs.sol";
 import "./interfaces/IIndelible.sol";
@@ -58,6 +58,7 @@ contract RenderV2 is Ownable, SSt {
     address constant flipmap = 0x0E4B8e24789630618aA90072F520711D3d9Db647;
     address constant onChainKevin = 0xaC3AE179bB3c0edf2aB2892a2B6A4644A71627B6;
     address constant nounsToken = 0x9C8fF314C9Bc7F6e59A9d9225Fb22946427eDC03;
+    address constant chainRunners = 0x97597002980134beA46250Aa0510C9B90d87A587;
     INounsDescriptorV2 constant nounsDescriptor = INounsDescriptorV2(0x6229c811D04501523C6058bfAAc29c91bb586268);
     ISVGRenderer constant nounsRenderer = ISVGRenderer(0x81d94554A4b072BFcd850205f0c79e97c92aab56);
 
@@ -220,8 +221,8 @@ contract RenderV2 is Ownable, SSt {
         //currently only renders as PNG this should also include gif! 
         bytes memory _traitData = getTraitData(_currentCollection.collection, _currentLayer.layerId, _currentLayer.traitId);
         buffer.appendSafe(bytes(string.concat('<image x="', int8ToString(_currentLayer.xOffset), '" y="', int8ToString(_currentLayer.yOffset),'" width="', Strings.toString(_currentCollection.xSize*_currentLayer.scale), '" height="', Strings.toString(_currentCollection.ySize*_currentLayer.scale),
-         '" href="data:', traitNames.mimetype , ';base64,'))); //add the gif/png/svg selector
-        buffer.appendSafe(_currentCollection.collection == onChainKevin ? _traitData : bytes(Base64.encode(_traitData)));
+         '" href="data:', traitNames.mimetype , ';base64,')));
+        buffer.appendSafe((_currentCollection.collection == onChainKevin || _currentCollection.collection == chainRunners) ? _traitData : bytes(Base64.encode(_traitData)));
         buffer.appendSafe(bytes('"/>'));
     }
 

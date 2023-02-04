@@ -21,45 +21,14 @@
       "additionalContracts": []
     }
   ],
-  "receipts": [
-    {
-      "transactionHash": "0xbd2cb330901d219ba0d90e36d1447efe2528ce8c47076c64e0275b12927e59fc",
-      "transactionIndex": "0x56",
-      "blockHash": "0x5ef002e2d854b56f45e9d44144a87cfca8b502afacd924e26c3d3a91278a3707",
-      "blockNumber": "0xfc6cc1",
-      "from": "0xeF421d02f19CCBb7f22EEEd2D2Ee9584DCD2a8FF",
-      "to": "0x9AcFf3827d5adA3d946433eCf65e4568CC6ef50D",
-      "cumulativeGasUsed": "0x58914d",
-      "gasUsed": "0x2b2ad",
-      "contractAddress": null,
-      "logs": [
-        {
-          "address": "0x9AcFf3827d5adA3d946433eCf65e4568CC6ef50D",
-          "topics": [
-            "0xbee0b7e907c247d44b95829b99daa1a1fe94150ddd0a468f8720395295cc2687",
-            "0x0000000000000000000000000000000000000000000000000000000000000006",
-            "0x0000000000000000000000009c8ff314c9bc7f6e59a9d9225fb22946427edc03"
-          ],
-          "data": "0x0000000000000000000000000000000000000000000000000000000000000000",
-          "blockHash": "0x5ef002e2d854b56f45e9d44144a87cfca8b502afacd924e26c3d3a91278a3707",
-          "blockNumber": "0xfc6cc1",
-          "transactionHash": "0xbd2cb330901d219ba0d90e36d1447efe2528ce8c47076c64e0275b12927e59fc",
-          "transactionIndex": "0x56",
-          "logIndex": "0x9a",
-          "removed": false
-        }
-      ],
-      "status": "0x1",
-      "logsBloom": "0x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004000000000000000840000c000000000000000000000009000000000000000000000000000000000000004000000000001000000000000000000000000000000080000000000000000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000",
-      "type": "0x2",
-      "effectiveGasPrice": "0x9dad4dfd9"
-    }
-  ],
+  "receipts": [],
   "libraries": [],
-  "pending": [],
+  "pending": [
+    "0xbd2cb330901d219ba0d90e36d1447efe2528ce8c47076c64e0275b12927e59fc"
+  ],
   "path": "/Users/nope/NFTs/eth/indelible/collage/packages/contracts/broadcast/MainnetDeploy.s.sol/1/run-latest.json",
   "returns": {},
-  "timestamp": 1675362618,
+  "timestamp": 1675362605,
   "chain": 1,
   "multi": false,
   "commit": "0a8f489"
