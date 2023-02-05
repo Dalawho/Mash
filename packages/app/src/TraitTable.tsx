@@ -7,13 +7,14 @@ import { GetBase64,GetTraitSVG } from "./GetTraitSVG";
 import Panel from "./Panel"
 import { Trait } from "./SharedInterfaces";
 
-const ITEMS_PER_PAGE = 20;
+const ITEMS_PER_PAGE = 30;
 gql`
   query InviniteTraits($skip: Int!, $name: String!, $contract: String!) {
         traits(
-            first: 20
+            first: 30
             skip: $skip
             where: {layer_: {name_contains: $name}, layer_starts_with: $contract}
+            orderBy: id
             ) {
           data
           id
@@ -71,13 +72,6 @@ const TraitTable = ({ selectedValue, handlePiecesId }: TraitTableProps) => {
         setSkip(prevOffset => prevOffset + ITEMS_PER_PAGE);
         executeQuery({ requestPolicy: 'network-only' });
     };
-
-    // const filteredTraits = items?.filter(trait => {
-    //     if(selectedValue.collection === 0 && selectedValue.layer === "") { return items; }
-    //     if(selectedValue.collection === 0) { return trait.layer === selectedValue.layer; }
-    //     if(selectedValue.layer === "") { return trait.contract == selectedValue.collection}
-    //     return trait.contract === selectedValue.collection && trait.layer === selectedValue.layer;
-    //   });
 
     return (
         <InfiniteScroll

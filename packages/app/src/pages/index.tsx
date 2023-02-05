@@ -205,7 +205,10 @@ const HomePage:NextPage = () => {
                 <BoxContainer boxes={locations} setBoxes={handleOrderChange} handleLocationChange={handleLocationChange} />
                 <div className="form-control ">
                   <label className="label cursor-pointer justify-center">
-                    <span className="label-text text-2xl mx-3">PFP mode</span> 
+
+                    <div className="tooltip font-sans" data-tip="PFP mode sets the canvas size to the background layer. Good if you want to have parts stay on the background without empty space on the edges.">
+                      <span className="label-text font-proggy text-2xl mx-3">PFP mode</span> 
+                    </div>
                     <input type="checkbox" checked={pfpRender} onClick={toggle} className="toggle" />
                   </label>
                 </div>
