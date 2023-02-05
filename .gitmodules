@@ -9,3 +9,5 @@
 [submodule "packages/contracts/lib/solady"]
 	path = packages/contracts/lib/solady
 	url = https://github.com/Vectorized/solady
+[submodule "lib/solady"]
+	branch = v0.0.75

@@ -8,8 +8,9 @@ import "src/sharedStructs.sol";
 import "src/Proxy.sol";
 import "src/MoonRender.sol";
 import "src/CRRenderV2.sol";
+import "src/MouseRender.sol";
 
-contract CounterTest is Test, SharedStructs {
+contract MashTest is Test, SharedStructs {
     using stdJson for string;
     Mash mash;
     RenderV2 render; 
@@ -17,7 +18,9 @@ contract CounterTest is Test, SharedStructs {
     Mash wrappedMash;
     MoonRender moon;
     ChainRender cr;
-    string[] public collections = ["1337", "TonalMuse",  "CryptoBabyTeddies", "Blitmap", "OnChainKevin", "Nouns","Moonbirds" , "ChainRunners", "ProofOfPepe",  "Flipmap"];
+    MouseRender mr; 
+
+    string[] public collections = ["1337", "TonalMuse",  "CryptoBabyTeddies", "Blitmap", "OnChainKevin", "Nouns", "ChainRunners", "Anonymice", "SmolPhunks", "Moonbirds" , "MadMasks"];
     struct DataLoad {
         address collection;
         uint16 maxSupply; 
@@ -34,6 +37,7 @@ contract CounterTest is Test, SharedStructs {
         proxy = new UUPSProxy(address(mash), "");
         moon = new MoonRender();
         cr = new ChainRender();
+        mr = new MouseRender(); 
         wrappedMash = Mash(address(proxy));
 
         wrappedMash.initialize();
@@ -46,10 +50,13 @@ contract CounterTest is Test, SharedStructs {
             wrappedMash.addCollection(CollectionInfo(col.collection,col.maxSupply,0,col.xSize,col.ySize),col.traitNames);
             if (col.zrender) {
                 if(col.collection == 0x23581767a106ae21c074b2276D25e5C3e136a68b) {
-                    render.addContract(col.collection, address(moon));
+                    render.addContract(col.collection, address(moon), false);
                 }
                 if(col.collection == 0x97597002980134beA46250Aa0510C9B90d87A587) {
-                    render.addContract(col.collection, address(cr));
+                    render.addContract(col.collection, address(cr), true);
+                }
+                if(col.collection == 0xbad6186E92002E312078b5a1dAfd5ddf63d3f731) {
+                   render.addContract(col.collection, address(mr), false);
                 }
             }
         }
@@ -78,15 +85,15 @@ contract CounterTest is Test, SharedStructs {
         bytes6 l4 = bytes6(0x050503010000);
         //        string[] private LAYER_NAMES = [unicode"Eyes", unicode"Head", unicode"Snout", unicode"Accessory", unicode"Body Accessory", unicode"Type", unicode"Background"];
         //bytes6 l5 = bytes6(0x020501010000);
-        bytes6 l5 = bytes6(0x080200020000);
-        bytes6 l6 = bytes6(0x080301020000);
-        bytes6 blit = bytes6(0x080101320000);
+        bytes6 l5 = bytes6(0x090200020000);
+        bytes6 l6 = bytes6(0x0b0801020000);
+        bytes6 blit = bytes6(0x080201320000);
 
-        bytes6 back = bytes6(0x080005320000);
+        bytes6 back = bytes6(0x080100320000);
 
         wrappedMash.previewCollage([blit,empty,empty,empty,empty,empty, empty]);
         //wrappedMash.mintAndBuy{ value: 0.005 ether }([l1,l2,l3,empty,empty,empty, empty]);
-        wrappedMash.mintAndBuy{ value: 0.005 ether }([back,blit, l5,l6,empty,empty, empty]);
+        wrappedMash.mintAndBuy{ value: 0.005 ether }([l6,back,blit, l5,empty,empty, empty]);
     }
 
     // function testPreview() public {

@@ -52,20 +52,26 @@ contract RenderV2 is Ownable, SSt {
 
     uint24[7] colors = [0xe1d7d5, 0xfbe3ab, 0x72969e, 0xd51e29, 0x174f87, 0x2afd2f, 0x621b62];
 
+    struct CustomRenderer {
+        address addr;
+        bool base64Encoded; 
+    }
 
     //Non indelible collections that need special treatment are here 
     address constant blitmap = 0x8d04a8c79cEB0889Bdd12acdF3Fa9D207eD3Ff63;
     address constant flipmap = 0x0E4B8e24789630618aA90072F520711D3d9Db647;
     address constant onChainKevin = 0xaC3AE179bB3c0edf2aB2892a2B6A4644A71627B6;
     address constant nounsToken = 0x9C8fF314C9Bc7F6e59A9d9225Fb22946427eDC03;
-    address constant chainRunners = 0x97597002980134beA46250Aa0510C9B90d87A587;
+    //address constant chainRunners = 0x97597002980134beA46250Aa0510C9B90d87A587;
     INounsDescriptorV2 constant nounsDescriptor = INounsDescriptorV2(0x6229c811D04501523C6058bfAAc29c91bb586268);
     ISVGRenderer constant nounsRenderer = ISVGRenderer(0x81d94554A4b072BFcd850205f0c79e97c92aab56);
 
     //other contracts that are handled by a seperate renderer are in this mapping
-    mapping (address => address) renderers;
+    mapping (address => CustomRenderer) renderers;
 
-    //constructor() {}
+    // constructor() {
+
+    // }
 
     ////////////////////////  Setters /////////////////////////////////
 
@@ -77,8 +83,8 @@ contract RenderV2 is Ownable, SSt {
         colors = _newcolors;
     }
 
-    function addContract(address _collection, address _render) external onlyOwner {
-        renderers[_collection] = _render;
+    function addContract(address _collection, address _render, bool _base64Encoded) external onlyOwner {
+        renderers[_collection] = CustomRenderer(_render, _base64Encoded);
     }
 
     ////////////////////////  Trait Data functions functions /////////////////////////////////
@@ -89,7 +95,7 @@ contract RenderV2 is Ownable, SSt {
         if(_collection == flipmap) return IIndelible.Trait(string.concat("Flipmap #", Strings.toString(id)), "image/svg+xml");
         if(_collection == onChainKevin) return IIndelible.Trait(IKevin(onChainKevin).traitTypes(layerId, traitId, 0), "image/png");
         if(_collection == nounsToken) return IIndelible.Trait(getNounsTraits(layerId, traitId), "image/svg+xml");
-        if(renderers[_collection] != address(0)) return IGenericRender(renderers[_collection]).getTraitDetails(layerId, traitId);
+        if(renderers[_collection].addr != address(0)) return IGenericRender(renderers[_collection].addr).getTraitDetails(layerId, traitId);
         return IIndelible(_collection).traitDetails(layerId, traitId);
     }
 
@@ -104,7 +110,7 @@ contract RenderV2 is Ownable, SSt {
         if(_collection == nounsToken) {
             return bytes(string.concat('<svg width="320" height="320" viewBox="0 0 320 320" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">', getNounsData(_layerId, _traitId), '</svg>')); 
         }
-        if(renderers[_collection] != address(0)) return IGenericRender(renderers[_collection]).getTraitData(_layerId, _traitId);
+        if(renderers[_collection].addr != address(0)) return IGenericRender(renderers[_collection].addr).getTraitData(_layerId, _traitId);
         return bytes(IIndelible(_collection).traitData(_layerId, _traitId));
     }
 
@@ -113,7 +119,7 @@ contract RenderV2 is Ownable, SSt {
         if(_collection == flipmap) return "Flipmap";
         if(_collection == onChainKevin) return "On Chain Kevin";
         if(_collection == nounsToken) return "Nouns";
-        if(renderers[_collection] != address(0)) return IGenericRender(renderers[_collection]).getCollectionName();
+        if(renderers[_collection].addr != address(0)) return IGenericRender(renderers[_collection].addr).getCollectionName();
         (string memory out,,,,,,) = IIndelible(_collection).contractData();
         return out;
     }
@@ -222,7 +228,7 @@ contract RenderV2 is Ownable, SSt {
         bytes memory _traitData = getTraitData(_currentCollection.collection, _currentLayer.layerId, _currentLayer.traitId);
         buffer.appendSafe(bytes(string.concat('<image x="', int8ToString(_currentLayer.xOffset), '" y="', int8ToString(_currentLayer.yOffset),'" width="', Strings.toString(_currentCollection.xSize*_currentLayer.scale), '" height="', Strings.toString(_currentCollection.ySize*_currentLayer.scale),
          '" href="data:', traitNames.mimetype , ';base64,')));
-        buffer.appendSafe((_currentCollection.collection == onChainKevin || _currentCollection.collection == chainRunners) ? _traitData : bytes(Base64.encode(_traitData)));
+        buffer.appendSafe((_currentCollection.collection == onChainKevin || renderers[_currentCollection.collection].base64Encoded) ? _traitData : bytes(Base64.encode(_traitData)));
         buffer.appendSafe(bytes('"/>'));
     }
 

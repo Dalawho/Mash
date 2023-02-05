@@ -128,5 +128,23 @@
         "xSize" : 32,
         "ySize" :  32,
         "zrender" : true
+    },
+    "Anonymice" : {
+        "collection" : "0xbad6186E92002E312078b5a1dAfd5ddf63d3f731" ,
+        "maxSupply" : 0,
+        "minted" : 0,
+        "traitNames" : ["Hat", "Whiskers", "Neck", "Earrings", "Eyes", "Mouth", "Nose", "Character", "Mask" ],
+        "xSize" : 24,
+        "ySize" :  24,
+        "zrender" : true
+    },
+    "MadMasks" : {
+        "collection" : "0x7915bf033126fa5fCC4dFA79F9bdD5717ed4cE40" ,
+        "maxSupply" : 0,
+        "minted" : 0,
+        "traitNames" : ["Mega Masks", "Accessories", "Masks", "Neck Accessories", "Stack", "Unmasked", "Back Accessories", "Midlayer", "Background" ],
+        "xSize" : 32,
+        "ySize" :  32,
+        "zrender" : false
     }
 }

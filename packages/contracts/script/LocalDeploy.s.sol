@@ -4,7 +4,7 @@ pragma solidity ^0.8.13;
 import "forge-std/Script.sol";
 import "../src/Indelible.sol";
 import "../src/Mash.sol";
-import "../src/Render.sol";
+import "../src/RenderV2.sol";
 import "../src/sharedStructs.sol";
 import "../src/Proxy.sol";
 
@@ -13,7 +13,7 @@ contract Deploy is Script, SharedStructs {
 
     Mash mash;
     Mash wrappedMash;
-    Render render;
+    RenderV2 render;
     UUPSProxy proxy;
 
     struct DataLoad {
@@ -32,7 +32,7 @@ contract Deploy is Script, SharedStructs {
         DataLoad memory col = abi.decode(rawJson, (DataLoad));
         vm.startBroadcast(deployerPrivateKey);
         mash = new Mash();
-        render = new Render(); 
+        render = new RenderV2(); 
         proxy = new UUPSProxy(address(mash), "");
         wrappedMash = Mash(address(proxy));
 

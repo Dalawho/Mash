@@ -20,7 +20,7 @@ export const GetBase64 = (traitData: string, contract: number, layer: string, tr
     }
     if(traitData.startsWith("<?xml")) return Buffer.from(traitData).toString('base64');
     if(traitData.startsWith("0x")) { 
-        if(contract == 5) return Buffer.from(traitData.substring(2),'hex').toString();
+        if(contract == 5 || contract == 7) return Buffer.from(traitData.substring(2),'hex').toString();
         return Buffer.from(traitData.substring(2),'hex').toString('base64');
     }
     return traitData;
