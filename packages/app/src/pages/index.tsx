@@ -11,7 +11,7 @@ import { BuyAndMintButton } from "../BuyAndMintButton";
 import ColorPicker from "../ColorPicker";
 import { customStyles } from "../formStyles";
 import GetContracts from "../GetContracts";
-import { GetFullSVG } from '../GetFullSVG';
+import { GetFullSVG, GetCheckSVG } from '../GetFullSVG';
 //import { GetSVG } from "../GetSVG";
 import GetLayers from "../GetLayers";
 import { IsSafari } from "../IsSafari";
@@ -49,6 +49,8 @@ const HomePage:NextPage = () => {
                   {hex: "#621b62", tailwind: "bg-[#621b62]", index: 7} ];
 
   const [selColor, setSelColor] = useState(colors[0]);
+
+  const contracts = GetContracts();
 
   const handleLocationChange = (coord:string,e:string, index:number) => {
     let newLoc = 0;
@@ -94,8 +96,12 @@ const HomePage:NextPage = () => {
         });
       return;
     }
+
+
     const maxId = locations.reduce((max, obj) => obj.id > max ? obj.id : max, 0);
-    const nextLocs = [...locations, {id: maxId+1, name: trait.name, contract: trait.contract, layerId: trait.layerNr, traitId: trait.traitNr, scale: 1, x: 0, y: 0, data: trait.data, mimeType: trait.mimeType}]
+    const nextLocs = [...locations, {id: maxId+1, name: trait.name, contract: trait.contract, layerId: trait.layerNr, traitId: trait.traitNr, scale: 1, x: 0, y: 0, data: trait.data, mimeType: trait.mimeType,
+       cwidth: contracts ? contracts?.filter(obj => obj.value === trait.contract)[0].x: 0,
+       cheight: contracts ? contracts?.filter(obj => obj.value === trait.contract)[0].y : 0}];
     setLocations(nextLocs);
     toast(`Added ${trait.name} as layer ${nextLocs.length}!`, {
       
@@ -146,7 +152,7 @@ const HomePage:NextPage = () => {
     //const traits = GetTraits();
     const layers = GetLayers();
 
-   const contracts = GetContracts();
+   
     const deBouncedLocations = useDebounce(locations); 
     const [width, heigth, SVG] = GetFullSVG({locations:locations, pfpRender: pfpRender, contracts: contracts ? contracts : undefined, bgColor: selColor, isSafari: isSafari});
     

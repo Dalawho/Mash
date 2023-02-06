@@ -11,6 +11,8 @@ export interface Locations {
     y: number;
     data: string;
     mimeType: string;
+    cwidth: number;
+    cheight: number;
   }
 
 type ScaleProps = {

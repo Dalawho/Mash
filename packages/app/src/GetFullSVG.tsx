@@ -8,22 +8,64 @@ export const GetFullSVG = ({locations, pfpRender, contracts, bgColor, isSafari} 
     if(locations.length == 0 && bgColor.hex != "transparent") return [0, 0, onlyBg(bgColor)];
     if(locations.length == 0) return [0,0,""];
     let out = "";
-    let height = contracts[locations[0].contract-1].x * locations[0].scale;
-    let width = contracts[locations[0].contract-1].y * locations[0].scale;
+    let height = locations[0].cheight * locations[0].scale; //this is broken because of sorting!! 
+    let width = locations[0].cwidth * locations[0].scale;
     if(bgColor.hex != "transparent") {
         out = out + `<rect width="100%" height="100%" fill="${bgColor.hex}" />`
     }
-
+    console.log(locations);
     for(let i = 0; i < locations.length; i++) {
-        out = out + getImage(locations[i], contracts[locations[i].contract-1].x, contracts[locations[i].contract-1].y, isSafari);
+        out = out + getImage(locations[i], locations[i].cheight, locations[i].cwidth, isSafari);
         if(!pfpRender) {
-            if(contracts[locations[i].contract-1].x*locations[i].scale+locations[i].y > height) height = contracts[locations[i].contract-1].x*locations[i].scale+locations[i].y;
-            if(contracts[locations[i].contract-1].y*locations[i].scale+locations[i].x > width) width = contracts[locations[i].contract-1].y*locations[i].scale+locations[i].x;
+            if(locations[0].cheight*locations[i].scale+locations[i].y > height) height = locations[0].cheight*locations[i].scale+locations[i].y;
+            if(locations[0].cwidth*locations[i].scale+locations[i].x > width) width = locations[0].cwidth*locations[i].scale+locations[i].x;
         }
     }
     
     return [width, height, `<svg xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges" version="1.1" id="pixel" viewBox="0 0 ${width} ${height}" width="320" height="320">
     ${out}
+    <style>#pixel {image-rendering: pixelated; image-rendering: -moz-crisp-edges; image-rendering: -webkit-crisp-edges; -ms-interpolation-mode: nearest-neighbor;}</style></svg>`];
+}
+
+export const GetCheckSVG = ({locations, pfpRender, contracts, bgColor, isSafari} : { locations: Locations[], pfpRender: boolean, contracts?: Contract[], bgColor: Color, isSafari: boolean}): [number, number, string] => {
+    //add variable viewbox but fixed size
+    if(!contracts) return [0,0,""];
+    if(locations.length == 0 && bgColor.hex != "transparent") return [0, 0, onlyBg(bgColor)];
+    if(locations.length == 0) return [0,0,""];
+    let out = "";
+    let x = 0;
+    let y = 0;
+    let height = contracts.filter(obj => obj.value === locations[0].contract)[0].x * locations[0].scale; //this is broken because of sorting!! 
+    let width = contracts.filter(obj => obj.value === locations[0].contract)[0].y * locations[0].scale;
+    if(bgColor.hex != "transparent") {
+        out = out + `<rect width="100%" height="100%" fill="${bgColor.hex}" />`
+    }
+
+    for(let i = 0; i < locations.length; i++) {
+        x = contracts.filter(obj => obj.value === locations[i].contract)[0].x * locations[0].scale; //this is broken because of sorting!! 
+        y = contracts.filter(obj => obj.value === locations[i].contract)[0].y * locations[0].scale;
+        out = out + getImage(locations[i], x, y, isSafari);
+        if(!pfpRender) {
+            if( x * locations[i].scale+locations[i].y > height) height = x * locations[i].scale+locations[i].y;
+            if( y * locations[i].scale+locations[i].x > width) width = y * locations[i].scale+locations[i].x;
+        }
+    }
+
+    let useElements = '';
+    for (let i = 0; i < 10; i++) {
+      for (let j = 0; j < 8; j++) {
+        useElements += `<use href="#check" x="${j * 64 + 100}" y="${i * 64 + 100}"/>`;
+      }
+    }
+    
+    return [width, height, `<svg xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges" version="1.1" id="pixel" viewBox="0 0 ${width*10} ${height*10}" width="1024" height="1024">
+    <defs>
+        <svg id="check" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges" version="1.1" id="pixel" viewBox="0 0 ${width} ${height}" width="${width}" height="${height}">
+        ${out}
+            <style>#pixel {image-rendering: pixelated; image-rendering: -moz-crisp-edges; image-rendering: -webkit-crisp-edges; -ms-interpolation-mode: nearest-neighbor;}</style>
+        </svg>
+    </defs>
+    ${useElements}
     <style>#pixel {image-rendering: pixelated; image-rendering: -moz-crisp-edges; image-rendering: -webkit-crisp-edges; -ms-interpolation-mode: nearest-neighbor;}</style></svg>`];
 }
 
