@@ -6,7 +6,7 @@ import { useIsMounted } from "./useIsMounted";
 
 gql`
   query Layers {
-    layers(first: 200) {
+    layers(first: 500) {
       id
       name
       index
@@ -41,7 +41,14 @@ const GetLayers = ()  => {
   //     }
   //     return("no Image found");
   //   }
-  const returnData = query.data?.layers.map((item, index) => { return {value: index, label: item.name, contract: parseInt(item.contract.id), layerNr: item.index } } ).sort( (a,b) => a.value - b.value );
+  const returnData = query.data?.layers.map((item, index) => { return {value: index, label: item.name, contract: parseInt(item.contract.id), layerNr: item.index } } ).sort( (a,b) => {    if (a.label < b.label) {
+    return -1;
+  }
+  if (a.label > b.label) {
+    return 1;
+  }
+  return 0;
+}  );
 
   return returnData;
 };

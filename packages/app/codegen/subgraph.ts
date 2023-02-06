@@ -663,7 +663,7 @@ export function useContractsQuery(options?: Omit<Urql.UseQueryArgs<ContractsQuer
 };
 export const LayersDocument = gql`
     query Layers {
-  layers(first: 200) {
+  layers(first: 500) {
     id
     name
     index
