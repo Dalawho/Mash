@@ -704,7 +704,7 @@ export const InviniteTraitsDocument = gql`
   traits(
     first: 30
     skip: $skip
-    where: {layer_: {name_contains: $name}, layer_starts_with: $contract}
+    where: {layer_: {name_starts_with: $name, name_ends_with: $name}, layer_starts_with: $contract}
     orderBy: id
   ) {
     data

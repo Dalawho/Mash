@@ -67,7 +67,7 @@ const HomePage:NextPage = () => {
       }
     }
     else {newLoc = Number(e); }
-    console.log(newLoc);
+    //console.log(newLoc);
     const nextLocs = locations.map(item => {
       if (item.id === index) {
           return {...item, [coord]: newLoc};
@@ -170,7 +170,7 @@ const HomePage:NextPage = () => {
     const toggle = () => {
       setPfpRender(!pfpRender);
   }
-  console.log(bytes);
+  //console.log(bytes);
   
     const empty = [{value: 0, label: "None", maxSupply: 0, minted: 0}]
     const placeholder = [{value: 0, label: "Please connect", maxSupply: 0, minted: 0, x:0, y:0}]
@@ -198,7 +198,7 @@ const HomePage:NextPage = () => {
                   CC0 Mash - an on-chain CC0 mashup
                 </h2>
                 <h3 className="pb-2">
-                  Phase 1: The Mint - starts 10.02 19:00 GMT
+                  Phase 1: The Mint - starts 10.02 19:00 GMT - follow us on twitter for more info
                 </h3>
                 <label htmlFor="my-modal-4" className="btn rounded-lg btn-outline btn-primary text-2xl">What?</label>
               </div>

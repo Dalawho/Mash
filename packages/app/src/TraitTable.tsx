@@ -13,7 +13,7 @@ gql`
         traits(
             first: 30
             skip: $skip
-            where: {layer_: {name_contains: $name}, layer_starts_with: $contract}
+            where: {layer_: {name_starts_with: $name, name_ends_with: $name}, layer_starts_with: $contract}
             orderBy: id
             ) {
           data
@@ -51,7 +51,7 @@ const TraitTable = ({ selectedValue, handlePiecesId }: TraitTableProps) => {
         variables: { skip, name: selectedValue.layer, contract: selectedValue.collection === 0 ? "": selectedValue.collection.toString() + "-"  },
         requestPolicy: 'network-only',
     });
-    console.log(result.data);
+    //console.log(result.data);
 
     useEffect(() => {
         if (result.data) {
