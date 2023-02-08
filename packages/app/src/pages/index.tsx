@@ -198,7 +198,7 @@ const HomePage:NextPage = () => {
                   CC0 Mash - an on-chain CC0 mashup
                 </h2>
                 <h3 className="pb-2">
-                  Phase 1: The Mint
+                  Phase 1: The Mint - starts 10.02 19:00 GMT
                 </h3>
                 <label htmlFor="my-modal-4" className="btn rounded-lg btn-outline btn-primary text-2xl">What?</label>
               </div>

@@ -51,6 +51,7 @@ const TraitTable = ({ selectedValue, handlePiecesId }: TraitTableProps) => {
         variables: { skip, name: selectedValue.layer, contract: selectedValue.collection === 0 ? "": selectedValue.collection.toString() + "-"  },
         requestPolicy: 'network-only',
     });
+    console.log(result.data);
 
     useEffect(() => {
         if (result.data) {
