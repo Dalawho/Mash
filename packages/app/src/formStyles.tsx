@@ -5,7 +5,7 @@
         menu: (provided) => {
              return({
           ...provided,
-          width: 200,
+          width: 250,
           color: "#121234",
           padding: 0,
           backgroundColor: "#1e1e1e",
@@ -28,7 +28,7 @@
         },
         control: (styles) => ({
             ...styles,
-             width: 200,
+             width: 250,
              backgroundColor: "#1e1e1e",
              padding: 0
            })
