@@ -133,7 +133,7 @@
         "collection" : "0xbad6186E92002E312078b5a1dAfd5ddf63d3f731" ,
         "maxSupply" : 0,
         "minted" : 0,
-        "traitNames" : ["Hat", "Whiskers", "Neck", "Earrings", "Eyes", "Mouth", "Nose", "Character", "Mask" ],
+        "traitNames" : ["Burned", "Hat", "Whiskers", "Neck", "Earrings", "Eyes", "Mouth", "Nose", "Character"],
         "xSize" : 24,
         "ySize" :  24,
         "zrender" : true
@@ -146,5 +146,14 @@
         "xSize" : 32,
         "ySize" :  32,
         "zrender" : false
+    },
+    "EtherOrcs" : {
+        "collection" : "0x3aBEDBA3052845CE3f57818032BFA747CDED3fca" ,
+        "maxSupply" : 0,
+        "minted" : 0,
+        "traitNames" : ["Body", "Helm", "Mainhand", "Offhand" ],
+        "xSize" : 60,
+        "ySize" :  60,
+        "zrender" : true
     }
 }

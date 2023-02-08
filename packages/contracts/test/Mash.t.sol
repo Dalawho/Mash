@@ -9,6 +9,7 @@ import "src/Proxy.sol";
 import "src/MoonRender.sol";
 import "src/CRRenderV2.sol";
 import "src/MouseRender.sol";
+import "src/EORender.sol";
 
 contract MashTest is Test, SharedStructs {
     using stdJson for string;
@@ -19,8 +20,9 @@ contract MashTest is Test, SharedStructs {
     MoonRender moon;
     ChainRender cr;
     MouseRender mr; 
+    EORender eo;
 
-    string[] public collections = ["1337", "TonalMuse",  "CryptoBabyTeddies", "Blitmap", "OnChainKevin", "Nouns", "ChainRunners", "Anonymice", "SmolPhunks", "Moonbirds" , "MadMasks"];
+    string[] public collections = ["1337", "TonalMuse",  "CryptoBabyTeddies", "Blitmap", "OnChainKevin", "Nouns", "ChainRunners", "SmolPhunks",  "MadMasks", "EtherOrcs" , "Anonymice", "Moonbirds"];
     struct DataLoad {
         address collection;
         uint16 maxSupply; 
@@ -38,6 +40,7 @@ contract MashTest is Test, SharedStructs {
         moon = new MoonRender();
         cr = new ChainRender();
         mr = new MouseRender(); 
+        eo = new EORender();
         wrappedMash = Mash(address(proxy));
 
         wrappedMash.initialize();
@@ -58,6 +61,9 @@ contract MashTest is Test, SharedStructs {
                 if(col.collection == 0xbad6186E92002E312078b5a1dAfd5ddf63d3f731) {
                    render.addContract(col.collection, address(mr), false);
                 }
+                if(col.collection == 0x3aBEDBA3052845CE3f57818032BFA747CDED3fca) {
+                   render.addContract(col.collection, address(eo), false);
+                }
             }
         }
         wrappedMash.setMintActive();
@@ -75,7 +81,7 @@ contract MashTest is Test, SharedStructs {
     //     wrappedMash.mintAndBuy{ value: 0.005 ether }([l5,empty,empty,empty,empty,empty, empty]);
     // }
 
-    function testMint() public {
+    function testMashMint() public {
         //testCollectionAddition();
         //        string[] private LAYER_NAMES = [unicode"5p3c141", unicode"0v32", unicode"3y35", unicode"und32", unicode"5ku115", unicode"84ck920und"];
         bytes6 empty = bytes6(0);
@@ -85,15 +91,17 @@ contract MashTest is Test, SharedStructs {
         bytes6 l4 = bytes6(0x050503010000);
         //        string[] private LAYER_NAMES = [unicode"Eyes", unicode"Head", unicode"Snout", unicode"Accessory", unicode"Body Accessory", unicode"Type", unicode"Background"];
         //bytes6 l5 = bytes6(0x020501010000);
-        bytes6 l5 = bytes6(0x090200020000);
-        bytes6 l6 = bytes6(0x0b0801020000);
-        bytes6 blit = bytes6(0x080201320000);
+        bytes6 l5 = bytes6(0x0a0206010000);
+        bytes6 l6 = bytes6(0x0a0001010000);
+        bytes6 blit = bytes6(0x0a0305310000);
 
-        bytes6 back = bytes6(0x080100320000);
+        bytes6 back = bytes6(0x0a0107310000);
+
+        bytes6 realBlit = bytes6(0x040005320000);
 
         wrappedMash.previewCollage([blit,empty,empty,empty,empty,empty, empty]);
         //wrappedMash.mintAndBuy{ value: 0.005 ether }([l1,l2,l3,empty,empty,empty, empty]);
-        wrappedMash.mintAndBuy{ value: 0.005 ether }([l6,back,blit, l5,empty,empty, empty]);
+        wrappedMash.mintAndBuy{ value: 0.005 ether }([realBlit, l6,back,blit, l5,empty, empty]);
     }
 
     // function testPreview() public {
@@ -107,8 +115,8 @@ contract MashTest is Test, SharedStructs {
     //     //console.log(wrappedMash.previewCollage([l1,l3,l2,l4,l5,l6, empty]));
     // }
 
-    function testAll() public {
-        testMint();
+    function testMashAll() public {
+        testMashMint();
         //console.log(wrappedMash.tokenURI(1));
         console.log(wrappedMash.tokenURI(1));
     }

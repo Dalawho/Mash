@@ -41,7 +41,7 @@ const GetContracts = ()  => {
     //   }
     //   return("no Image found");
     // }
-  const returnData = query.data?.contracts.map((item, index) => { return {value: parseInt(item.id), label: `${item.name}`, maxSupply: 100, minted: 0, x: item.xSize, y: item.ySize } } ).sort( (a,b) => {
+  const returnData = query.data?.contracts.map((item, index) => { return {value: parseInt(item.id), label: `${item.name} - ${item.xSize}px `, maxSupply: 100, minted: 0, x: item.xSize, y: item.ySize } } ).sort( (a,b) => {
     if (a.label < b.label) {
       return -1;
     }

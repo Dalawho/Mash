@@ -6,7 +6,7 @@ import "./ERC721.sol";
 import "./DefaultOperatorFiltererUpgradeable.sol";
 import {SharedStructs as SSt} from "./sharedStructs.sol";
 import "openzeppelin-upgradable/proxy/utils/UUPSUpgradeable.sol";
-import "forge-std/console.sol";
+// import "forge-std/console.sol";
 
 interface IRender {
     function tokenURI(uint256 tokenId, SSt.LayerStruct[7] memory layerIds, SSt.CollectionInfo[7] memory _collections) external view returns (string memory); 
