@@ -35,7 +35,7 @@ const HomePage:NextPage = () => {
     
   const [locations, setLocations] = useState<Locations[]>([]);//[{ id: 0, name:"", contract: 0, layerId: 0, traitId: 0, scale: 1, x: 0, y: 0}]) ;
   //const [SVG, setSVG] = useState<string | null>(null);
-  const [bytes, setBytes] = useState(Array.from({length: 7}, () => "0x000000000000"));
+  const [bytes, setBytes] = useState(Array.from({length: 7}, () => "000000000000"));
   const [pfpRender, setPfpRender] = useState(true);
   const [selectedValue, setSelectedValue] = useState<Selector>({collection: 0, layer: ""});
   
@@ -158,7 +158,7 @@ const HomePage:NextPage = () => {
     
     useEffect(() => {
       const nextBytes = deBouncedLocations.map((item) => encodeLayer(item));
-      setBytes(nextBytes.concat(Array.from({length: 7-nextBytes.length}, () => "0x000000000000")));
+      setBytes(nextBytes.concat(Array.from({length: 7-nextBytes.length}, () => "000000000000")));
 
     }, [deBouncedLocations, pfpRender, selColor])
 

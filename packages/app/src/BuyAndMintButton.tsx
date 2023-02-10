@@ -17,6 +17,8 @@ export const BuyAndMintButton = ( {inBytes} : {inBytes : string[] } ) => {
   })
   const { data, error, isLoading, isSuccess , write } = useContractWrite(config);
   const {isSuccess: txSuccess} = useWaitForTransaction({hash: data?.hash});
+
+  //console.log(write);
   //    {txSuccess && <div>{artName} submitted</div>}
   return (
     <div className="justify-center">
