@@ -93,13 +93,13 @@ contract MashTest is Test, SharedStructs {
         //bytes6 l5 = bytes6(0x020501010000);
         bytes6 realBlit =   bytes6(0x010010310000);
         bytes6 l6 =         bytes6(0x020102010000);
-        bytes6 back =       bytes6(0x010007311010);
-        bytes6 blit =       bytes6(0x030405310000);
+        bytes6 back =       bytes6(0x030103311010);
+        bytes6 blit =       bytes6(0x040402310000);
         bytes6 l5 =         bytes6(0x050506010000);
 
         wrappedMash.previewCollage([blit,empty,empty,empty,empty,empty, empty]);
         //wrappedMash.mintAndBuy{ value: 0.005 ether }([l1,l2,l3,empty,empty,empty, empty]);
-        wrappedMash.mintAndBuy{ value: 0.005 ether }([realBlit, empty, empty,empty, empty,empty, empty]);
+        wrappedMash.mintAndBuy{ value: 0.005 ether }([realBlit, l6, back,blit, back,empty, empty]);
     }
 
     // function testPreview() public {

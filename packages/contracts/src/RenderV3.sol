@@ -110,10 +110,10 @@ contract RenderV3 is Ownable, SSt {
     function getTraitDetails(address _collection, uint8 layerId, uint8 traitId, bool wholeToken) public view returns(IIndelible.Trait memory) {
         uint16 id = (uint16(layerId) << 8) | uint16(traitId);
         if(wholeToken) {
-            return IIndelible.Trait(string.concat(getCollectionName(_collection), "# ", Strings.toString(id)), ""); //is this always true, also for birds and 
+            return IIndelible.Trait(string.concat(getCollectionName(_collection), " ", Strings.toString(id)), ""); //is this always true, also for birds and 
         }
         if(_collection == blitmap) return IIndelible.Trait(IBlitmap(blitmap).tokenNameOf(id),"image/svg+xml");
-        if(_collection == flipmap) return IIndelible.Trait(string.concat("Flipmap #", Strings.toString(id)), "image/svg+xml");
+        if(_collection == flipmap) return IIndelible.Trait(string.concat("Flipmap ", Strings.toString(id)), "image/svg+xml");
         if(_collection == onChainKevin) return IIndelible.Trait(IKevin(onChainKevin).traitTypes(layerId, traitId, 0), "image/png");
         if(_collection == nounsToken) return IIndelible.Trait(getNounsTraits(layerId, traitId), "image/svg+xml");
         if(renderers[_collection].addr != address(0)) return IGenericRender(renderers[_collection].addr).getTraitDetails(layerId, traitId);
@@ -161,10 +161,10 @@ contract RenderV3 is Ownable, SSt {
 
     //// special collection functions
     function getNounsTraits(uint8 layerId, uint8 traitId) private pure returns (string memory) {
-        if(layerId == 0) return string.concat("Body #", Strings.toString(traitId));
-        if(layerId == 1) return string.concat("Accessory #", Strings.toString(traitId));
-        if(layerId == 2) return string.concat("Head #", Strings.toString(traitId));
-        return string.concat("Glasses #", Strings.toString(traitId));
+        if(layerId == 0) return string.concat("Body ", Strings.toString(traitId));
+        if(layerId == 1) return string.concat("Accessory ", Strings.toString(traitId));
+        if(layerId == 2) return string.concat("Head ", Strings.toString(traitId));
+        return string.concat("Glasses ", Strings.toString(traitId));
     }
     
     function getNounsData(uint8 layerId, uint8 traitId) private view returns(string memory) {
@@ -194,7 +194,7 @@ contract RenderV3 is Ownable, SSt {
             collectionNames[i] = getCollectionName(_collections[i].collection);
             traitNames[i] = getTraitDetails(_collections[i].collection, layerInfo[i].layerId, layerInfo[i].traitId, _collections[i].maxSupply == 99);   
         }
-        string memory _outString = string.concat('data:application/json,', '{', '"name" : "CC0 Mash #' , Strings.toString(tokenId), '", ',
+        string memory _outString = string.concat('data:application/json,', '{', '"name" : "CC0 Mash ' , Strings.toString(tokenId), '", ',
             '"description" : "What Is This, a Crossover Episode?"');
         
         _outString = string.concat(_outString, ',"attributes":[');
@@ -205,7 +205,7 @@ contract RenderV3 is Ownable, SSt {
             if(i > 0) _outString = string.concat(_outString,',');
               _outString = string.concat(
               _outString,
-             '{"trait_type":"', _collections[i].collection == blitmap ? "Blitmap" : _collections[i].collection == flipmap ? "Flipmap" : _collections[i].maxSupply != 99 ? "Token" :  layerNames[layerInfo[i].layerId], '","value":"', traitNames[i].name,' (from ', collectionNames[i] , ')"}'
+             '{"trait_type":"', _collections[i].collection == blitmap ? "Blitmap" : _collections[i].collection == flipmap ? "Flipmap" : _collections[i].maxSupply == 99 ? "Token" :  layerNames[layerInfo[i].layerId], '","value":"', traitNames[i].name,' (from ', collectionNames[i] , ')"}'
              );
         }
 
