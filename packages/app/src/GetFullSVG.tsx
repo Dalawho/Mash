@@ -13,7 +13,7 @@ export const GetFullSVG = ({locations, pfpRender, contracts, bgColor, isSafari} 
     if(bgColor.hex != "transparent") {
         out = out + `<rect width="100%" height="100%" fill="${bgColor.hex}" />`
     }
-    console.log(locations);
+    //console.log(locations);
     for(let i = 0; i < locations.length; i++) {
         out = out + getImage(locations[i], locations[i].cheight, locations[i].cwidth, isSafari);
         if(!pfpRender) {

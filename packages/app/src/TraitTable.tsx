@@ -46,12 +46,12 @@ const TraitTable = ({ selectedValue, handlePiecesId }: TraitTableProps) => {
     const [skip, setSkip] = useState(0);
     const [hasMore, setHasMore] = useState(true);
     const [items, setItems] = useState<Trait[]>([]);
+    const [previousLayer, setPreviousLayer] = useState("");
 
     const [result, executeQuery] = useInviniteTraitsQuery({
-        variables: { skip, name: selectedValue.layer, contract: selectedValue.collection === 0 ? "": selectedValue.collection.toString() + "-"  },
+        variables: { skip: previousLayer === selectedValue.layer ? skip: 0, name: selectedValue.layer, contract: selectedValue.collection === 0 ? "": selectedValue.collection.toString() + "-"  },
         requestPolicy: 'network-only',
     });
-    //console.log(result.data);
 
     useEffect(() => {
         if (result.data) {
@@ -66,12 +66,13 @@ const TraitTable = ({ selectedValue, handlePiecesId }: TraitTableProps) => {
         setSkip(0);
         setItems([]);
         setHasMore(true);
+        setPreviousLayer(selectedValue.layer);
   }, [selectedValue]);
 
 
     const fetchMoreData = () => {
-        setSkip(prevOffset => prevOffset + ITEMS_PER_PAGE);
-        executeQuery({ requestPolicy: 'network-only' });
+      setSkip(prevOffset => prevOffset + ITEMS_PER_PAGE);
+      executeQuery({ requestPolicy: 'network-only' });
     };
 
     return (
