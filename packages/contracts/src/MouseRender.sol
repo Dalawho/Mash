@@ -70,6 +70,11 @@ contract MouseRender is IGenericRender {
         return "Anonymice";
     }
 
+
+    function getToken(uint256 _tokenId) external view returns(bytes memory) {
+      return "";
+    }
+
     function traitToSVG(string memory pixels, uint256 pixelCount, bytes memory buffer)
         public
         view

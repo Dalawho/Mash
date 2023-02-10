@@ -9,10 +9,10 @@ export const BuyAndMintButton = ( {inBytes} : {inBytes : string[] } ) => {
    
   const price = "0.005";
   const { config } = usePrepareContractWrite({
-    addressOrName: contractAddresses.mash,
-    contractInterface: Mash__factory.abi,
+    address: contractAddresses.mash,
+    abi: Mash__factory.abi,
     functionName: 'mintAndBuy',
-    args: [inBytes],
+    args: [[`0x${inBytes[0]}`,`0x${inBytes[1]}`,`0x${inBytes[2]}`,`0x${inBytes[3]}`,`0x${inBytes[4]}`,`0x${inBytes[5]}`,`0x${inBytes[6]}`]],
     overrides: {value: ethers.utils.parseEther(price)}
   })
   const { data, error, isLoading, isSuccess , write } = useContractWrite(config);

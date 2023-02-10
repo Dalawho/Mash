@@ -28,5 +28,6 @@ interface IIndelible {
         returns (Trait memory);
 
     function contractData() external view returns(string memory, string memory, string memory, string memory , string memory, uint, string memory );
-        
+    
+    function tokenIdToSVG(uint tokenId) external view returns (string memory);
 }

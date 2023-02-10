@@ -16,6 +16,10 @@ contract IndelibleTest is IIndelible {
         
     }
 
+    function tokenIdToSVG(uint tokenId) external view returns (string memory) {
+        return "";
+    }
+
     function traitData(uint layerIndex, uint traitIndex)
         external
         view

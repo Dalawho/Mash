@@ -141,7 +141,7 @@ const HomePage:NextPage = () => {
     else {
       array = new Uint8Array([layer.contract, layer.layerId, layer.traitId, pfpRenderByte, layer.x, layer.y]);
     }
-    return "0x" + array.reduce((output, elem) => output + elem.toString(16).padStart(2, '0'), '');
+    return array.reduce((output, elem) => output + elem.toString(16).padStart(2, '0'), '');
   }
 // Detect Safari
   let isSafari = false;

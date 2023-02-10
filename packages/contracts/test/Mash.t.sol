@@ -3,7 +3,7 @@ pragma solidity ^0.8.12;
 
 import "forge-std/Test.sol";
 import "src/Mash.sol";
-import "src/RenderV2.sol";
+import "src/RenderV3.sol";
 import "src/sharedStructs.sol";
 import "src/Proxy.sol";
 import "src/MoonRender.sol";
@@ -14,7 +14,7 @@ import "src/EORender.sol";
 contract MashTest is Test, SharedStructs {
     using stdJson for string;
     Mash mash;
-    RenderV2 render; 
+    RenderV3 render; 
     UUPSProxy proxy;
     Mash wrappedMash;
     MoonRender moon;
@@ -22,7 +22,7 @@ contract MashTest is Test, SharedStructs {
     MouseRender mr; 
     EORender eo;
 
-    string[] public collections = ["1337", "TonalMuse",  "CryptoBabyTeddies", "Blitmap", "OnChainKevin", "Nouns", "ChainRunners", "SmolPhunks",  "MadMasks", "EtherOrcs" , "Anonymice", "Moonbirds"];
+    string[] public collections = ["1337Token" ,"1337", "TonalMuse",  "CryptoBabyTeddies", "Blitmap", "OnChainKevin", "Nouns", "ChainRunners", "SmolPhunks",  "MadMasks", "EtherOrcs" , "Anonymice", "Moonbirds"];
     struct DataLoad {
         address collection;
         uint16 maxSupply; 
@@ -35,7 +35,7 @@ contract MashTest is Test, SharedStructs {
 
     function setUp() public {
         mash = new Mash();
-        render = new RenderV2(); 
+        render = new RenderV3(); 
         proxy = new UUPSProxy(address(mash), "");
         moon = new MoonRender();
         cr = new ChainRender();
@@ -91,17 +91,15 @@ contract MashTest is Test, SharedStructs {
         bytes6 l4 = bytes6(0x050503010000);
         //        string[] private LAYER_NAMES = [unicode"Eyes", unicode"Head", unicode"Snout", unicode"Accessory", unicode"Body Accessory", unicode"Type", unicode"Background"];
         //bytes6 l5 = bytes6(0x020501010000);
-        bytes6 l5 = bytes6(0x0a0206010000);
-        bytes6 l6 = bytes6(0x0a0001010000);
-        bytes6 blit = bytes6(0x0a0305310000);
-
-        bytes6 back = bytes6(0x0a0107310000);
-
-        bytes6 realBlit = bytes6(0x040005320000);
+        bytes6 realBlit =   bytes6(0x010010310000);
+        bytes6 l6 =         bytes6(0x020102010000);
+        bytes6 back =       bytes6(0x010007311010);
+        bytes6 blit =       bytes6(0x030405310000);
+        bytes6 l5 =         bytes6(0x050506010000);
 
         wrappedMash.previewCollage([blit,empty,empty,empty,empty,empty, empty]);
         //wrappedMash.mintAndBuy{ value: 0.005 ether }([l1,l2,l3,empty,empty,empty, empty]);
-        wrappedMash.mintAndBuy{ value: 0.005 ether }([realBlit, l6,back,blit, l5,empty, empty]);
+        wrappedMash.mintAndBuy{ value: 0.005 ether }([realBlit, empty, empty,empty, empty,empty, empty]);
     }
 
     // function testPreview() public {

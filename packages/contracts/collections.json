@@ -155,5 +155,14 @@
         "xSize" : 60,
         "ySize" :  60,
         "zrender" : true
+    },
+    "1337Token" : {
+        "collection" : "0x9251dEC8DF720C2ADF3B6f46d968107cbBADf4d4" ,
+        "maxSupply" : 99 ,
+        "minted" : 1 ,
+        "traitNames" : [""],
+        "xSize" : 32 ,
+        "ySize" :  32,
+        "zrender" : false
     }
 }

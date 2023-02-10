@@ -71,7 +71,7 @@ contract MoonRender is IGenericRender {
             _writeBackgroundPixels(data, buffer);
         } 
         else {
-            (bytes memory rawData, ) = assetStorageManger.loadLayer(_layerId - 1, _traitId).popByteFront();
+            (bytes memory rawData, ) = _layerId < 5 ? assetStorageManger.loadLayer(_layerId - 1, _traitId).popByteFront() : assetStorageManger.loadLayer(_layerId, _traitId).popByteFront();
             (bytes memory data, bytes4 rect_) = rawData.popDWORDFront();
             Rectangle memory rect = Rectangle({
                 xMin: uint8(bytes1(rect_)),
@@ -88,6 +88,10 @@ contract MoonRender is IGenericRender {
 
     function getCollectionName() external pure returns(string memory){
         return "Moonbirds";
+    }
+
+    function getToken(uint256 _tokenId) external view returns(bytes memory) {
+      return "";
     }
 
     function _writeBackgroundPixels(bytes memory data, bytes memory buffer)

@@ -90,4 +90,9 @@ contract EORender is IGenericRender {
     }
 
 
+    function getToken(uint256 _tokenId) external view returns(bytes memory) {
+      return "";
+    }
+
+
 }

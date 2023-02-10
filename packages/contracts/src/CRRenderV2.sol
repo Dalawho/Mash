@@ -60,6 +60,11 @@ contract ChainRender is IGenericRender, Shared {
     }
 
 
+    function getToken(uint256 _tokenId) external view returns(bytes memory) {
+      return "";
+    }
+
+
     //The rendering functions below are modified from the chainrunners contract to better suit the rendering of single traits
     function tokenSVGBuffer(Layer memory tokenLayer, Color [NUM_COLORS] memory tokenPalette) public pure returns (bytes memory) {
         // Base64 encoded lookups into x/y position strings from 010 to 310.
