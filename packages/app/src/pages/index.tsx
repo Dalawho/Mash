@@ -11,8 +11,8 @@ import { BuyAndMintButton } from "../BuyAndMintButton";
 import ColorPicker from "../ColorPicker";
 import { customStyles } from "../formStyles";
 import GetContracts from "../GetContracts";
-import { GetFullSVG, GetCheckSVG } from '../GetFullSVG';
-import { GetSVG } from "../GetSVG";
+import { GetFullSVG } from '../GetFullSVG';
+//import { GetSVG } from "../GetSVG";
 import GetLayers from "../GetLayers";
 import { IsSafari } from "../IsSafari";
 //import GetTraits from "../GetTraits";
@@ -146,15 +146,15 @@ const HomePage:NextPage = () => {
 // Detect Safari
   let isSafari = false;
   if (typeof window !== "undefined") isSafari = IsSafari();
-    const SVG = GetSVG({ inBytes: bytes});
-    const width = 32;
-    const heigth = 32;
+    // const SVG = GetSVG({ inBytes: bytes});
+    // const width = 32;
+    // const heigth = 32;
     //const traits = GetTraits();
     const layers = GetLayers();
 
    
     const deBouncedLocations = useDebounce(locations); 
-    // const [width, heigth, SVG] = GetFullSVG({locations:locations, pfpRender: pfpRender, contracts: contracts ? contracts : undefined, bgColor: selColor, isSafari: isSafari});
+    const [width, heigth, SVG] = GetFullSVG({locations:locations, pfpRender: pfpRender, contracts: contracts ? contracts : undefined, bgColor: selColor, isSafari: isSafari});
     
     useEffect(() => {
       const nextBytes = deBouncedLocations.map((item) => encodeLayer(item));
