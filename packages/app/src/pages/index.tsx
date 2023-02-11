@@ -174,12 +174,15 @@ const HomePage:NextPage = () => {
     const empty = [{value: 0, label: "None", maxSupply: 0, minted: 0}]
     const placeholder = [{value: 0, label: "Please connect", maxSupply: 0, minted: 0, x:0, y:0}]
 
-    console.log([`0x${bytes[0]}`,`0x${bytes[1]}`,`0x${bytes[2]}`,`0x${bytes[3]}`,`0x${bytes[4]}`,`0x${bytes[5]}`,`0x${bytes[6]}`]);
+    //console.log([`0x${bytes[0]}`,`0x${bytes[1]}`,`0x${bytes[2]}`,`0x${bytes[3]}`,`0x${bytes[4]}`,`0x${bytes[5]}`,`0x${bytes[6]}`]);
 
     return(
       <div className="" data-theme="halloween">
         <div className="flex flex-col text-2xl font-proggy" >
           <nav className='m-4 flex flex-row justify-end space-x-5 h-10'>
+          <a href="https://opensea.io/collection/cc0-mash" className="p-0 my-auto flex">
+              <Image src="/OS.png" width={33} height={33}  />
+            </a>
             <a href="https://twitter.com/Cc0Mash" className="p-0 my-auto flex">
               <Image src="/Twitter social icons - circle - white.png" width={33} height={33}  />
             </a>
