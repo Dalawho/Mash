@@ -1,7 +1,7 @@
 import nouns from "./out.json";
 
-export const GetTraitSVG = ({traitData , mimeType} : { traitData: string, mimeType:string}) => {
-    if(traitData.startsWith("<?xml")) {
+export const GetTraitSVG = ({traitData , mimeType, contract} : { traitData: string, mimeType:string, contract:number}) => {
+    if(traitData.startsWith("<?xml") || contract > 12) {
         return `<svg xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges" version="1.1" id="pixel" viewBox="0 0 50 50" width="80%" height="80%"> '
         <image x="0"" y="0" width="100%" height="100%" href="data:image/svg+xml;base64,${traitData}"/>
     <style>#pixel {image-rendering: pixelated; image-rendering: -moz-crisp-edges; image-rendering: -webkit-crisp-edges; -ms-interpolation-mode: nearest-neighbor;}</style></svg>`;
@@ -14,6 +14,7 @@ export const GetTraitSVG = ({traitData , mimeType} : { traitData: string, mimeTy
 }
 
 export const GetBase64 = (traitData: string, contract: number, layer: string, trait:number) => {
+    if(contract > 12) return traitData;
     if(contract == 6 && layer == "Head") {
         //console.log(nouns.nouns[trait]);
         return nouns.nouns[trait];

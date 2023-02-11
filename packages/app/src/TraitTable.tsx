@@ -56,7 +56,7 @@ const TraitTable = ({ selectedValue, handlePiecesId }: TraitTableProps) => {
     useEffect(() => {
         if (result.data) {
             let traitResults = result.data?.traits.map((item, index) => {return {value: parseInt(item.id), label: `${item.id}`, tokenURI: "", layer: item.layer.name, data: GetBase64(item.data, parseInt(item.layer.contract.id), item.layer.name, item.index), contract: parseInt(item.layer.contract.id), mimeType: item.mimeType, layerNr: item.layer.index, traitNr: item.index, name: item.name}});
-            traitResults = traitResults.map((item) => {return {...item, tokenURI: GetTraitSVG({traitData: item.data, mimeType: item.mimeType})}})
+            traitResults = traitResults.map((item) => {return {...item, tokenURI: GetTraitSVG({traitData: item.data, mimeType: item.mimeType, contract: item.contract})}})
             setItems(prevItems => [...prevItems, ...traitResults]);
             setHasMore(result.data.traits.length === ITEMS_PER_PAGE);
         }
