@@ -101,13 +101,15 @@ const getImage = (loc: Locations, x:number, y:number, isSafari: boolean) => {
 
 
 const returnForeign = (loc: Locations, x:number, y:number, image:string) => {
+    let mimeType = loc.contract > 12 ? "image/svg+xml" : loc.mimeType
     return ` <foreignObject x="${loc.x}" y="${loc.y}" width="${x * loc.scale}" height="${y * loc.scale}">
-    <img width="100%" height="100%" src="data:${loc.mimeType};base64,${image}"/>
+    <img width="100%" height="100%" src="data:${mimeType};base64,${image}"/>
     </foreignObject>`;
 }
 
 const returnPNG = (loc: Locations, x:number, y:number, image:string) => {
-    return ` <image x="${loc.x}" y="${loc.y}" width="${x * loc.scale}" height="${y * loc.scale}" href="data:${loc.mimeType};base64,${image}"/>`;
+    let mimeType = loc.contract > 12 ? "image/svg+xml" : loc.mimeType
+    return ` <image x="${loc.x}" y="${loc.y}" width="${x * loc.scale}" height="${y * loc.scale}" href="data:${mimeType};base64,${image}"/>`;
 }
 
 const returnSVG = (loc: Locations, x:number, y:number, image:string) => {
