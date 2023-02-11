@@ -133,7 +133,7 @@ const HomePage:NextPage = () => {
     const pfpRenderByte = (((pfpRender ? 1 : 0) << 7) | (selColor.index & 0x07) << 4 ) | layer.scale ;
     //fix here for blitmap and for background 
     let array = new Uint8Array();
-    if(layer.contract == 4) {
+    if(layer.contract == 4 || layer.contract == 8) {
       const traitIdHigh = (layer.traitId & 0xFF00) >> 8;
       const traitIdLow = layer.traitId & 0x00FF;
       array = new Uint8Array([layer.contract, traitIdHigh, traitIdLow, pfpRenderByte, layer.x, layer.y]);
@@ -174,6 +174,7 @@ const HomePage:NextPage = () => {
     const empty = [{value: 0, label: "None", maxSupply: 0, minted: 0}]
     const placeholder = [{value: 0, label: "Please connect", maxSupply: 0, minted: 0, x:0, y:0}]
 
+    console.log([`0x${bytes[0]}`,`0x${bytes[1]}`,`0x${bytes[2]}`,`0x${bytes[3]}`,`0x${bytes[4]}`,`0x${bytes[5]}`,`0x${bytes[6]}`]);
 
     return(
       <div className="" data-theme="halloween">
