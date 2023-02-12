@@ -26,7 +26,7 @@ export const BuyAndMintButton = ( {inBytes} : {inBytes : string[] } ) => {
     {isLoading && <div>Confirm in Wallet</div>}
     {(isSuccess && !txSuccess) && <div>Transaction submitted</div>}
     {(!isLoading && !isSuccess) && <div>Mint for 0.005 Eth</div>}
-    {(!isLoading && isSuccess && txSuccess) && <div>Mint for 0.005 Eth</div>}
+    {(!isLoading && isSuccess && txSuccess) && <div>Success! Mint another mashup?</div>}
     </Button>
     </div>
   );
