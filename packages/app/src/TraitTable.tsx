@@ -50,7 +50,7 @@ const TraitTable = ({ selectedValue, handlePiecesId }: TraitTableProps) => {
     const [previousLayer, setPreviousLayer] = useState("");
 
     const [result, executeQuery] = useInviniteTraitsQuery({
-        variables: { skip: selectedValue.name === "" ? 0 : (previousLayer === selectedValue.layer) ? skip: 0, name: selectedValue.name, layer: selectedValue.layer, contract: selectedValue.collection === 0 ? "": selectedValue.collection.toString() + "-"  },
+        variables: { skip: selectedValue.name !== "" ? 0 : (previousLayer === selectedValue.layer) ? skip: 0, name: selectedValue.name, layer: selectedValue.layer, contract: selectedValue.collection === 0 ? "": selectedValue.collection.toString() + "-"  },
         requestPolicy: 'network-only',
     });
 
