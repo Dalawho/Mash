@@ -48,9 +48,11 @@ const TraitTable = ({ selectedValue, handlePiecesId }: TraitTableProps) => {
     const [hasMore, setHasMore] = useState(true);
     const [items, setItems] = useState<Trait[]>([]);
     const [previousLayer, setPreviousLayer] = useState("");
+    const [previousName, setPreviousName] = useState("");
+    
 
     const [result, executeQuery] = useInviniteTraitsQuery({
-        variables: { skip: selectedValue.name !== "" ? 0 : (previousLayer === selectedValue.layer) ? skip: 0, name: selectedValue.name, layer: selectedValue.layer, contract: selectedValue.collection === 0 ? "": selectedValue.collection.toString() + "-"  },
+        variables: { skip: (previousName === selectedValue.name && previousLayer === selectedValue.layer) ? skip: 0, name: selectedValue.name, layer: selectedValue.layer, contract: selectedValue.collection === 0 ? "": selectedValue.collection.toString() + "-"  },
         requestPolicy: 'network-only',
     });
 
@@ -68,6 +70,7 @@ const TraitTable = ({ selectedValue, handlePiecesId }: TraitTableProps) => {
         setItems([]);
         setHasMore(true);
         setPreviousLayer(selectedValue.layer);
+        setPreviousName(selectedValue.name);
   }, [selectedValue]);
 
 
