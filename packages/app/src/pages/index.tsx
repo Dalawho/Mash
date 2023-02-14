@@ -9,10 +9,10 @@ import { toast } from "react-toastify";
 import { BoxContainer } from "../BoxContainer";
 import { BuyAndMintButton } from "../BuyAndMintButton";
 import ColorPicker from "../ColorPicker";
-import { customStyles } from "../formStyles";
+import { customStyles, traitStyle } from "../formStyles";
 import GetContracts from "../GetContracts";
 import { GetFullSVG } from '../GetFullSVG';
-//import { GetSVG } from "../GetSVG";
+// import { GetSVG } from "../GetSVG";
 import GetLayers from "../GetLayers";
 import { IsSafari } from "../IsSafari";
 //import GetTraits from "../GetTraits";
@@ -24,6 +24,7 @@ import useDebounce from '../useDebounce';
 interface Selector{
   collection: number,
   layer: string,
+  name: string,
 }
 
 interface SelectTrait {
@@ -37,7 +38,7 @@ const HomePage:NextPage = () => {
   //const [SVG, setSVG] = useState<string | null>(null);
   const [bytes, setBytes] = useState(Array.from({length: 7}, () => "000000000000"));
   const [pfpRender, setPfpRender] = useState(true);
-  const [selectedValue, setSelectedValue] = useState<Selector>({collection: 0, layer: ""});
+  const [selectedValue, setSelectedValue] = useState<Selector>({collection: 0, layer: "", name: ""});
   
   const colors = [{hex: "transparent", tailwind: "bg-[#00000000]", index: 0}, 
                   {hex: "#e1d7d5", tailwind: "bg-[#e1d7d5]", index: 1},
@@ -97,6 +98,7 @@ const HomePage:NextPage = () => {
       return;
     }
 
+    
 
     const maxId = locations.reduce((max, obj) => obj.id > max ? obj.id : max, 0);
     const nextLocs = [...locations, {id: maxId+1, name: trait.name, contract: trait.contract, layerId: trait.layerNr, traitId: trait.traitNr, scale: 1, x: 0, y: 0, data: trait.data, mimeType: trait.mimeType,
@@ -120,12 +122,15 @@ const HomePage:NextPage = () => {
     if(e)  {
       const i: SelectTrait = e as SelectTrait;
       if(filter === "layer") {
-        setSelectedValue({...selectedValue, [filter]: i.label.toString() === "None" ? "" : i.label.toString()}) }
+        setSelectedValue({...selectedValue, [filter]: i.label.toString() === "None" ? "" : i.label.toString(), name: ""}) }
 
       if(filter === "collection") {
-        setSelectedValue({layer: "", collection: i.value}) }
-      }
+        setSelectedValue({layer: "", collection: i.value, name: ""}) }
   }
+}
+  const handleName = (newName: string) => {
+      setSelectedValue({...selectedValue, name: newName}) }
+  
 
   const placeSVG = '<svg xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges" version="1.1" id="pixel" viewBox="0 0 32 32" width="320" height="320"><style>#pixel {image-rendering: pixelated; image-rendering: -moz-crisp-edges; image-rendering: -webkit-crisp-edges; -ms-interpolation-mode: nearest-neighbor;}</style></svg>';
 
@@ -151,7 +156,6 @@ const HomePage:NextPage = () => {
     // const heigth = 32;
     //const traits = GetTraits();
     const layers = GetLayers();
-
    
     const deBouncedLocations = useDebounce(locations); 
     const [width, heigth, SVG] = GetFullSVG({locations:locations, pfpRender: pfpRender, contracts: contracts ? contracts : undefined, bgColor: selColor, isSafari: isSafari});
@@ -221,28 +225,20 @@ const HomePage:NextPage = () => {
                   </label>
                 </div>
                 <div>
-                {/* <div className="form-control ">
-                  <label className="label cursor-pointer justify-center">
-                    <span className="label-text text-2xl mx-3">Background</span> 
-                    <input type="checkbox" checked={pfpRender} onClick={toggle} className="toggle" />
-                  </label>
-                  {<TwitterPicker/>} */}
                   <ColorPicker onChange={setSelColor} selectedColor={selColor} colors={colors}/>
-                  {/* <div className="">
-                  <button className=" text-2xl btn btn-outline btn-primary">Set Background</button>
-                  <GithubPicker colors={['#B80000', '#DB3E00', '#FCCB00', '#008B02', '#006B76', '#1273DE', '#004DCF']} />
-                  </div> */}
                 </div>
                 <BuyAndMintButton inBytes={bytes} />
               </div>
               </div>
               <div className='flex flex-row space-x-3 text-center pt-2'>
-                <h1 className="my-auto">Filter by: </h1>
+                <h1 className="my-auto">Filter:</h1>
                 <p className="my-auto">Collection </p>
                 <Select styles={customStyles} value={contracts?.filter(obj => obj.value === selectedValue.collection)} options={contracts ? [empty[0], ...contracts] : placeholder } onChange={(newValue) => handleFilter("collection", newValue)}/>
                 <p className="my-auto">Layer </p>
-                <Select styles={customStyles} value={filteredLayers?.filter(obj => obj.label === selectedValue.layer)} options={filteredLayers ? [empty[0], ...filteredLayers] : placeholder } onChange={(newValue) => handleFilter("layer", newValue)}/>
-              </div>
+                <Select styles={traitStyle} value={filteredLayers?.filter(obj => obj.label === selectedValue.layer)} options={filteredLayers ? [empty[0], ...filteredLayers] : placeholder } onChange={(newValue) => handleFilter("layer", newValue)}/>
+                <p className="my-auto">Traits </p>
+                <input type="text" placeholder="Search by token#" value={selectedValue.name} onChange={e => handleName(e.target.value)} className="input input-bordered w-full max-w-xs text-2xl" />
+                </div>
               <h2 className="text-3xl text-bold">Select layers</h2>
               <div>
                 <TraitTable selectedValue={selectedValue} handlePiecesId={handlePiecesId} />

@@ -9,11 +9,11 @@ import { Trait } from "./SharedInterfaces";
 
 const ITEMS_PER_PAGE = 30;
 gql`
-  query InviniteTraits($skip: Int!, $name: String!, $contract: String!) {
+  query InviniteTraits($skip: Int!, $layer: String!, $name: String!, $contract: String!) {
         traits(
             first: 30
             skip: $skip
-            where: {layer_: {name_starts_with: $name, name_ends_with: $name}, layer_starts_with: $contract}
+            where: {name_starts_with_nocase: $name, layer_: {name_starts_with: $layer, name_ends_with: $layer}, layer_starts_with: $contract}
             orderBy: id
             ) {
           data
@@ -35,6 +35,7 @@ gql`
 interface Selector{
     collection: number,
     layer: string,
+    name: string
   }
 
 interface TraitTableProps {
@@ -49,7 +50,7 @@ const TraitTable = ({ selectedValue, handlePiecesId }: TraitTableProps) => {
     const [previousLayer, setPreviousLayer] = useState("");
 
     const [result, executeQuery] = useInviniteTraitsQuery({
-        variables: { skip: previousLayer === selectedValue.layer ? skip: 0, name: selectedValue.layer, contract: selectedValue.collection === 0 ? "": selectedValue.collection.toString() + "-"  },
+        variables: { skip: selectedValue.name === "" ? 0 : (previousLayer === selectedValue.layer) ? skip: 0, name: selectedValue.name, layer: selectedValue.layer, contract: selectedValue.collection === 0 ? "": selectedValue.collection.toString() + "-"  },
         requestPolicy: 'network-only',
     });
 

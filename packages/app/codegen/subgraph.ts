@@ -630,6 +630,14 @@ export type LayersQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type LayersQuery = { readonly __typename?: 'Query', readonly layers: ReadonlyArray<{ readonly __typename?: 'Layer', readonly id: string, readonly name: string, readonly index: number, readonly contract: { readonly __typename?: 'Contract', readonly id: string } }> };
 
+export type NamesQueryVariables = Exact<{
+  name: Scalars['String'];
+  contract: Scalars['String'];
+}>;
+
+
+export type NamesQuery = { readonly __typename?: 'Query', readonly traits: ReadonlyArray<{ readonly __typename?: 'Trait', readonly id: string, readonly name: string, readonly index: number }> };
+
 export type TraitsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -637,6 +645,7 @@ export type TraitsQuery = { readonly __typename?: 'Query', readonly traits: Read
 
 export type InviniteTraitsQueryVariables = Exact<{
   skip: Scalars['Int'];
+  layer: Scalars['String'];
   name: Scalars['String'];
   contract: Scalars['String'];
 }>;
@@ -677,6 +686,22 @@ export const LayersDocument = gql`
 export function useLayersQuery(options?: Omit<Urql.UseQueryArgs<LayersQueryVariables>, 'query'>) {
   return Urql.useQuery<LayersQuery, LayersQueryVariables>({ query: LayersDocument, ...options });
 };
+export const NamesDocument = gql`
+    query Names($name: String!, $contract: String!) {
+  traits(
+    where: {layer_: {name_starts_with: $name, name_ends_with: $name}, layer_starts_with: $contract}
+    orderBy: id
+  ) {
+    id
+    name
+    index
+  }
+}
+    `;
+
+export function useNamesQuery(options: Omit<Urql.UseQueryArgs<NamesQueryVariables>, 'query'>) {
+  return Urql.useQuery<NamesQuery, NamesQueryVariables>({ query: NamesDocument, ...options });
+};
 export const TraitsDocument = gql`
     query Traits {
   traits(first: 50) {
@@ -700,11 +725,11 @@ export function useTraitsQuery(options?: Omit<Urql.UseQueryArgs<TraitsQueryVaria
   return Urql.useQuery<TraitsQuery, TraitsQueryVariables>({ query: TraitsDocument, ...options });
 };
 export const InviniteTraitsDocument = gql`
-    query InviniteTraits($skip: Int!, $name: String!, $contract: String!) {
+    query InviniteTraits($skip: Int!, $layer: String!, $name: String!, $contract: String!) {
   traits(
     first: 30
     skip: $skip
-    where: {layer_: {name_starts_with: $name, name_ends_with: $name}, layer_starts_with: $contract}
+    where: {name_starts_with_nocase: $name, layer_: {name_starts_with: $layer, name_ends_with: $layer}, layer_starts_with: $contract}
     orderBy: id
   ) {
     data
