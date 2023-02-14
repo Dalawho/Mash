@@ -19,15 +19,6 @@
         "ySize" :  39 ,
         "zrender" : false
     },
-    "pksl" : {
-        "collection" : "0x5c9Dd18B69B2778aDf344D29e910A0DcFAbfb5B3" ,
-        "maxSupply" : 1000 ,
-        "minted" : 0 ,
-        "traitNames" : ["Texture", "Face", "Head", "Background", "Luck"],
-        "xSize" : 32 ,
-        "ySize" :  32 ,
-        "zrender" : false
-    },
     "TinyBones" : {
         "collection" : "0x0Cc27400A9C11CF07a3b6528cB0c94b8b89Dfa3D" ,
         "maxSupply" : 1000 ,
@@ -164,5 +155,51 @@
         "xSize" : 32 ,
         "ySize" :  32,
         "zrender" : false
+    },
+    "OnChainKevinToken" : {
+        "collection" : "0xaC3AE179bB3c0edf2aB2892a2B6A4644A71627B6" ,
+        "maxSupply" : 99 ,
+        "minted" : 1 ,
+        "traitNames" : ["Lasers", "Head Accessory", "Mouth", "Face Accessory", "Eyes", "Nose", "Shirt", "Skin", "Background"] ,
+        "xSize" : 32 ,
+        "ySize" :  32,
+        "zrender" : false
+    },
+    "NounsToken" : {
+        "collection" : "0x9C8fF314C9Bc7F6e59A9d9225Fb22946427eDC03" ,
+        "maxSupply" : 99 ,
+        "minted" : 1 ,
+        "traitNames" : ["Body", "Accessory", "Head", "Glasses"] ,
+        "xSize" : 32 ,
+        "ySize" :  32,
+        "zrender" : false
+    },
+    "HOM" : {
+        "collection" : "0xb609183A8245C32fA3C60c498bB54010e9Ce8e85" ,
+        "maxSupply" : 0 ,
+        "minted" : 0 ,
+        "traitNames" : ["Role", "Role (Hidden)", "Wear", "Skin", "Class", "Background"] ,
+        "xSize" : 24 ,
+        "ySize" :  24,
+        "zrender" : false
+    },
+    "CrypToadz" : {
+        "collection" : "0x1CB1A5e65610AEFF2551A50f76a87a7d3fB649C6" ,
+        "maxSupply" : 0 ,
+        "minted" : 0 ,
+        "traitNames" : ["Background",   "Body short", "Mouth short", "Head short", "Eyes short", "Clothes short", "Accessory II short", "Accessory I short",
+                                        "Body long", "Mouth long", "Head long", "Eyes long", "Clothes long", "Accessory II long", "Accessory I long"  ] ,
+        "xSize" : 36 ,
+        "ySize" :  36,
+        "zrender" : true
+    },
+    "CrypToadzToken" : {
+        "collection" : "0x1CB1A5e65610AEFF2551A50f76a87a7d3fB649C6" ,
+        "maxSupply" : 99 ,
+        "minted" : 1 ,
+        "traitNames" : [""] ,
+        "xSize" : 36 ,
+        "ySize" :  36,
+        "zrender" : true
     }
 }

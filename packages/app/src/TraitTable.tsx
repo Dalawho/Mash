@@ -13,7 +13,7 @@ gql`
         traits(
             first: 30
             skip: $skip
-            where: {name_starts_with_nocase: $name, layer_: {name_starts_with: $layer, name_ends_with: $layer}, layer_starts_with: $contract}
+            where: {name_contains_nocase: $name, layer_: {name_starts_with: $layer, name_ends_with: $layer}, layer_starts_with: $contract}
             orderBy: id
             ) {
           data

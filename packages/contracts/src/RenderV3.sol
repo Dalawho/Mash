@@ -107,17 +107,17 @@ contract RenderV3 is Ownable, SSt {
 
     ////////////////////////  Trait Data functions functions /////////////////////////////////
 
-    function getTraitDetails(address _collection, uint8 layerId, uint8 traitId, bool wholeToken) public view returns(IIndelible.Trait memory) {
-        uint16 id = (uint16(layerId) << 8) | uint16(traitId);
-        if(wholeToken) {
+    function getTraitDetails(address _collection, uint8 _layerId, uint8 _traitId, bool _wholeToken) public view returns(IIndelible.Trait memory) {
+        uint16 id = (uint16(_layerId) << 8) | uint16(_traitId);
+        if(_wholeToken) {
             return IIndelible.Trait(string.concat(getCollectionName(_collection), " ", Strings.toString(id)), ""); //is this always true, also for birds and 
         }
         if(_collection == blitmap) return IIndelible.Trait(IBlitmap(blitmap).tokenNameOf(id),"image/svg+xml");
         if(_collection == flipmap) return IIndelible.Trait(string.concat("Flipmap ", Strings.toString(id)), "image/svg+xml");
-        if(_collection == onChainKevin) return IIndelible.Trait(IKevin(onChainKevin).traitTypes(layerId, traitId, 0), "image/png");
-        if(_collection == nounsToken) return IIndelible.Trait(getNounsTraits(layerId, traitId), "image/svg+xml");
-        if(renderers[_collection].addr != address(0)) return IGenericRender(renderers[_collection].addr).getTraitDetails(layerId, traitId);
-        return IIndelible(_collection).traitDetails(layerId, traitId);
+        if(_collection == onChainKevin) return IIndelible.Trait(IKevin(onChainKevin).traitTypes(_layerId, _traitId, 0), "image/png");
+        if(_collection == nounsToken) return IIndelible.Trait(getNounsTraits(_layerId, _traitId), "image/svg+xml");
+        if(renderers[_collection].addr != address(0)) return IGenericRender(renderers[_collection].addr).getTraitDetails(_layerId, _traitId);
+        return IIndelible(_collection).traitDetails(_layerId, _traitId);
     }
 
     function getTraitData(address _collection, uint8 _layerId, uint8 _traitId, bool wholeToken) public view returns(bytes memory) {
@@ -132,7 +132,7 @@ contract RenderV3 is Ownable, SSt {
                 return getNounsToken(id); //also returns the encoding 
             }
             //IGenericRender (need to update Moon, Mouse and CR)
-            if(renderers[_collection].addr != address(0)) return IGenericRender(renderers[_collection].addr).getToken(id);
+            if(renderers[_collection].addr != address(0)) return bytes(IGenericRender(renderers[_collection].addr).getToken(id));
             //indelible
             return bytes(IIndelible(_collection).tokenIdToSVG(id)); //this returns the encoding as well.. starting with data:  
         }
@@ -147,6 +147,9 @@ contract RenderV3 is Ownable, SSt {
         }
         if(renderers[_collection].addr != address(0)) return IGenericRender(renderers[_collection].addr).getTraitData(_layerId, _traitId);
         return bytes(IIndelible(_collection).traitData(_layerId, _traitId));
+        IIndelible.Trait memory _traitDetails = getTraitDetails(_collection, _layerId, _traitId, wholeToken) ;
+        bytes memory out = '<svg width="1200" height="1200" viewBox="0 0 1200 1200" version="1.2" xmlns="http://www.w3.org/2000/svg" style="background-color:transparent;background-image:url(data:image/png;base64,';
+        bytes memory next = ');background-repeat:no-repeat;background-size:contain;background-position:center;image-rendering:-webkit-optimize-contrast;-ms-interpolation-mode:nearest-neighbor;image-rendering:-moz-crisp-edges;image-rendering:pixelated;"></svg>';
     }
 
     function getCollectionName(address _collection) public view returns(string memory) {

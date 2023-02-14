@@ -90,7 +90,7 @@ contract MoonRender is IGenericRender {
         return "Moonbirds";
     }
 
-    function getToken(uint256 _tokenId) external view returns(bytes memory) {
+    function getToken(uint256 _tokenId) external view returns(string memory) {
       return "";
     }
 

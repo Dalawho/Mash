@@ -8,7 +8,7 @@ contract CounterTest is Test {
     }
 
     function testDecode() public {
-        console.log(getTraitData(6,0));
+        console.log(getTraitData(1,1));
     }
 
     function getTraitData(uint8 _layerId, uint8 _traitId) public view returns(uint16) {

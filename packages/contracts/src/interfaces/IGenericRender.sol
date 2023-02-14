@@ -6,5 +6,5 @@ interface IGenericRender {
     function getTraitDetails(uint8 _layerId, uint8 _traitId) external view returns(IIndelible.Trait memory);
     function getTraitData(uint8 _layerId, uint8 _traitId) external view returns(bytes memory);
     function getCollectionName() external view returns(string memory);
-    function getToken(uint256 _tokenId) external view returns(bytes memory);
+    function getToken(uint256 _tokenId) external view returns(string memory);
 }
